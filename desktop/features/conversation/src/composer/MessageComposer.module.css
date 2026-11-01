@@ -29,7 +29,7 @@
   background: linear-gradient(
     110deg,
     color-mix(in oklch, var(--primary) 24%, transparent),
-    oklch(0.65 0.12 285 / 14%),
+    color-mix(in oklch, var(--brand-lavender) 14%, transparent),
     color-mix(in oklch, var(--primary) 12%, transparent)
   );
   filter: blur(14px);
@@ -45,7 +45,7 @@
   box-shadow:
     0 8px 24px -8px oklch(0 0 0 / 24%),
     0 0 24px -6px color-mix(in oklch, var(--primary) 28%, transparent),
-    0 4px 32px -8px oklch(0.72 0.14 285 / 24%);
+    0 4px 32px -8px color-mix(in oklch, var(--brand-lavender) 24%, transparent);
 }
 
 .inputGroup:focus-within::before {

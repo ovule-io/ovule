@@ -38,11 +38,19 @@
   transition: opacity 240ms ease-out;
   /* A transparent center preserves the embedded page / video compositor. */
   box-shadow:
-    inset 0 0 0 2px #8b7cf6aa,
-    inset 0 0 24px 3px #846ef34d;
+    inset 0 0 0 2px color-mix(in srgb, var(--brand-lavender-strong) 67%, transparent),
+    inset 0 0 24px 3px color-mix(in srgb, var(--brand-lavender-strong) 30%, transparent);
   background:
-    radial-gradient(ellipse at 0 0, #8b7cf64d, transparent 38%),
-    radial-gradient(ellipse at 100% 100%, #44cddf38, transparent 38%);
+    radial-gradient(
+      ellipse at 0 0,
+      color-mix(in srgb, var(--brand-lavender) 30%, transparent),
+      transparent 38%
+    ),
+    radial-gradient(
+      ellipse at 100% 100%,
+      color-mix(in srgb, var(--brand-cyan) 22%, transparent),
+      transparent 38%
+    );
 }
 .ovule-control-feedback[data-active] {
   opacity: 1;
@@ -57,11 +65,11 @@
   height: 28px;
   margin: -14px;
   border-radius: 50%;
-  border: 2px solid #faf8ff;
-  background: #8b7cf64d;
+  border: 2px solid var(--brand-paper);
+  background: color-mix(in srgb, var(--brand-lavender) 30%, transparent);
   box-shadow:
-    0 0 0 5px #8b7cf633,
-    0 0 18px #8b7cf6aa;
+    0 0 0 5px color-mix(in srgb, var(--brand-lavender) 20%, transparent),
+    0 0 18px color-mix(in srgb, var(--brand-lavender-strong) 67%, transparent);
   opacity: 0;
   transform: scale(1);
   transition:
@@ -73,7 +81,7 @@
 }
 .ovule-control-pointer[data-pressed="true"] {
   transform: scale(0.72);
-  background: #8b7cf6b3;
+  background: color-mix(in srgb, var(--brand-lavender-strong) 70%, transparent);
 }
 @media (prefers-reduced-motion: reduce) {
   .ovule-control-feedback,

@@ -1,3 +1,5 @@
+@import "./brand.css";
+
 :root {
   color-scheme: light;
   font-family:
@@ -28,17 +30,8 @@
    */
   --app-background: oklch(0.91 0.025 270);
   --app-background-image:
-    radial-gradient(
-      circle at 0% 0%,
-      oklch(0.935 0.035 290 / 88%),
-      transparent 42%
-    ),
-    linear-gradient(
-      0deg,
-      oklch(0.93 0.034 280),
-      var(--app-background) 60%,
-      oklch(0.885 0.03 245)
-    );
+    radial-gradient(circle at 0% 0%, oklch(0.935 0.035 290 / 88%), transparent 42%),
+    linear-gradient(0deg, oklch(0.93 0.034 280), var(--app-background) 60%, oklch(0.885 0.03 245));
   --app-chrome-hover: color-mix(in oklch, var(--foreground) 10%, transparent);
   /* Reserved for top-level Chat, Onboarding, and Workbench panes. */
   --app-pane-radius: 12px;
@@ -49,8 +42,8 @@
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: #70d6b1;
-  --primary-foreground: #082019;
+  --primary: var(--brand-cyan);
+  --primary-foreground: var(--brand-on-cyan);
   --secondary: oklch(0.97 0 0);
   --secondary-foreground: oklch(0.205 0 0);
   --muted: oklch(0.97 0 0);
@@ -69,8 +62,8 @@
   --chart-5: oklch(0.769 0.188 70.08);
   --sidebar: var(--background);
   --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: #70d6b1;
-  --sidebar-primary-foreground: #082019;
+  --sidebar-primary: var(--primary);
+  --sidebar-primary-foreground: var(--primary-foreground);
   --sidebar-accent: oklch(0.97 0 0);
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-hover: oklch(0.955 0 0);
@@ -108,18 +101,11 @@
   --terminal-search: var(--popover);
   --terminal-cursor: var(--primary);
   --terminal-selection: color-mix(in oklch, var(--primary) 24%, transparent);
-  --terminal-scrollbar: color-mix(
-    in oklch,
-    var(--muted-foreground) 36%,
-    transparent
-  );
+  --terminal-scrollbar: color-mix(in oklch, var(--muted-foreground) 36%, transparent);
 
   /* A restrained shadcn-like type scale for product UI. */
-  --font-sans:
-    "Geist Variable", Geist, "Geist Sans", ui-sans-serif, system-ui, sans-serif;
-  --font-mono:
-    "Cascadia Code", "JetBrains Mono", ui-monospace, SFMono-Regular, Consolas,
-    monospace;
+  --font-sans: "Geist Variable", Geist, "Geist Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Cascadia Code", "JetBrains Mono", ui-monospace, SFMono-Regular, Consolas, monospace;
   --font-size-caption: 0.75rem;
   --font-size-ui: 0.875rem;
   --font-size-title: 1rem;
@@ -139,17 +125,8 @@
   color-scheme: dark;
   --app-background: oklch(0.25 0.035 285);
   --app-background-image:
-    radial-gradient(
-      circle at 0% 0%,
-      oklch(0.31 0.055 300 / 72%),
-      transparent 42%
-    ),
-    linear-gradient(
-      0deg,
-      oklch(0.275 0.045 295),
-      var(--app-background) 58%,
-      oklch(0.225 0.038 255)
-    );
+    radial-gradient(circle at 0% 0%, oklch(0.31 0.055 300 / 72%), transparent 42%),
+    linear-gradient(0deg, oklch(0.275 0.045 295), var(--app-background) 58%, oklch(0.225 0.038 255));
   --app-pane-shadow: 0 2px 3px -1px oklch(0 0 0 / 34%);
   --background: oklch(0.205 0 0);
   --foreground: oklch(0.985 0 0);

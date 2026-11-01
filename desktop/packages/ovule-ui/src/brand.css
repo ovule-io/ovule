@@ -1,0 +1,11 @@
+/* Ovule's shared brand palette. Semantic status and document colors are separate. */
+:root {
+  --brand-cyan: #8bdde5;
+  --brand-cyan-strong: #318b98;
+  --brand-lavender: #c4b5fd;
+  --brand-lavender-strong: #9684d8;
+  --brand-ink: #202638;
+  --brand-on-cyan: #16343a;
+  --brand-paper: #f7f8fc;
+  --brand-gradient: linear-gradient(120deg, var(--brand-cyan), var(--brand-lavender));
+}

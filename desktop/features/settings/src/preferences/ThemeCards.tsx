@@ -118,14 +118,14 @@ function ThemeScene({ theme }: { theme: ThemeMode }) {
       <path d="M8 1H26V99H8Q1 99 1 92V8Q1 1 8 1Z" fill={fill("sidebar")} />
       <path d="M26 1V99" stroke={fill("border")} />
       <Bot x={7} y={7} size={11} stroke={fill("icon")} />
-      <rect x="65" y="10" width="83" height="4" rx="2" fill="#2e6bd1" />
+      <rect x="65" y="10" width="83" height="4" rx="2" fill="var(--brand-cyan-strong)" />
       <rect x="35" y="25" width="95" height="4" rx="2" fill={fill("line")} />
       <rect x="35" y="33" width="47" height="4" rx="2" fill={fill("line")} />
       <rect x="35" y="41" width="95" height="4" rx="2" fill={fill("line")} />
-      <rect x="55" y="56" width="93" height="4" rx="2" fill="#2e6bd1" />
-      <rect x="85" y="64" width="63" height="4" rx="2" fill="#2e6bd1" />
+      <rect x="55" y="56" width="93" height="4" rx="2" fill="var(--brand-cyan-strong)" />
+      <rect x="85" y="64" width="63" height="4" rx="2" fill="var(--brand-cyan-strong)" />
       <rect x="35" y="79" width="114" height="14" rx="7" fill="none" stroke={fill("border")} />
-      <circle cx="141" cy="86" r="3.5" fill="#2e6bd1" />
+      <circle cx="141" cy="86" r="3.5" fill="var(--brand-cyan-strong)" />
     </svg>
   );
 }

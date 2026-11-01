@@ -181,7 +181,12 @@
   z-index: -1;
   inset: 4px 12px -5px;
   border-radius: inherit;
-  background: linear-gradient(110deg, #9691ed33, #76b7ea24, #c296ed22);
+  background: linear-gradient(
+    110deg,
+    color-mix(in srgb, var(--brand-lavender) 20%, transparent),
+    color-mix(in srgb, var(--brand-cyan) 14%, transparent),
+    color-mix(in srgb, var(--brand-lavender) 14%, transparent)
+  );
   filter: blur(16px);
   opacity: 0.4;
   pointer-events: none;
@@ -189,10 +194,10 @@
   content: "";
 }
 .browserEmptyOmnibox:focus-within {
-  border-color: color-mix(in srgb, #9691ed 55%, var(--border));
+  border-color: color-mix(in srgb, var(--brand-lavender-strong) 55%, var(--border));
   box-shadow:
-    0 0 0 1px #9691ed12,
-    0 4px 24px -6px #9691ed38;
+    0 0 0 1px color-mix(in srgb, var(--brand-lavender) 7%, transparent),
+    0 4px 24px -6px color-mix(in srgb, var(--brand-lavender) 22%, transparent);
 }
 .browserEmptyOmnibox:focus-within::before {
   opacity: 1;

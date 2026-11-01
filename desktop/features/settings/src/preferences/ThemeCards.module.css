@@ -39,7 +39,7 @@
   background-repeat: no-repeat;
 }
 .choice[aria-checked="true"] .preview {
-  border-color: #3b82f6;
+  border-color: var(--brand-cyan-strong);
 }
 .choice:focus-visible .preview {
   outline: 2px solid var(--ring);

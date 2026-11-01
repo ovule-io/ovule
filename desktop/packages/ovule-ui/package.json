@@ -50,6 +50,7 @@
     "./prompt-input": "./src/prompt-input.tsx",
     "./confirmation": "./src/confirmation.tsx",
     "./theme.css": "./src/theme.css",
+    "./brand.css": "./src/brand.css",
     "./styles.css": "./src/styles.css",
     "./tool-panels.module.css": "./src/tool-panels.module.css",
     "./FeedbackButton": "./src/FeedbackButton.tsx",

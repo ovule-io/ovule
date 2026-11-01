@@ -234,8 +234,8 @@
   box-shadow: none;
 }
 .paneOmnibox:focus-within {
-  border-color: color-mix(in srgb, #9691ed 55%, var(--border));
-  box-shadow: 0 0 0 1px #9691ed12;
+  border-color: color-mix(in srgb, var(--brand-lavender-strong) 55%, var(--border));
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--brand-lavender) 7%, transparent);
 }
 .paneOmnibox .paneOmniboxInput:focus-visible {
   border: 0;

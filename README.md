@@ -1,4 +1,11 @@
-# Ovule
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="desktop/branding/masters/favicon-dark.png" />
+    <img src="desktop/branding/masters/favicon.png" alt="Ovule logo" width="96" height="96" />
+  </picture>
+</p>
+
+<h1 align="center">Ovule</h1>
 
 Ovule is a local-first desktop workspace for AI agents, built on [Tuffite](https://github.com/tuffite/tuffite). It is currently in active development.
 

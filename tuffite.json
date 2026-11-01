@@ -14,14 +14,13 @@
       "cwd": "desktop"
     },
     "devtoolsPort": 9234,
-    "mojomSources": [
-      "desktop/packages/ovule-shell-api/shell_api.mojom"
-    ]
+    "mojomSources": ["desktop/packages/ovule-shell-api/shell_api.mojom"]
   },
   "bundle": {
-    "resources": [
-      "LICENSE",
-      "desktop/dist"
-    ]
+    "icons": {
+      "macos": "desktop/branding/app-icon.icns",
+      "windows": "desktop/branding/app-icon.ico"
+    },
+    "resources": ["LICENSE", "desktop/dist"]
   }
 }

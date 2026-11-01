@@ -173,7 +173,7 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 
---- Embedded notice in dist/chart.js ---
+--- Embedded notice in dist/chart.cjs ---
 /*!
  * Chart.js v4.4.9
  * https://www.chartjs.org
@@ -855,27 +855,6 @@ The Apache Software Foundation (https://www.apache.org/).
  */
 
 
---- Embedded notice in lib/chart/graph/forceHelper.js ---
-/*
-* A third-party license is embedded for some of the code in this file:
-* Some formulas were originally copied from "d3.js" with some
-* modifications made for this project.
-* (See more details in the comment of the method "step" below.)
-* The use of the source code of this file is also subject to the terms
-* and consitions of the license of "d3.js" (BSD-3Clause, see
-* </licenses/LICENSE-d3>).
-*/
-
-
---- Embedded notice in lib/chart/graph/forceHelper.js ---
-/**
-     * Some formulas were originally copied from "d3.js"
-     * https://github.com/d3/d3/blob/b516d77fb8566b576088e73410437494717ada26/src/layout/force.js
-     * with some modifications made for this project.
-     * See the license statement at the head of this file.
-     */
-
-
 --- Embedded notice in lib/i18n/langZH.js ---
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -895,6 +874,27 @@ The Apache Software Foundation (https://www.apache.org/).
  * specific language governing permissions and limitations
  * under the License.
  */
+
+
+--- Embedded notice in lib/chart/graph/forceHelper.js ---
+/*
+* A third-party license is embedded for some of the code in this file:
+* Some formulas were originally copied from "d3.js" with some
+* modifications made for this project.
+* (See more details in the comment of the method "step" below.)
+* The use of the source code of this file is also subject to the terms
+* and consitions of the license of "d3.js" (BSD-3Clause, see
+* </licenses/LICENSE-d3>).
+*/
+
+
+--- Embedded notice in lib/chart/graph/forceHelper.js ---
+/**
+     * Some formulas were originally copied from "d3.js"
+     * https://github.com/d3/d3/blob/b516d77fb8566b576088e73410437494717ada26/src/layout/force.js
+     * with some modifications made for this project.
+     * See the license statement at the head of this file.
+     */
 
 
 ========================================================================
