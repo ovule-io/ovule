@@ -1,0 +1,19 @@
+{
+  "name": "@ovule/provider-deepseek",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "files": [
+    "extension.json",
+    "dist",
+    "LICENSE",
+    "THIRD_PARTY_NOTICES.txt"
+  ],
+  "scripts": {
+    "build": "bun ../../scripts/build-extensions.ts agent-deepseek"
+  },
+  "dependencies": {
+    "@ovule/extension": "workspace:*"
+  },
+  "license": "MIT OR Apache-2.0"
+}

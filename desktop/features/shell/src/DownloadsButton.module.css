@@ -1,0 +1,125 @@
+.panel {
+  width: min(420px, calc(100vw - 32px));
+  padding: 0;
+}
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 14px 16px 8px;
+  font-size: var(--font-size-ui);
+}
+.count,
+.metadata {
+  color: var(--muted-foreground);
+  font-size: var(--font-size-caption);
+}
+.count {
+  flex: none;
+  margin-left: 12px;
+  border-radius: 6px;
+  padding: 2px 6px;
+  background: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.list {
+  max-height: min(420px, 60vh);
+  overflow: auto;
+  padding: 6px;
+}
+.list .row[data-orientation] {
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 8px;
+}
+.row + .row {
+  margin-top: 4px;
+}
+.list .row:hover,
+.list .row:focus-within {
+  background: var(--muted);
+}
+.row .metadata {
+  display: flex;
+  white-space: normal;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 8px;
+  margin-top: 3px;
+  font-variant-numeric: tabular-nums;
+}
+.metadata small {
+  font-size: inherit;
+}
+.metadata > :not(:first-child)::before {
+  content: "·";
+  margin-right: 8px;
+}
+.body progress {
+  display: block;
+  width: 100%;
+  height: 4px;
+  margin-top: 6px;
+  accent-color: var(--primary);
+}
+.actions {
+  opacity: 0;
+  transition: opacity 120ms;
+}
+.row:hover .actions,
+.row:focus-within .actions {
+  opacity: 1;
+}
+.error {
+  color: var(--danger);
+  padding: 6px 12px;
+  font-size: var(--font-size-caption);
+  overflow-wrap: anywhere;
+}
+.ring {
+  width: 26px;
+  height: 26px;
+  overflow: visible;
+}
+.track,
+.value,
+.indeterminate {
+  fill: none;
+  stroke-width: 2;
+}
+.track {
+  stroke: var(--line-strong);
+}
+.value,
+.indeterminate {
+  stroke: var(--foreground);
+  transform: rotate(-90deg);
+  transform-origin: center;
+  stroke-linecap: round;
+}
+.percent {
+  fill: currentColor;
+  font: 9px var(--font-mono);
+}
+.indeterminate {
+  animation: download-spin 1.4s linear infinite;
+}
+@keyframes download-spin {
+  to {
+    transform: rotate(270deg);
+  }
+}
+@media (hover: none) {
+  .actions {
+    opacity: 1;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .actions,
+  .row {
+    transition: none;
+  }
+  .indeterminate {
+    animation: none;
+  }
+}

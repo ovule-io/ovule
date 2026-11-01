@@ -1,0 +1,23 @@
+.sectionTitle {
+  margin: 0 0 8px;
+  font-size: var(--font-size-ui);
+  font-weight: 600;
+}
+
+.partLine {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.partTitle {
+  font-size: var(--font-size-ui);
+  font-weight: 500;
+}
+
+.partDetail {
+  margin-top: 3px;
+  color: var(--faint);
+  font: var(--font-size-caption) / 1.4 var(--font-mono);
+}

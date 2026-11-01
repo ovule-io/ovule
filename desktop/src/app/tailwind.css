@@ -1,0 +1,137 @@
+@import "tailwindcss";
+@source "../../features";
+@source "../../node_modules/streamdown/dist/*.js";
+
+* {
+  box-sizing: border-box;
+}
+html,
+body,
+#root {
+  width: 100%;
+  height: 100%;
+}
+.hydrate-fallback {
+  display: grid;
+  width: 100%;
+  min-height: 100dvh;
+  place-items: center;
+  background: var(--background);
+  color: var(--muted-foreground);
+  animation: hydrate-fallback-reveal 120ms ease-out 160ms both;
+}
+.hydrate-fallback-content {
+  display: grid;
+  place-items: center;
+  gap: 8px;
+  text-align: center;
+}
+.hydrate-fallback-content strong {
+  color: var(--text);
+  font-size: var(--font-size-ui);
+  font-weight: 500;
+}
+.hydrate-fallback-content p {
+  margin: 0;
+  font-size: var(--font-size-caption);
+}
+@keyframes hydrate-fallback-reveal {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+html[data-surface="thread"] [data-conversation-root] {
+  width: 100%;
+  height: 100%;
+}
+html[data-surface="thread"],
+html[data-surface="thread"] body,
+html[data-surface="thread"] #root {
+  background: var(--background);
+}
+html[data-surface="pane"],
+html[data-surface="pane"] body,
+html[data-surface="pane"] #root {
+  background: var(--background);
+}
+body {
+  margin: 0;
+  min-width: 576px;
+  overflow: hidden;
+  background: transparent;
+  color: var(--text);
+  font-size: var(--font-size-ui);
+  line-height: var(--line-height-ui);
+}
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+button {
+  cursor: pointer;
+}
+svg.lucide {
+  width: 16px;
+  height: 16px;
+}
+.ui-input-group-addon svg.lucide,
+.ui-input > svg.lucide {
+  width: 14px;
+  height: 14px;
+}
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--ring) 65%, transparent);
+  outline-offset: 2px;
+}
+::selection {
+  background: color-mix(in srgb, var(--primary) 30%, transparent);
+}
+* {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}
+*:hover {
+  scrollbar-color: color-mix(in srgb, var(--muted-foreground) 45%, transparent) transparent;
+}
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+*::-webkit-scrollbar-track,
+*::-webkit-scrollbar-corner {
+  background: transparent;
+}
+*::-webkit-scrollbar-button {
+  display: none;
+  width: 0;
+  height: 0;
+}
+*::-webkit-scrollbar-thumb {
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+}
+*:hover::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--muted-foreground) 45%, transparent);
+}
+
+html[data-surface="pane"] body,
+html[data-surface="thread"] body {
+  min-width: 0;
+}
+html[data-surface="pane"] #root > * {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+html[data-surface="pane"] [data-workflow-panel] {
+  overflow: auto;
+}

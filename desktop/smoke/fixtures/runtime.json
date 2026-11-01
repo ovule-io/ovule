@@ -1,0 +1,694 @@
+{
+  "app": {
+    "assets": [
+      {
+        "file": "desktop/dist/client/index.html",
+        "origins": [
+          "ovule://-"
+        ],
+        "paths": [
+          "/main",
+          "/thread",
+          "/pane",
+          "/explorer",
+          "/",
+          "/index.html"
+        ]
+      },
+      {
+        "directory": "desktop/dist/client/assets",
+        "origins": [
+          "ovule://-",
+          "ovule://*.artifact",
+          "ovule://*.preview",
+          "ovule://*.local"
+        ],
+        "paths": [
+          "/assets/*"
+        ]
+      },
+      {
+        "file": "desktop/dist/client/shell_api.js",
+        "origins": [
+          "ovule://-",
+          "ovule://*.local"
+        ],
+        "paths": [
+          "/shell_api.js"
+        ]
+      },
+      {
+        "directory": "desktop/dist/resources/web/extensions",
+        "origins": [
+          "ovule://-",
+          "ovule://*.artifact"
+        ],
+        "paths": [
+          "/extensions/*"
+        ]
+      },
+      {
+        "file": "desktop/dist/client/preview.html",
+        "origins": [
+          "ovule://*.local"
+        ],
+        "paths": [
+          "/code",
+          "/markdown",
+          "/office",
+          "/unsupported",
+          "/pdf",
+          "/preview.html",
+          "/html"
+        ]
+      }
+    ],
+    "network": {
+      "disableHttp2": true,
+      "maxResponseBytes": 1048576,
+      "timeoutSeconds": 30
+    },
+    "schemes": [
+      "ovule"
+    ],
+    "windows": [
+      {
+        "decorations": false,
+        "height": 800,
+        "label": "main",
+        "maxHeight": 2160,
+        "maxWidth": 3840,
+        "minHeight": 640,
+        "minWidth": 576,
+        "title": "Ovule",
+        "url": "ovule://-/main",
+        "width": 992
+      }
+    ]
+  },
+  "browser": {
+    "devtools": true,
+    "rules": [
+      {
+        "explorer": {
+          "behavior": {
+            "dialog": {
+              "mode": "delegate"
+            },
+            "externalProtocol": {
+              "mode": "browser"
+            },
+            "navigation": {
+              "mode": "delegate"
+            },
+            "newWindow": {
+              "mode": "delegate"
+            }
+          },
+          "create": true,
+          "executeJavaScript": true
+        },
+        "identifier": "app-shell",
+        "origins": [
+          "ovule://-"
+        ],
+        "shellApi": [
+          {
+            "method": "ovule.Agent.ApprovalMode"
+          },
+          {
+            "method": "ovule.Agent.ExecutionCalls"
+          },
+          {
+            "method": "ovule.Agent.MarkApprovalPresented"
+          },
+          {
+            "method": "ovule.Agent.PendingApprovals"
+          },
+          {
+            "method": "ovule.Agent.RespondApproval"
+          },
+          {
+            "method": "ovule.Agent.RespondApprovalWithScope"
+          },
+          {
+            "method": "ovule.Agent.SetApprovalMode"
+          },
+          {
+            "method": "ovule.Browser.CreateFilePreview"
+          },
+          {
+            "method": "ovule.Browser.CreateHtmlPreview"
+          },
+          {
+            "method": "ovule.Browser.DownloadDirectory"
+          },
+          {
+            "method": "ovule.Browser.ListDownloads"
+          },
+          {
+            "method": "ovule.Browser.ListLocalDirectory"
+          },
+          {
+            "method": "ovule.Browser.PublishDownload"
+          },
+          {
+            "method": "ovule.Browser.ReadLocalFile"
+          },
+          {
+            "method": "ovule.Browser.ReadLocalText"
+          },
+          {
+            "method": "ovule.Browser.RemoveDownload"
+          },
+          {
+            "method": "ovule.Browser.Respond"
+          },
+          {
+            "method": "ovule.Browser.RevealDownload"
+          },
+          {
+            "method": "ovule.Browser.RevokePreview"
+          },
+          {
+            "method": "ovule.Browser.SetDownloadDirectory"
+          },
+          {
+            "method": "ovule.Content.ReadHtmlPreview"
+          },
+          {
+            "method": "ovule.Content.ReadMarkdown"
+          },
+          {
+            "method": "ovule.Content.ReadWorkspaceFile"
+          },
+          {
+            "method": "ovule.Content.SaveMarkdown"
+          },
+          {
+            "method": "ovule.Content.SaveWorkspaceFile"
+          },
+          {
+            "method": "ovule.Extensions.ExtensionCatalog"
+          },
+          {
+            "method": "ovule.Extensions.RunExtensionAction"
+          },
+          {
+            "method": "ovule.Message.CancelAttempt"
+          },
+          {
+            "method": "ovule.Message.ForkMessage"
+          },
+          {
+            "method": "ovule.Message.ReadMessageAttachment"
+          },
+          {
+            "method": "ovule.Message.RestartMessage"
+          },
+          {
+            "method": "ovule.Message.SelectAgent"
+          },
+          {
+            "method": "ovule.Message.SelectHost"
+          },
+          {
+            "method": "ovule.Message.SendMessage"
+          },
+          {
+            "method": "ovule.Message.SendMessageWithAttachments"
+          },
+          {
+            "method": "ovule.Preview.Describe"
+          },
+          {
+            "method": "ovule.Preview.ReadFile"
+          },
+          {
+            "method": "ovule.Preview.ReadText"
+          },
+          {
+            "method": "ovule.Remoting.Clipboard"
+          },
+          {
+            "method": "ovule.Remoting.Signal"
+          },
+          {
+            "method": "ovule.Remoting.Snapshot"
+          },
+          {
+            "method": "ovule.Remoting.Start"
+          },
+          {
+            "method": "ovule.Remoting.Stop"
+          },
+          {
+            "method": "ovule.Settings.CleanLegacyData"
+          },
+          {
+            "method": "ovule.Settings.ImportSkill"
+          },
+          {
+            "method": "ovule.Settings.InstallBundledSkill"
+          },
+          {
+            "method": "ovule.Settings.OpenSystemUrl"
+          },
+          {
+            "method": "ovule.Settings.RemoveAgent"
+          },
+          {
+            "method": "ovule.Settings.RemoveModel"
+          },
+          {
+            "method": "ovule.Settings.RemoveSkill"
+          },
+          {
+            "method": "ovule.Settings.RemoveTool"
+          },
+          {
+            "method": "ovule.Settings.SetSkillEnabled"
+          },
+          {
+            "method": "ovule.Settings.UpsertAgent"
+          },
+          {
+            "method": "ovule.Settings.UpsertModel"
+          },
+          {
+            "method": "ovule.Settings.UpsertTool"
+          },
+          {
+            "method": "ovule.Setup.CleanOnboardingState"
+          },
+          {
+            "method": "ovule.Setup.CompleteOnboarding"
+          },
+          {
+            "method": "ovule.Setup.InstallExtension"
+          },
+          {
+            "method": "ovule.Setup.InstallToolchain"
+          },
+          {
+            "method": "ovule.Setup.OllamaModelJobs"
+          },
+          {
+            "method": "ovule.Setup.OllamaModels"
+          },
+          {
+            "method": "ovule.Setup.OnboardingStatus"
+          },
+          {
+            "method": "ovule.Setup.PullOllamaModel"
+          },
+          {
+            "method": "ovule.Setup.RemoveExtension"
+          },
+          {
+            "method": "ovule.Setup.RunExtensionSetupAction"
+          },
+          {
+            "method": "ovule.Setup.SetExtensionEnabled"
+          },
+          {
+            "method": "ovule.Setup.ToolchainStatus"
+          },
+          {
+            "method": "ovule.Terminal.CancelTerminal"
+          },
+          {
+            "method": "ovule.Terminal.CloseSession"
+          },
+          {
+            "method": "ovule.Terminal.ConfigureShellProfiles"
+          },
+          {
+            "method": "ovule.Terminal.ListSessions"
+          },
+          {
+            "method": "ovule.Terminal.OpenSession"
+          },
+          {
+            "method": "ovule.Terminal.ReadSession"
+          },
+          {
+            "method": "ovule.Terminal.ResizeSession"
+          },
+          {
+            "method": "ovule.Terminal.ShellProfiles"
+          },
+          {
+            "method": "ovule.Terminal.StartTerminal"
+          },
+          {
+            "method": "ovule.Terminal.WriteSession"
+          },
+          {
+            "method": "ovule.Workflow.AddGate"
+          },
+          {
+            "method": "ovule.Workflow.AddTask"
+          },
+          {
+            "method": "ovule.Workflow.AdvanceWorkflow"
+          },
+          {
+            "method": "ovule.Workflow.CreateGoal"
+          },
+          {
+            "method": "ovule.Workflow.DelegateTask"
+          },
+          {
+            "method": "ovule.Workflow.ResetWorkflows"
+          },
+          {
+            "method": "ovule.Workflow.ResolveGate"
+          },
+          {
+            "method": "ovule.Workspace.BindWorkspace"
+          },
+          {
+            "method": "ovule.Workspace.BrowserSuggestions"
+          },
+          {
+            "method": "ovule.Workspace.ConfigureHostSpice"
+          },
+          {
+            "method": "ovule.Workspace.CreateProject"
+          },
+          {
+            "method": "ovule.Workspace.CreateThread"
+          },
+          {
+            "method": "ovule.Workspace.DesktopPermissions"
+          },
+          {
+            "method": "ovule.Workspace.DiscoverSshHost"
+          },
+          {
+            "method": "ovule.Workspace.HostPowerStatus"
+          },
+          {
+            "method": "ovule.Workspace.MoveThreadToProject"
+          },
+          {
+            "method": "ovule.Workspace.RegenerateHostLink"
+          },
+          {
+            "method": "ovule.Workspace.RegisterEndpoint"
+          },
+          {
+            "method": "ovule.Workspace.RemoveRemoteHost"
+          },
+          {
+            "method": "ovule.Workspace.RenameProject"
+          },
+          {
+            "method": "ovule.Workspace.RepairLocalHostAccess"
+          },
+          {
+            "method": "ovule.Workspace.RequestDesktopPermission"
+          },
+          {
+            "method": "ovule.Workspace.ResetLinkHosts"
+          },
+          {
+            "method": "ovule.Workspace.ResetLocalHostLinkIdentity"
+          },
+          {
+            "method": "ovule.Workspace.RevokeWorkspaceLink"
+          },
+          {
+            "method": "ovule.Workspace.SetHostKeepAwake"
+          },
+          {
+            "method": "ovule.Workspace.SetThreadWorkspace"
+          },
+          {
+            "method": "ovule.Workspace.SetThreadWorkspaceBindings"
+          },
+          {
+            "method": "ovule.Workspace.SetWorkspaceLinkAccess"
+          },
+          {
+            "method": "ovule.Workspace.ShareCurrentWorkspaceLink"
+          },
+          {
+            "method": "ovule.Workspace.ShareHostLink"
+          },
+          {
+            "method": "ovule.Workspace.ShareWorkspaceLink"
+          },
+          {
+            "method": "ovule.Workspace.Snapshot"
+          },
+          {
+            "method": "ovule.Workspace.SubmitWorkspaceLinkPairing"
+          },
+          {
+            "method": "ovule.Workspace.TestSshEndpoint"
+          },
+          {
+            "method": "ovule.Workspace.TestWorkspaceLink"
+          },
+          {
+            "method": "ovule.Workspace.UnbindRemoteHost"
+          },
+          {
+            "method": "ovule.Workspace.UnbindWorkspace"
+          },
+          {
+            "method": "tuffite.Storage.Clear"
+          },
+          {
+            "method": "tuffite.Storage.Get"
+          },
+          {
+            "method": "tuffite.Storage.Remove"
+          },
+          {
+            "method": "tuffite.Storage.Set"
+          },
+          {
+            "method": "tuffite.Log.Debug"
+          },
+          {
+            "method": "tuffite.Log.Error"
+          },
+          {
+            "method": "tuffite.Log.Info"
+          },
+          {
+            "method": "tuffite.Log.Trace"
+          },
+          {
+            "method": "tuffite.Log.Warn"
+          },
+          {
+            "method": "tuffite.Utility.Cancel"
+          },
+          {
+            "method": "tuffite.Utility.Invoke"
+          },
+          {
+            "allow": [
+              {
+                "path": "resource/*"
+              }
+            ],
+            "method": "tuffite.Fs.ReadFile"
+          },
+          {
+            "allow": [
+              {
+                "path": "resource/*"
+              }
+            ],
+            "method": "tuffite.Fs.Exists"
+          },
+          {
+            "allow": [
+              {
+                "path": "data/**"
+              },
+              {
+                "path": "cache/**"
+              },
+              {
+                "path": "temp/**"
+              }
+            ],
+            "method": "tuffite.Fs.CreateDir"
+          },
+          {
+            "allow": [
+              {
+                "path": "data/**"
+              },
+              {
+                "path": "cache/**"
+              },
+              {
+                "path": "temp/**"
+              }
+            ],
+            "method": "tuffite.Fs.Exists"
+          },
+          {
+            "allow": [
+              {
+                "path": "data/**"
+              },
+              {
+                "path": "cache/**"
+              },
+              {
+                "path": "temp/**"
+              }
+            ],
+            "method": "tuffite.Fs.ReadFile"
+          },
+          {
+            "allow": [
+              {
+                "path": "data/**"
+              },
+              {
+                "path": "cache/**"
+              },
+              {
+                "path": "temp/**"
+              }
+            ],
+            "method": "tuffite.Fs.RemoveFile"
+          },
+          {
+            "allow": [
+              {
+                "path": "data/**"
+              },
+              {
+                "path": "cache/**"
+              },
+              {
+                "path": "temp/**"
+              }
+            ],
+            "method": "tuffite.Fs.WriteFile"
+          },
+          {
+            "method": "tuffite.Path.Directories"
+          },
+          {
+            "allow": [
+              {
+                "path": "resource/**"
+              },
+              {
+                "path": "data/**"
+              },
+              {
+                "path": "cache/**"
+              },
+              {
+                "path": "temp/**"
+              }
+            ],
+            "method": "tuffite.Path.Resolve"
+          },
+          {
+            "method": "tuffite.Dialog.OpenFile"
+          },
+          {
+            "method": "tuffite.Dialog.OpenDirectory"
+          },
+          {
+            "method": "tuffite.Dialog.SaveFile"
+          },
+          {
+            "method": "tuffite.Window.Close"
+          },
+          {
+            "method": "tuffite.Window.Create"
+          },
+          {
+            "method": "tuffite.Window.Current"
+          },
+          {
+            "method": "tuffite.Window.Focus"
+          },
+          {
+            "method": "tuffite.Window.GetBounds"
+          },
+          {
+            "method": "tuffite.Window.List"
+          },
+          {
+            "method": "tuffite.Window.Maximize"
+          },
+          {
+            "method": "tuffite.Window.Minimize"
+          },
+          {
+            "method": "tuffite.Window.Restore"
+          },
+          {
+            "method": "tuffite.Window.SetBounds"
+          },
+          {
+            "method": "tuffite.Window.SetConstraints"
+          },
+          {
+            "method": "tuffite.Window.SetFullscreen"
+          },
+          {
+            "method": "tuffite.Window.SetTitle"
+          }
+        ]
+      },
+      {
+        "identifier": "artifact-and-preview",
+        "origins": [
+          "ovule://*.artifact",
+          "ovule://*.preview"
+        ],
+        "shellApi": [
+          {
+            "method": "tuffite.Path.Directories"
+          },
+          {
+            "method": "tuffite.Storage.Get"
+          }
+        ]
+      },
+      {
+        "identifier": "document-preview",
+        "origins": [
+          "ovule://*.local"
+        ],
+        "shellApi": [
+          {
+            "method": "ovule.Preview.Describe"
+          },
+          {
+            "method": "ovule.Preview.ReadText"
+          },
+          {
+            "method": "ovule.Preview.ReadFile"
+          }
+        ]
+      },
+      {
+        "csp": "default-src 'self'; connect-src 'self' ws: wss:; script-src 'self' 'nonce-ovule-spa' 'sha256-X+PV4o5mNco/Pvq+pI48kE+2DEZFB7C85wagfp0G5Bc=' 'sha256-7Jd2j+/dVXRgQ8V+qmwGHURb1YpFcJvFTBg5hMsQGV8=' 'sha256-duhaxWNI+6QAukUMmlYrkl97X+e0pxobkwS+TpY5/CQ=' 'sha256-RBZNiG3Ztb26Xi/69+VRecU4BPhrfxcvspLXMRrrCNE='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https: http:; frame-src 'self' https:; object-src 'none'; base-uri 'none'",
+        "identifier": "document-csp",
+        "origins": [
+          "ovule://-",
+          "ovule://*.artifact",
+          "ovule://*.preview",
+          "ovule://*.local"
+        ]
+      }
+    ]
+  }
+}

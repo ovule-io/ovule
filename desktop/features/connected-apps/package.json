@@ -1,0 +1,42 @@
+{
+  "name": "@ovule/connected-apps",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./operations": {
+      "types": "./src/operations.d.ts"
+    },
+    "./view-data": {
+      "types": "./src/view-data.d.ts"
+    },
+    "./view": {
+      "types": "./src/view.d.ts"
+    },
+    "./connected-apps.token": "./src/connected-apps.token.ts",
+    "./connected-apps.provider": "./src/connected-apps.provider.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@ovule/ioc": "workspace:*",
+    "@ovule/settings": "workspace:*",
+    "@ovule/ui": "workspace:*",
+    "@ovule/workspace": "workspace:*",
+    "lucide-react": "1.43.0",
+    "react": ">=18",
+    "react-i18next": "^16.2.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "4.3.3",
+    "@types/node": "26.5.0",
+    "@types/react": "19.2.18",
+    "@types/react-dom": "19.2.7",
+    "prettier": "3.6.2",
+    "tailwindcss": "4.3.3",
+    "typescript": "5.9.3",
+    "vite": "8.2.2"
+  },
+  "license": "MIT OR Apache-2.0"
+}

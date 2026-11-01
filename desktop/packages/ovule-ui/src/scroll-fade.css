@@ -1,0 +1,36 @@
+/* Bottom-edge subset of shadcn/ui scroll-fade, adapted for plain CSS.
+ * https://ui.shadcn.com/docs/utils/scroll-fade */
+@property --scroll-fade-b {
+  syntax: "<length-percentage>";
+  inherits: false;
+  initial-value: 0px;
+}
+
+@keyframes scroll-fade-reveal-b {
+  from {
+    --scroll-fade-b: var(--scroll-fade-b-size, var(--scroll-fade-size, min(12%, 40px)));
+  }
+  to {
+    --scroll-fade-b: 0px;
+  }
+}
+
+.scroll-fade-b {
+  mask-image: linear-gradient(
+    to bottom,
+    #000 0,
+    #000 calc(100% - var(--scroll-fade-b)),
+    transparent 100%
+  );
+  mask-repeat: no-repeat;
+}
+
+@supports (animation-timeline: scroll()) {
+  .scroll-fade-b {
+    animation: scroll-fade-reveal-b 1ms ease-in-out both;
+    /* Keep the timeline separate: the CSS minifier otherwise merges it into
+     * an animation shorthand that the bundled Chromium cannot parse. */
+    animation-timeline: scroll(self y) !important;
+    animation-range: calc(100% - var(--scroll-fade-reveal, 96px)) 100%;
+  }
+}

@@ -1,0 +1,86 @@
+{
+  "id": "io.ovule.visual-blocks",
+  "version": "0.1.0",
+  "apiVersion": 1,
+  "contributes": {
+    "agents": [],
+    "channels": [],
+    "skills": [],
+    "models": [],
+    "capabilities": [
+      {
+        "id": "visualization.echarts",
+        "label": "ECharts visualization",
+        "description": "Render declarative chart data in Thread messages."
+      },
+      {
+        "id": "drawing.excalidraw",
+        "label": "Excalidraw scene",
+        "description": "Render declarative drawing scenes in Thread messages."
+      }
+    ],
+    "messageBlocks": [
+      {
+        "kind": "echarts",
+        "tag": "ovule-echarts",
+        "module": "dist/web/echarts-block.mjs",
+        "style": "dist/web/blocks.css",
+        "capability": "visualization.echarts",
+        "agentInstructions": "Use this block when the user asks for a chart or when a chart explains data better than prose. Put a standard ECharts option object in data.option. Prefer inline data and do not create an HTML file unless the user explicitly asks for one.",
+        "example": {
+          "option": {
+            "title": {
+              "text": "Attempt latency"
+            },
+            "tooltip": {
+              "trigger": "axis"
+            },
+            "xAxis": {
+              "type": "category",
+              "data": ["Plan", "Run", "Verify"]
+            },
+            "yAxis": {
+              "type": "value"
+            },
+            "series": [
+              {
+                "type": "bar",
+                "data": [12, 42, 18]
+              }
+            ]
+          }
+        }
+      },
+      {
+        "kind": "excalidraw",
+        "tag": "ovule-excalidraw",
+        "module": "dist/web/excalidraw-block.mjs",
+        "style": "dist/web/blocks.css",
+        "capability": "drawing.excalidraw",
+        "agentInstructions": "Use this block for diagrams or sketches. Put Excalidraw-compatible scene elements in data.elements and an optional title in data.title.",
+        "example": {
+          "title": "Request flow",
+          "elements": [
+            {
+              "type": "rectangle",
+              "x": 20,
+              "y": 20,
+              "width": 160,
+              "height": 64
+            },
+            {
+              "type": "text",
+              "x": 48,
+              "y": 40,
+              "text": "Ovule"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "permissions": {},
+  "private": true,
+  "schemaVersion": 1,
+  "type": "module"
+}

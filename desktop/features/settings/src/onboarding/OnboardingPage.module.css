@@ -1,0 +1,355 @@
+.onboardingPage {
+  container: onboarding / inline-size;
+  height: 100%;
+  overflow: hidden;
+  background: var(--background);
+}
+.onboardingPageContent {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  width: min(780px, calc(100% - 32px));
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  overflow: hidden;
+  margin: 0 auto;
+  padding: 24px 0 32px;
+}
+.onboardingBody {
+  min-width: 0;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+.onboardingHeader {
+  padding-bottom: 12px;
+}
+.onboardingFooter {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-top: 12px;
+}
+.onboardingSection {
+  min-width: 0;
+  max-width: 100%;
+}
+.onboardingMark {
+  display: grid;
+  width: 32px;
+  height: 32px;
+  place-items: center;
+  border-radius: 9px;
+  background: var(--text);
+  color: var(--surface);
+}
+.onboardingLoading {
+  display: flex;
+  min-height: 210px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: var(--muted-foreground);
+  font-size: var(--font-size-ui);
+}
+.onboardingAgents,
+.onboardingModelSetup {
+  display: grid;
+  min-width: 0;
+  gap: 10px;
+  margin-top: 18px;
+}
+.onboardingSectionHeading {
+  display: flex;
+  min-width: 0;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+.sectionHeadingTitle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--font-size-ui);
+  font-weight: 500;
+}
+.sectionHeadingDescription {
+  color: var(--faint);
+  font-size: var(--font-size-caption);
+  text-align: right;
+}
+.onboardingField {
+  display: grid;
+  min-width: 0;
+  align-content: start;
+  gap: 6px;
+}
+.onboardingField.full {
+  grid-column: 1 / -1;
+}
+.fieldLabel {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--foreground);
+  font-size: var(--font-size-ui);
+  font-weight: 500;
+}
+.fieldDescription {
+  min-height: 28px;
+  color: var(--faint);
+  font-size: var(--font-size-ui);
+  line-height: 1.45;
+}
+.fieldControl {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  outline: 0;
+  padding: 8px;
+  background: var(--surface-2);
+  color: var(--text);
+  font-size: var(--font-size-ui);
+}
+.integrationCard {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 8px 12px;
+  background: var(--surface-2);
+}
+.integrationIdentity,
+.integrationText {
+  display: flex;
+  min-width: 0;
+}
+.integrationIdentity {
+  align-items: center;
+  gap: 8px;
+}
+.integrationText {
+  flex-direction: column;
+  gap: 2px;
+}
+.integrationDescription {
+  overflow: hidden;
+  color: var(--faint);
+  font-size: var(--font-size-ui);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.onboardingAuthNote {
+  white-space: normal;
+}
+.integrationActions {
+  display: flex;
+  flex: 1;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  min-width: 0;
+  gap: 6px;
+}
+.integrationInput {
+  flex: 1 1 180px;
+  align-items: center;
+  min-width: 0;
+  width: min(220px, 28vw);
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  padding: 8px;
+  background: var(--surface);
+  color: var(--text);
+  font-size: var(--font-size-ui);
+}
+.onboardingError {
+  margin-top: 12px;
+  border: 1px solid var(--danger);
+  border-radius: 8px;
+  padding: 8px 10px;
+  background: var(--danger-soft);
+  color: var(--danger);
+  font-size: var(--font-size-ui);
+  overflow-wrap: anywhere;
+}
+.onboardingAgentCard {
+  display: flex;
+  min-width: 0;
+  align-items: stretch;
+  justify-content: space-between;
+  gap: 8px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  padding: 10px;
+  background: var(--surface-2);
+}
+.onboardingAgentCard.selected {
+  border-color: var(--border);
+  background: var(--accent);
+}
+.onboardingAddProfile {
+  justify-self: start;
+}
+.onboardingAgentToggle {
+  display: flex;
+  justify-content: flex-start;
+  flex: 1;
+  min-width: 0;
+  align-items: center;
+  gap: 8px;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+}
+.onboardingAgentToggle:disabled {
+  cursor: not-allowed;
+}
+.agentText {
+  display: grid;
+  min-width: 0;
+  gap: 2px;
+}
+.agentTitle {
+  font-size: var(--font-size-ui);
+  font-weight: 500;
+}
+.agentDescription {
+  overflow: hidden;
+  color: var(--faint);
+  font-size: var(--font-size-ui);
+  line-height: 1.45;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.onboardingCheck {
+  display: grid;
+  flex: 0 0 16px;
+  width: 16px;
+  height: 16px;
+  place-items: center;
+  border: 1px solid var(--line-strong);
+  border-radius: 5px;
+  color: var(--surface);
+}
+.onboardingCheckSelected {
+  border-color: var(--foreground);
+  background: var(--foreground);
+}
+.onboardingDefault {
+  align-self: center;
+  border: 0;
+  border-radius: 999px;
+  padding: 4px 7px;
+  background: transparent;
+  color: var(--faint);
+  font-size: var(--font-size-caption);
+  white-space: nowrap;
+  cursor: pointer;
+}
+.onboardingDefault:disabled {
+  visibility: hidden;
+}
+.onboardingDefault:hover,
+.onboardingDefault.active {
+  background: var(--surface);
+  color: var(--text);
+}
+.onboardingSelectionError {
+  color: var(--danger);
+  font-size: var(--font-size-ui);
+}
+
+.agentConfiguration {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--surface-2);
+}
+.agentConfiguration.selected {
+  border-color: var(--border);
+}
+.agentConfiguration .onboardingAgentCard {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+.agentConfigurationBody {
+  display: grid;
+  min-width: 0;
+  gap: 12px;
+  border-top: 1px solid var(--line);
+  padding: 16px;
+  background: var(--background);
+}
+.profileFields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.readiness {
+  align-self: center;
+  color: var(--muted-foreground);
+  font-size: var(--font-size-caption);
+  white-space: nowrap;
+}
+.readiness.onboardingSelectionError {
+  color: var(--danger);
+}
+@container onboarding (max-width: 720px) {
+  .profileFields {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .onboardingSectionHeading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .sectionHeadingDescription {
+    text-align: left;
+  }
+  .onboardingAgentCard {
+    flex-wrap: wrap;
+  }
+  .onboardingAgentToggle {
+    flex-basis: 100%;
+  }
+}
+
+.readiness {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  border-radius: 999px;
+  padding: 3px 8px;
+  font-weight: 600;
+}
+.ready,
+.readyIcon {
+  color: var(--success);
+}
+.ready {
+  background: var(--success-soft);
+}
+.needsSetup {
+  color: var(--warning);
+  background: var(--warning-soft);
+  border: 1px solid var(--warning);
+}
+.setupProgress {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  color: var(--muted-foreground);
+  font-size: var(--font-size-ui);
+}

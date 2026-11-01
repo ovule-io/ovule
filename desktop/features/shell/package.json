@@ -1,0 +1,61 @@
+{
+  "name": "@ovule/shell",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./downloads": {
+      "types": "./src/downloads.d.ts"
+    },
+    "./dialog": {
+      "types": "./src/dialog.d.ts"
+    },
+    "./explorer": {
+      "types": "./src/explorer.d.ts"
+    },
+    "./route": {
+      "types": "./src/route.d.ts"
+    },
+    "./shell": {
+      "types": "./src/shell.d.ts"
+    },
+    "./snapshot-sync": {
+      "types": "./src/snapshot-sync.d.ts"
+    },
+    "./window": {
+      "types": "./src/window.d.ts"
+    },
+    "./shell.token": "./src/shell.token.ts",
+    "./app.provider": "./src/app.provider.ts",
+    "./isolated": {
+      "types": "./src/isolated-api.d.ts"
+    }
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "lucide-react": "1.43.0",
+    "@ovule/ioc": "workspace:*",
+    "@ovule/shell-api": "workspace:*",
+    "@ovule/workspace": "workspace:*",
+    "pdfjs-dist": "5.4.149",
+    "@ovule/ui": "workspace:*",
+    "i18next": "25.6.0",
+    "@streamdown/code": "2.0.0",
+    "@ovule/file-types": "workspace:*"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "4.3.3",
+    "@types/node": "26.5.0",
+    "@types/react": "19.2.18",
+    "@types/react-dom": "19.2.7",
+    "prettier": "3.6.2",
+    "tailwindcss": "4.3.3",
+    "typescript": "5.9.3",
+    "vite": "8.2.2"
+  },
+  "license": "MIT OR Apache-2.0"
+}

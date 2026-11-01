@@ -1,0 +1,31 @@
+{
+  "name": "@ovule/visuals",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "files": [
+    "extension.json",
+    "README.md",
+    "dist",
+    "LICENSE.echarts.txt",
+    "NOTICE.md",
+    "LICENSE",
+    "THIRD_PARTY_NOTICES.txt",
+    "THIRD_PARTY_NOTICES.md"
+  ],
+  "scripts": {
+    "build": "bun ../../scripts/build-extensions.ts visuals"
+  },
+  "dependencies": {
+    "echarts": "6.1.0",
+    "chart.js": "4.4.9",
+    "docx-preview": "0.4.0",
+    "exceljs": "4.4.0",
+    "pdfjs-dist": "5.4.149",
+    "pptxviewjs": "1.1.9",
+    "buffer": "5.7.1",
+    "process": "0.11.10",
+    "jszip": "3.10.1"
+  },
+  "license": "MIT OR Apache-2.0"
+}

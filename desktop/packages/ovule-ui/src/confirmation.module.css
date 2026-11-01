@@ -1,0 +1,41 @@
+.item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 16px;
+}
+.content {
+  flex: 1 1 240px;
+  min-width: 0;
+}
+.title {
+  color: var(--foreground);
+  font-size: var(--font-size-ui);
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+.description {
+  margin: 6px 0 0;
+  color: var(--muted-foreground);
+  font-size: var(--font-size-ui);
+  line-height: 1.5;
+}
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  flex: 0 0 auto;
+  margin-inline-start: auto;
+}
+
+.action {
+  min-height: 30px;
+  border-radius: 999px;
+  padding-inline: 14px;
+}

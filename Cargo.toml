@@ -1,0 +1,166 @@
+[workspace]
+members = [".", "services/*", "crates/*", "desktop/extensions/cloudflare-connectivity/native"]
+resolver = "3"
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.91"
+license = "MIT OR Apache-2.0"
+
+[workspace.dependencies]
+ovule-agent-api = { path = "crates/ovule-agent-api" }
+ovule-browser = { path = "services/browser" }
+ovule-memory = { path = "services/memory" }
+ovule-skills = { path = "services/skills" }
+ovule-cloudflare-connectivity = { path = "desktop/extensions/cloudflare-connectivity/native" }
+ovule-agent = { path = "services/agent" }
+ovule-channels = { path = "services/channels" }
+ovule-conversation = { path = "services/conversation" }
+ovule-extension-api = { path = "crates/ovule-extension-api" }
+ovule-extensions = { path = "services/extensions" }
+ovule-files = { path = "services/files" }
+ovule-hosts = { path = "services/hosts" }
+ovule-link-protocol = { path = "crates/ovule-link-protocol" }
+ovule-link-transport = { path = "crates/ovule-link-transport" }
+ovule-platform = { path = "crates/ovule-platform" }
+ovule-remoting = { path = "services/remoting" }
+ovule-secrets = { path = "services/secrets" }
+ovule-settings = { path = "services/settings" }
+ovule-setup = { path = "services/setup" }
+ovule-storage = { path = "services/storage" }
+ovule-terminal = { path = "services/terminal" }
+ovule-toolchains = { path = "services/toolchains" }
+ovule-workflow = { path = "services/workflow" }
+ovule-workspace = { path = "services/workspace" }
+tuffite = { git = "https://github.com/tuffite/tuffite.git", rev = "4b1498ac309edecdc55f12eeb93db1816b6204f4", default-features = false }
+tuffite-ioc = { git = "https://github.com/tuffite/tuffite.git", rev = "4b1498ac309edecdc55f12eeb93db1816b6204f4", default-features = false }
+tracing = { version = "0.1", default-features = false, features = [
+  "std",
+  "attributes",
+] }
+
+[workspace.lints.rust]
+unsafe_op_in_unsafe_fn = "deny"
+
+[workspace.lints.clippy]
+all = { level = "deny", priority = -1 }
+pedantic = { level = "deny", priority = -1 }
+missing_errors_doc = "allow"
+module_name_repetitions = "allow"
+
+[profile.release]
+opt-level = 2
+lto = false
+codegen-units = 16
+debug = 1
+panic = "unwind"
+strip = "none"
+
+[profile.ci]
+inherits = "release"
+opt-level = "z"
+lto = false
+codegen-units = 1
+debug = 0
+strip = "symbols"
+
+[package]
+name = "ovule"
+description = "Local-first observable agent harness built on Tuffite"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+build = "build.rs"
+[lib]
+name = "ovule"
+path = "src/lib.rs"
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+processkit = { version = "3.3.4", features = ["tracing"] }
+tokio-util = { version = "0.7", features = ["compat"] }
+url = "2"
+rand = "0.10"
+tempfile = "3"
+
+ovule-skills.workspace = true
+ovule-storage.workspace = true
+agent-client-protocol = "2.2"
+axum = { version = "0.8", default-features = false, features = ["http1", "tokio"] }
+rmcp = { version = "3.4", default-features = false, features = ["client", "macros", "server", "transport-child-process", "transport-streamable-http-client-reqwest", "transport-streamable-http-server"] }
+tower-http = { version = "0.6", default-features = false, features = ["auth"] }
+which = "8"
+
+ovule-agent-api.workspace = true
+ovule-memory.workspace = true
+ovule-browser.workspace = true
+ovule-platform.workspace = true
+ovule-cloudflare-connectivity.workspace = true
+ovule-hosts = { workspace = true }
+ovule-agent = { workspace = true }
+ovule-settings = { workspace = true }
+ovule-channels = { workspace = true }
+ovule-conversation = { workspace = true }
+ovule-setup = { workspace = true }
+ovule-workflow = { workspace = true }
+ovule-terminal = { workspace = true }
+ovule-files = { workspace = true }
+ovule-workspace = { workspace = true }
+ovule-secrets = { workspace = true }
+ovule-remoting = { workspace = true }
+ovule-extensions = { workspace = true }
+ovule-toolchains = { workspace = true }
+ovule-extension-api = { workspace = true }
+
+tuffite = { workspace = true, features = ["remoting"] }
+tuffite-ioc = { workspace = true, features = ["registry"] }
+
+serde_json = "1"
+tokio = { version = "1", features = [
+  "io-util",
+  "net",
+  "process",
+  "rt-multi-thread",
+  "macros",
+  "sync",
+  "time",
+] }
+async-trait = "0.1"
+rustls = { version = "0.23", default-features = false, features = [
+  "ring",
+  "std",
+] }
+serde = { version = "1", features = ["derive"] }
+tracing.workspace = true
+tracing-subscriber = { version = "0.3", default-features = false, features = [
+  "fmt",
+  "env-filter",
+] }
+
+[features]
+default = ["native-framework"]
+native-framework = [
+  "ovule-browser/framework",
+  "ovule-workspace/framework",
+  "ovule-channels/framework",
+  "ovule-conversation/framework",
+  "ovule-terminal/framework",
+  "ovule-remoting/framework",
+  "ovule-extensions/framework",
+  "ovule-setup/framework",
+]
+ssh_transport = ["ovule-hosts/ssh_transport"]
+
+[build-dependencies]
+serde_json = "1"
+tuffite = { workspace = true, features = ["build"] }
+
+[dev-dependencies]
+reqwest = { version = "0.13", default-features = false, features = ["rustls-no-provider"] }
+ovule-settings = { workspace = true, features = ["test-driver"] }
+ovule-workspace = { workspace = true, features = ["test-support"] }
+
+[lints]
+workspace = true

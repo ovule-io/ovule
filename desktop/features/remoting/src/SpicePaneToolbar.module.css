@@ -1,0 +1,63 @@
+.toolbar {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  align-items: center;
+  gap: 3px;
+}
+.title {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding-inline: 4px;
+}
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  flex-shrink: 1;
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.controls .select {
+  flex-shrink: 0;
+  width: auto;
+  min-width: 0;
+  height: 30px;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  padding: 0 4px;
+  gap: 4px;
+  font-size: var(--font-size-caption);
+}
+.controls .action {
+  width: 28px;
+  min-width: 28px;
+  height: 30px;
+  padding: 4px;
+  border: 0;
+  background: transparent;
+}
+.action svg,
+.status svg {
+  width: 15px;
+  height: 15px;
+}
+.status {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 24px;
+  color: var(--muted-foreground);
+}
+.status[data-status="connected"] {
+  color: var(--success);
+}
+.status[data-status="error"],
+.status[data-status="disconnected"] {
+  color: var(--danger);
+}

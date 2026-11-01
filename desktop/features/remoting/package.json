@@ -1,0 +1,45 @@
+{
+  "name": "@ovule/remoting",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./model": {
+      "types": "./src/model.d.ts"
+    },
+    "./remoting": {
+      "types": "./src/remoting.d.ts"
+    },
+    "./session-links": {
+      "types": "./src/session-links.d.ts"
+    },
+    "./remoting.token": "./src/remoting.token.ts",
+    "./pane.provider": "./src/pane.provider.ts",
+    "./app.provider": "./src/app.provider.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@ovule/shell": "workspace:*",
+    "@ovule/ioc": "workspace:*",
+    "@ovule/panes": "workspace:*",
+    "@ovule/shell-api": "workspace:*",
+    "@ovule/ui": "workspace:*",
+    "lucide-react": "1.43.0",
+    "react": ">=18",
+    "react-i18next": "^16.2.1",
+    "spice-client": "1.2.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "4.3.3",
+    "@types/node": "26.5.0",
+    "@types/react": "19.2.18",
+    "@types/react-dom": "19.2.7",
+    "prettier": "3.6.2",
+    "tailwindcss": "4.3.3",
+    "typescript": "5.9.3",
+    "vite": "8.2.2"
+  },
+  "license": "MIT OR Apache-2.0"
+}

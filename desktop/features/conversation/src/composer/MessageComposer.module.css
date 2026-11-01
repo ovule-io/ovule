@@ -1,0 +1,474 @@
+.root {
+  flex: none;
+  position: relative;
+  z-index: 10;
+  width: auto;
+  min-width: 0;
+  margin: 0 var(--thread-content-gutter, clamp(22px, 5vw, 70px)) 20px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.inputGroup {
+  position: relative;
+  width: 100%;
+  border: 0;
+  border-radius: 16px;
+  background: var(--muted);
+  box-shadow: 0 8px 24px -8px oklch(0 0 0 / 30%);
+  transition: box-shadow 180ms ease;
+}
+
+.inputGroup::before {
+  position: absolute;
+  z-index: -1;
+  inset: 8px 12px -6px;
+  border-radius: inherit;
+  background: linear-gradient(
+    110deg,
+    color-mix(in oklch, var(--primary) 24%, transparent),
+    oklch(0.65 0.12 285 / 14%),
+    color-mix(in oklch, var(--primary) 12%, transparent)
+  );
+  filter: blur(14px);
+  opacity: 0.65;
+  transition: opacity 180ms ease;
+  pointer-events: none;
+  content: "";
+}
+
+.inputGroup:focus-within {
+  border-color: transparent;
+  background: var(--muted);
+  box-shadow:
+    0 8px 24px -8px oklch(0 0 0 / 24%),
+    0 0 24px -6px color-mix(in oklch, var(--primary) 28%, transparent),
+    0 4px 32px -8px oklch(0.72 0.14 285 / 24%);
+}
+
+.inputGroup:focus-within::before {
+  opacity: 1;
+}
+
+.composerInput {
+  width: 100%;
+  min-height: 58px;
+  height: 58px;
+  resize: none;
+  border: 0;
+  border-radius: 12px;
+  padding: 8px 10px;
+  outline: 0;
+  background: transparent;
+  color: var(--text);
+  font-size: var(--font-size-ui);
+  line-height: 1.5;
+}
+
+.composerInput::placeholder {
+  color: var(--faint);
+}
+
+.composerInput:focus-visible {
+  border-color: transparent;
+  outline: none;
+  box-shadow: none;
+}
+
+.attachments {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 2px 0 8px;
+}
+
+.attachment {
+  position: relative;
+  flex: 0 0 92px;
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface-2);
+}
+
+.attachmentPreview {
+  display: block;
+  width: 92px;
+  height: 64px;
+  object-fit: cover;
+}
+
+.attachmentCaption {
+  overflow: hidden;
+  padding: 4px 6px;
+  color: var(--muted-foreground);
+  font-size: var(--font-size-caption);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.attachmentRemove {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  display: grid;
+  width: 20px;
+  height: 20px;
+  place-items: center;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(10, 13, 12, 0.76);
+  color: white;
+}
+
+.attachmentError {
+  margin: -2px 0 6px;
+  color: var(--danger);
+  font-size: var(--font-size-ui);
+}
+
+.suggestionBar {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 7px;
+  padding-bottom: 5px;
+}
+
+.suggestionLabel {
+  flex: none;
+  color: var(--faint);
+  font-size: var(--font-size-caption);
+  font-weight: 500;
+}
+
+.chips {
+  display: flex;
+  min-width: 0;
+  gap: 5px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.chips::-webkit-scrollbar {
+  display: none;
+}
+
+.chip {
+  display: inline-flex;
+  flex: none;
+  height: 22px;
+  align-items: center;
+  gap: 4px;
+  padding: 0 8px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--surface-2) 82%, transparent);
+  color: var(--muted-foreground);
+  font-size: var(--font-size-ui);
+}
+
+.chip:hover {
+  border-color: var(--border);
+  background: var(--accent);
+  color: var(--accent-foreground);
+}
+
+.menu {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 8px);
+  left: 0;
+  z-index: 14;
+  max-height: min(320px, 44vh);
+  overflow-y: auto;
+  padding: 6px;
+  border: 1px solid var(--line-strong);
+  border-radius: 12px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.menuHeader {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 7px 7px;
+  color: var(--faint);
+  font-size: var(--font-size-caption);
+}
+
+.menuTitle {
+  margin-right: auto;
+  font-weight: 500;
+}
+
+.menuShortcut {
+  padding: 1px 4px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--surface-2);
+  font: inherit;
+}
+
+.option {
+  display: grid;
+  width: 100%;
+  height: auto;
+  min-height: 48px;
+  grid-template-columns: minmax(110px, auto) 1fr;
+  align-items: start;
+  gap: 12px;
+  padding: 8px 9px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text);
+  text-align: left;
+}
+
+.optionCommand {
+  padding-top: 2px;
+  color: var(--foreground);
+  font-size: var(--font-size-caption);
+}
+
+.optionText {
+  display: grid;
+  min-width: 0;
+  gap: 2px;
+}
+
+.optionLine {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.optionTitle {
+  font-size: var(--font-size-ui);
+  font-weight: 500;
+  line-height: var(--line-height-ui);
+}
+
+.optionDescription {
+  color: var(--muted-foreground);
+  font-size: var(--font-size-caption);
+  line-height: var(--line-height-caption);
+}
+
+.activeOption {
+  background: var(--accent);
+}
+
+.empty {
+  margin: 0;
+  padding: 10px;
+  color: var(--muted-foreground);
+  font-size: var(--font-size-ui);
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 2px;
+}
+
+.leadingActions {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  align-items: center;
+  gap: 6px;
+}
+
+.attachmentInput {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.plusButton:global(.ui-button),
+.sendButton:global(.ui-button) {
+  width: 32px;
+  min-width: 32px;
+  height: 32px;
+  flex: none;
+  border-radius: 999px;
+}
+
+.plusButton:global(.ui-button) {
+  border: 1px solid var(--border);
+  background: var(--background);
+  color: var(--foreground);
+  box-shadow: 0 1px 2px oklch(0.145 0 0 / 6%);
+}
+
+.plusButton:global(.ui-button):hover {
+  background: var(--accent);
+  color: var(--accent-foreground);
+}
+
+.sendButton:global(.ui-button) {
+  border: 0;
+  background: var(--foreground);
+  color: var(--background);
+  box-shadow: 0 1px 2px oklch(0.145 0 0 / 12%);
+}
+
+.sendButton:global(.ui-button):hover:not(:disabled) {
+  background: color-mix(in oklch, var(--foreground) 86%, var(--background));
+  color: var(--background);
+}
+
+.context {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  align-items: center;
+  gap: 4px;
+}
+.workspaceMenu {
+  width: min(360px, 70vw);
+  max-height: min(440px, 60vh);
+  overflow-y: auto;
+}
+.workspaceOption {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  padding: 7px;
+  border-radius: 7px;
+  cursor: pointer;
+}
+.workspaceOption:hover {
+  background: var(--surface-3);
+}
+.workspaceOptionText {
+  display: grid;
+  min-width: 0;
+}
+.workspaceOptionLine {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.workspaceAlias {
+  overflow: hidden;
+  color: var(--text);
+  font-size: var(--font-size-ui);
+  font-weight: 400;
+  line-height: 18px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.workspaceMenuActions {
+  display: grid;
+  gap: 2px;
+  padding-top: 4px;
+}
+.workspaceMenuActionsSeparated {
+  border-top: 1px solid var(--line);
+}
+.remoteWorkspaceGroup {
+  display: grid;
+  gap: 3px;
+  padding-top: 5px;
+  border-top: 1px solid var(--line);
+}
+.workspaceGroupLabel {
+  padding: 2px 7px;
+  color: var(--faint);
+  font-size: var(--font-size-caption);
+  font-weight: 500;
+}
+.remoteWorkspaceOption {
+  display: grid;
+  height: auto;
+  min-width: 0;
+  justify-content: stretch;
+  gap: 1px;
+  padding: 7px;
+  text-align: left;
+}
+.remoteWorkspaceOption > span,
+.remoteWorkspaceOption > small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.remoteWorkspaceOption > small {
+  color: var(--faint);
+  font-size: var(--font-size-caption);
+}
+.workspaceMenuAction {
+  justify-content: flex-start;
+  max-width: none;
+}
+.workspaceDetail {
+  color: var(--faint);
+  font-size: var(--font-size-caption);
+}
+
+.contextButton {
+  max-width: 190px;
+  overflow: hidden;
+  color: var(--muted-foreground);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.clearWorkspace {
+  display: grid;
+  width: 22px;
+  height: 22px;
+  place-items: center;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--faint);
+}
+
+.clearWorkspace:hover {
+  background: var(--surface-3);
+  color: var(--text);
+}
+
+.inputGroup {
+  position: relative;
+}
+.skillLink {
+  position: absolute;
+  z-index: 2;
+  top: 8px;
+  left: 10px;
+  padding: 0;
+  border: 0;
+  background: var(--background);
+  color: var(--link, #2563eb);
+  font: inherit;
+  font-size: var(--font-size-ui);
+  line-height: 1.5;
+  cursor: pointer;
+}
+.skillLink:hover {
+  text-decoration: underline;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .inputGroup,
+  .inputGroup::before {
+    transition: none;
+  }
+}

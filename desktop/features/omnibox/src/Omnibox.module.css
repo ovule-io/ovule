@@ -1,0 +1,94 @@
+.panel,
+.inputRow {
+  display: contents;
+}
+.panel[data-expanded] {
+  position: fixed;
+  inset: auto;
+  display: block;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--popover);
+  color: var(--popover-foreground);
+  box-shadow: 0 12px 36px -10px #0004;
+}
+.panel::backdrop {
+  background: transparent;
+  pointer-events: none;
+}
+.panel[data-expanded] .inputRow {
+  display: flex;
+  align-items: center;
+  height: var(--omnibox-row-height);
+  gap: var(--omnibox-row-gap);
+  padding: var(--omnibox-row-padding);
+  box-sizing: border-box;
+  border-bottom: 1px solid var(--border);
+}
+.panel[data-expanded] .inputRow input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  border-radius: 0;
+  outline: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.panel[data-expanded] .results {
+  position: static;
+  display: grid;
+  width: 100%;
+  min-width: 0;
+  max-width: none;
+  max-height: var(--omnibox-list-height);
+  gap: 3px;
+  overflow: auto;
+  margin: 0;
+  padding: 6px;
+  box-sizing: border-box;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.panel .results[hidden] {
+  display: none;
+}
+.panel[data-expanded] .option {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  width: 100%;
+  height: auto;
+  min-height: 48px;
+  align-items: center;
+  justify-items: start;
+  gap: 3px;
+  padding: 9px 12px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--popover-foreground);
+  font-weight: 400;
+  text-align: left;
+}
+.panel[data-expanded] .option[aria-selected="true"],
+.panel[data-expanded] .option:hover {
+  background: var(--muted);
+}
+.panel[data-expanded] .option > span,
+.panel[data-expanded] .option > small {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  line-height: 1.4;
+}
+.panel[data-expanded] .option > small {
+  color: var(--muted-foreground);
+  font-size: var(--font-size-caption);
+}

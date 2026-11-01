@@ -1,0 +1,5 @@
+Third-party notices
+
+Generated from the bundled input graph. Third-party code retains its upstream license.
+
+This file contains original license and notice texts; Ovule's dual license applies only to Ovule-owned code.

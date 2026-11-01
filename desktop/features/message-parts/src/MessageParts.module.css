@@ -1,0 +1,342 @@
+.messageMarkdown {
+  min-width: 0;
+  max-width: 100%;
+  white-space: normal;
+  color: inherit;
+  font-size: var(--font-size-ui);
+  line-height: 1.62;
+  overflow-wrap: anywhere;
+}
+.messageMarkdown > :first-child {
+  margin-top: 0;
+}
+.messageMarkdown > :last-child {
+  margin-bottom: 0;
+}
+.messageMarkdown p,
+.messageMarkdown ul,
+.messageMarkdown ol,
+.messageMarkdown blockquote,
+.messageMarkdown pre,
+.messageMarkdown table {
+  margin: 7px 0;
+}
+.messageMarkdown h1,
+.messageMarkdown h2,
+.messageMarkdown h3,
+.messageMarkdown h4,
+.messageMarkdown h5,
+.messageMarkdown h6 {
+  margin: 1em 0 0.35em;
+  font-size: 1em;
+  line-height: 1.5;
+  letter-spacing: normal;
+  font-weight: 600;
+  text-wrap: pretty;
+}
+/* Chat headings should guide reading without competing with the answer. */
+.messageMarkdown h1 {
+  font-size: 1.15em;
+}
+.messageMarkdown h2 {
+  font-size: 1.075em;
+}
+.messageMarkdown h4,
+.messageMarkdown h5,
+.messageMarkdown h6 {
+  margin-top: 0.75em;
+}
+.messageMarkdown :is(h1, h2, h3, h4, h5, h6) :is(strong, b) {
+  font-weight: inherit;
+}
+.messageMarkdown ul,
+.messageMarkdown ol {
+  padding-left: 20px;
+}
+.messageMarkdown li + li {
+  margin-top: 3px;
+}
+.messageMarkdown li:global(.task-list-item) {
+  list-style: none;
+}
+.messageMarkdown input[type="checkbox"] {
+  width: 12px;
+  height: 12px;
+  margin: 0 6px 0 -18px;
+  accent-color: var(--foreground);
+}
+.messageMarkdown code {
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  padding: 1px 4px;
+  background: color-mix(in srgb, var(--surface-3) 76%, transparent);
+  font: 13px/1.5 var(--font-mono);
+}
+.messageMarkdown pre {
+  overflow: auto;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 10px 12px;
+  background: color-mix(in srgb, var(--surface-3) 80%, transparent);
+}
+.messageMarkdown pre code {
+  border: 0;
+  padding: 0;
+  background: transparent;
+}
+.messageMarkdown blockquote {
+  border-left: 2px solid var(--border);
+  padding-left: 10px;
+  color: var(--muted-foreground);
+}
+.messageMarkdown a {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 3px;
+  color: var(--foreground);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.messageMarkdown a:hover {
+  text-decoration: underline;
+}
+.messagePreviewLink {
+  display: inline-flex;
+  align-items: baseline;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--foreground);
+  font: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+.messageMarkdown table {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  border-collapse: collapse;
+}
+.messageMarkdown table,
+.messageMarkdown thead,
+.messageMarkdown tbody,
+.messageMarkdown tr {
+  border: 0;
+}
+.messageMarkdown :global([data-streamdown="table-wrapper"]) {
+  min-width: 0;
+  max-width: 100%;
+  margin: 7px 0;
+  padding: 0;
+  gap: 0;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: transparent;
+}
+.messageMarkdown :global([data-streamdown="table-wrapper"]) > div {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+.messageMarkdown th,
+.messageMarkdown td {
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  padding: 5px 8px;
+  text-align: left;
+}
+.messageMarkdown tbody tr:last-child td {
+  border-bottom: 0;
+}
+.messageMarkdown th {
+  background: var(--surface-3);
+}
+.messageParts {
+  display: grid;
+  min-width: 0;
+  max-width: 100%;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 8px;
+}
+.messageAttachment {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 9px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 9px 10px;
+  background: var(--surface);
+  color: var(--text);
+  text-decoration: none;
+}
+.messageAttachment:hover {
+  border-color: var(--line-strong);
+  background: var(--surface-3);
+}
+.messageLocalFileCard {
+  width: 100%;
+  margin: 6px 0;
+  cursor: pointer;
+  text-align: left;
+}
+.messageLocalFileTitle {
+  color: var(--foreground);
+}
+.messageAttachmentText {
+  min-width: 0;
+}
+.messageAttachmentLine {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.messageAttachmentTitle {
+  margin: 0;
+  color: var(--text);
+  font-size: var(--font-size-ui);
+  font-weight: 500;
+  text-transform: none;
+}
+.messageAttachmentDetail {
+  margin-top: 2px;
+  font-size: var(--font-size-caption);
+}
+.messageAttachment.unavailable {
+  opacity: 0.65;
+}
+.attachmentDialog {
+  width: min(960px, calc(100vw - 40px));
+  max-width: calc(100vw - 40px);
+}
+.attachmentFullImage {
+  display: block;
+  width: 100%;
+  max-height: 70vh;
+  object-fit: contain;
+  border-radius: 6px;
+}
+.messageExtensionBlock {
+  display: block;
+  min-width: 0;
+}
+.messageExtensionError {
+  border: 1px dashed var(--danger);
+  border-radius: 9px;
+  padding: 12px;
+  color: var(--danger);
+  font-size: var(--font-size-ui);
+}
+
+.messageParts > * {
+  min-width: 0;
+  max-width: 100%;
+}
+/* Streamdown owns a header and scroll body; keep one quiet outer border. */
+.messageMarkdown :global([data-streamdown="code-block"]) {
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  gap: 0;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--surface-3) 80%, transparent);
+}
+.messageMarkdown :global([data-streamdown="code-block-header"]) {
+  padding: 5px 10px;
+  color: var(--muted-foreground);
+  font-size: var(--font-size-caption);
+}
+.messageMarkdown :global([data-streamdown="code-block-body"]) {
+  min-width: 0;
+  max-width: 100%;
+  overflow: auto;
+  padding: 8px 10px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+.messageMarkdown :global([data-streamdown="code-block-body"]) pre {
+  overflow: visible;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+.messageMarkdown pre code {
+  white-space: pre;
+  overflow-wrap: normal;
+}
+
+.codeFrame {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.messageMarkdown :global([data-streamdown="code-block-header"]) {
+  padding-right: 112px;
+}
+
+.messageMarkdown :global([data-streamdown="code-block-actions"]) {
+  margin-right: 6px;
+  gap: 2px;
+  border: 0;
+  background: transparent;
+  backdrop-filter: none;
+}
+
+.codeAction {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  border-radius: 5px;
+  color: var(--muted-foreground);
+  background: transparent;
+  cursor: pointer;
+}
+
+.codeAction:hover,
+.codeAction[aria-pressed="true"] {
+  color: var(--text);
+  background: var(--surface-3);
+}
+
+.codeAction:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: -2px;
+}
+
+.codeFrame[data-code-wrap="true"] :global([data-streamdown="code-block-body"]) pre,
+.codeFrame[data-code-wrap="true"] :global([data-streamdown="code-block-body"]) code {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+/* Streamdown's token utilities use OS color scheme; follow Ovule's selected theme. */
+.messageMarkdown :global([data-streamdown="code-block-body"]) code span span {
+  color: var(--sdm-c, inherit);
+}
+
+:global([data-theme="dark"])
+  .messageMarkdown
+  :global([data-streamdown="code-block-body"])
+  code
+  span
+  span {
+  color: var(--shiki-dark, var(--sdm-c, inherit));
+}
+
+.codeError {
+  display: block;
+  color: var(--muted-foreground);
+  font-size: var(--font-size-caption);
+}

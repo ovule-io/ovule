@@ -1,0 +1,52 @@
+.ovule-visual-block {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 12px;
+  background: var(--surface);
+}
+.ovule-visual-block header {
+  margin-bottom: 10px;
+  font-size: var(--font-size-ui);
+  font-weight: 600;
+}
+.ovule-visual-block ol {
+  display: grid;
+  gap: 7px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.ovule-visual-block li {
+  display: grid;
+  grid-template-columns: minmax(56px, auto) 1fr auto;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--font-size-caption);
+}
+.ovule-visual-block li i {
+  display: block;
+  width: var(--value);
+  min-width: 2px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--chart-2);
+}
+.ovule-visual-block svg {
+  display: block;
+  width: 100%;
+  min-height: 160px;
+  color: var(--text);
+}
+.ovule-echarts-surface {
+  width: 100%;
+  min-height: 280px;
+}
+.ovule-visual-error {
+  display: grid;
+  min-height: 120px;
+  place-items: center;
+  border: 1px dashed var(--danger);
+  border-radius: 10px;
+  color: var(--danger);
+  font-size: var(--font-size-ui);
+}

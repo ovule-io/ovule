@@ -1,0 +1,92 @@
+{
+  "computerUse": [
+    {
+      "id": "computer-use",
+      "label": "CRD Computer Use",
+      "provider": "crd",
+      "backend": "native-crd",
+      "capabilities": [
+        "desktop.snapshot",
+        "desktop.input",
+        "clipboard.write"
+      ],
+      "agents": []
+    }
+  ],
+  "capabilities": [
+    {
+      "id": "human-handoff",
+      "label": "Human handoff",
+      "description": "Pause automation at an explicit trust boundary and let the user complete a visual or sensitive step."
+    },
+    {
+      "id": "appshot",
+      "label": "Appshot",
+      "description": "Attach the current application state as visual context for a handoff."
+    }
+  ],
+  "messageBlocks": [
+    {
+      "kind": "human-handoff",
+      "hostRenderer": "human-handoff",
+      "capability": "human-handoff",
+      "agentInstructions": "When a user must take control for login, CAPTCHA, approval, MFA, payment, or another sensitive visual step, emit one human-handoff block and stop automating that step. Prefer protocol spice for remote desktops. Use data {id,title,instructions,protocol,target?,gatewayUrl?,appshotUrl?,appshotAlt?}. target may be an https URL or a spice/spice+tls endpoint; gatewayUrl is an optional HTTPS SPICE web gateway. Never include passwords, tokens, or cookies in URLs. Wait for a later user completion message before continuing.",
+      "example": {
+        "id": "handoff-login",
+        "title": "Complete sign-in",
+        "instructions": "Take control to finish MFA, then choose Continue.",
+        "protocol": "spice",
+        "target": "spice+tls://desktop.example.com:5900",
+        "gatewayUrl": "https://desktop.example.com/session/handoff-login",
+        "appshotUrl": "https://desktop.example.com/session/handoff-login/preview.png",
+        "appshotAlt": "Sign-in screen"
+      }
+    }
+  ],
+  "onboarding": [
+    {
+      "id": "ollama",
+      "label": "Ollama",
+      "description": "Install Ollama and pull a local model for private on-device inference.",
+      "icon": "cloud",
+      "modelProvider": "ollama",
+      "fields": [
+        {
+          "id": "model",
+          "label": "Ollama model",
+          "kind": "text",
+          "required": true,
+          "placeholder": "qwen3-coder"
+        }
+      ],
+      "actions": [
+        {
+          "id": "pull",
+          "label": "Install and pull model",
+          "handler": "model-provider.pull",
+          "toolchains": [
+            "ollama"
+          ],
+          "toolchain": "ollama",
+          "field": "model",
+          "provider": "ollama"
+        }
+      ],
+      "links": [
+        {
+          "label": "Open Ollama models",
+          "url": "https://ollama.com/search"
+        }
+      ],
+      "status": {
+        "handler": "command.probe",
+        "toolchain": "ollama",
+        "args": [
+          "--version"
+        ],
+        "readyDetail": "Ollama is installed and ready.",
+        "missingDetail": "Install Ollama and pull a local model."
+      }
+    }
+  ]
+}

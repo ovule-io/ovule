@@ -1,0 +1,9 @@
+.workspaceTitlebar {
+  grid-row: 1;
+  grid-column: 1;
+}
+
+.threadSurface {
+  height: 100%;
+  border-radius: 0;
+}

@@ -1,0 +1,37 @@
+{
+  "name": "@ovule/omnibox",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./view-data": {
+      "types": "./src/view-data.d.ts"
+    },
+    "./view": {
+      "types": "./src/view.d.ts"
+    },
+    "./omnibox.token": "./src/omnibox.token.ts",
+    "./omnibox.provider": "./src/omnibox.provider.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@ovule/ioc": "workspace:*",
+    "@ovule/shell-api": "workspace:*",
+    "@ovule/ui": "workspace:*",
+    "@ovule/workspace": "workspace:*",
+    "react": ">=18"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "4.3.3",
+    "@types/node": "26.5.0",
+    "@types/react": "19.2.18",
+    "@types/react-dom": "19.2.7",
+    "prettier": "3.6.2",
+    "tailwindcss": "4.3.3",
+    "typescript": "5.9.3",
+    "vite": "8.2.2"
+  },
+  "license": "MIT OR Apache-2.0"
+}

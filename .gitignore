@@ -1,0 +1,52 @@
+.DS_Store
+
+node_modules/
+/target*/
+dist/
+.tmp*/
+/.tuffite-debug.json
+.dev-data/
+.dev-browser-data/
+.react-router/
+.superpowers/
+.lock-*.tmp
+*.tsbuildinfo
+*.bun-build
+
+!desktop/extensions/**/dist/
+!desktop/extensions/**/dist/**
+
+# Native-embedded settings UI snapshot, available before frontend builds.
+!desktop/features/settings/dist/
+!desktop/features/settings/dist/ollama-ui.js
+
+# Machine-local Framework / Framework development preferences.
+/mise.local.toml
+
+# Python tooling caches.
+__pycache__/
+
+# Local credentials and diagnostic captures.
+.env
+.env.*
+!.env.example
+!.env.*.example
+*.pem
+*.p12
+*.pfx
+*.key
+*.har
+*.log
+
+# Independent optional repositories; never include them in public source or packaging.
+/plugins/
+
+# Portable synthetic packages for Cargo-only contract tests.
+!tests/fixtures/plugins/*/dist/
+!tests/fixtures/plugins/*/dist/**
+
+# Debug ShellAPI bindings are generated alongside stable release bindings.
+/desktop/packages/ovule-shell-api/generated/debug/
+
+# Isolated harness evaluation evidence.
+/artifacts/harness-eval/

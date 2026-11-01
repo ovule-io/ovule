@@ -1,0 +1,870 @@
+// Ovule typed Shell API. Timestamp fields are Unix milliseconds.
+module ovule;
+
+struct AgentContributionView {
+  string extensionId;
+  string id;
+  string label;
+  array<string> executableCandidates;
+  bool mcpConfig;
+  array<string> requiredEnvironment;
+};
+
+struct AgentInput {
+  string id;
+  string label;
+  string driver;
+  string? modelId;
+  array<string> skillIds;
+  array<string> toolIds;
+  string instructions;
+  bool enabled;
+};
+
+struct AgentView {
+  string id;
+  string label;
+  string driver;
+  bool available;
+  bool enabled;
+  string detail;
+  string? modelId;
+  array<string> skillIds;
+  array<string> toolIds;
+  string instructions;
+  string? extensionId;
+};
+
+struct AppSnapshot {
+  int64 revision;
+  array<AgentView> agents;
+  array<SkillView> skills;
+  array<ToolView> tools;
+  array<CapabilityView> capabilities;
+  array<LegacyDataIssueView> legacyDataIssues;
+  array<ModelView> models;
+  array<ProjectView> projects;
+  array<HostView> hosts;
+  array<RemoteEndpointView> endpoints;
+  array<WorkspaceBindingView> bindings;
+  array<ThreadView> threads;
+  array<ThreadMessageView> messages;
+  array<GoalView> goals;
+  array<NodeView> nodes;
+  array<AttemptView> attempts;
+  array<TerminalRunView> terminalRuns;
+};
+
+struct CapabilityAgentExposureView {
+  string agentId;
+  string projection;
+  bool available;
+  string detail;
+};
+
+struct CapabilityView {
+  string id;
+  string label;
+  string kind;
+  string provider;
+  string backend;
+  array<string> operations;
+  array<string> scopes;
+  array<string> permissions;
+  string health;
+  string detail;
+  array<string> projections;
+  array<CapabilityAgentExposureView> agentExposures;
+  string? toolchainId;
+  string source;
+};
+
+struct LegacyDataIssueView {
+  string id;
+  string title;
+  string detail;
+  array<string> affectedIds;
+  string cleanupAction;
+};
+
+struct AttemptEventView {
+  string kind;
+  double occurredAt;
+  string detail;
+};
+
+struct AttemptView {
+  string id;
+  string threadId;
+  string? taskId;
+  string? sourceMessageId;
+  string? responseMessageId;
+  string purpose;
+  string agent;
+  string hostId;
+  string? driver;
+  string? modelProvider;
+  string? modelRemoteId;
+  string status;
+  string summary;
+  string output;
+  int64 outputSequence;
+  double createdAt;
+  double? startedAt;
+  double? finishedAt;
+  double? durationMs;
+  array<AttemptEventView> events;
+};
+
+struct BrowserSuggestion {
+  string id;
+  string kind;
+  string title;
+  string detail;
+  string target;
+};
+
+struct CreateThreadInput {
+  string? workspacePath;
+};
+
+struct ExtensionActionInput {
+  string? threadId;
+  string extensionId;
+  string actionId;
+  string? connectionId;
+};
+
+struct ExtensionActionResult {
+  string dataJson;
+  string? openUrl;
+};
+
+struct ExtensionCapabilityView {
+  string extensionId;
+  string id;
+  string label;
+  string description;
+};
+
+struct ExtensionCatalogView {
+  array<ExtensionPackageView> extensions;
+  array<AgentContributionView> agents;
+  array<ModelContributionView> models;
+  array<ExtensionCapabilityView> capabilities;
+  array<MessageBlockContributionView> messageBlocks;
+  array<SlashCommandContributionView> slashCommands;
+  array<ComputerUseContributionView> computerUse;
+  array<FileEditorContributionView> fileEditors;
+};
+
+struct ExtensionPackageView {
+  string installPath;
+  string id;
+  string version;
+  string source;
+  bool enabled;
+  bool removable;
+};
+
+struct ComputerUseContributionView {
+  string extensionId;
+  string id;
+  string label;
+  string provider;
+  string? toolchainId;
+  array<string> capabilities;
+};
+
+struct FileEditorContributionView {
+  string extensionId;
+  string id;
+  string label;
+  array<string> extensions;
+  string mode;
+  string? threadPresentation;
+  string tag;
+  string moduleUrl;
+  string? styleUrl;
+};
+
+struct GoalView {
+  string id;
+  string threadId;
+  string title;
+  string intent;
+  string status;
+  string progress;
+  double createdAt;
+};
+
+struct HtmlPreview {
+  string source;
+  string html;
+};
+
+struct IntegrationStatus {
+  string id;
+  bool available;
+  bool authenticated;
+  string detail;
+};
+
+struct ExtensionOnboardingActionView {
+  bool requiresAuthentication;
+  string id;
+  array<string> requiredToolchains;
+};
+
+struct ExtensionOnboardingView {
+  string? tag;
+  string extensionId;
+  string id;
+  string label;
+  string description;
+  string icon;
+  array<string> agentIds;
+  string? modelProvider;
+  array<string> inputFields;
+  array<ExtensionOnboardingActionView> actions;
+  array<string> allowedLinks;
+  IntegrationStatus status;
+};
+
+struct ExtensionSetupValue {
+  string id;
+  string value;
+};
+
+struct ExtensionSetupActionInput {
+  string extensionId;
+  string setupId;
+  string actionId;
+  array<ExtensionSetupValue> values;
+};
+
+struct MarkdownDocument {
+  string path;
+  string content;
+};
+
+struct WorkspaceFile {
+  string path;
+  string name;
+  string extension;
+  int64 sizeBytes;
+  array<uint8> bytes;
+};
+
+struct MessageAttachmentInput {
+  string name;
+  string mediaType;
+  array<uint8> bytes;
+};
+
+struct MessageBlockContributionView {
+  string? uiType;
+  string extensionId;
+  string kind;
+  string? tag;
+  string? moduleUrl;
+  string? styleUrl;
+  string? hostRenderer;
+  string? capability;
+};
+
+struct MessagePartView {
+  string id;
+  string kind;
+  string? text;
+  string? url;
+  string? name;
+  string? mediaType;
+  int64? sizeBytes;
+  string? dataJson;
+};
+
+struct ModelContributionView {
+  string extensionId;
+  string id;
+  string label;
+  string provider;
+  string remoteId;
+  array<string> agentIds;
+  bool recommended;
+  string description;
+};
+
+struct ModelInput {
+  string id;
+  string label;
+  string provider;
+  string remoteId;
+  bool enabled;
+  array<string> agentIds;
+};
+
+struct ModelView {
+  string id;
+  string label;
+  string provider;
+  string remoteId;
+  bool enabled;
+  array<string> agentIds;
+  string? extensionId;
+  bool recommended;
+  string description;
+};
+
+struct NodeView {
+  string id;
+  string goalId;
+  string threadId;
+  string kind;
+  string title;
+  string status;
+  string? agent;
+  array<string> dependencyIds;
+  string hostId;
+  array<string> workspaceBindingIds;
+  double createdAt;
+};
+
+struct OllamaModelCatalog {
+  array<OnboardingModelOption> models;
+  array<OllamaModelJobView> jobs;
+};
+
+struct OllamaModelJobView {
+  string model;
+  string status;
+  string detail;
+  string? error;
+};
+
+struct OnboardingAgentInput {
+  string id;
+  string label;
+  string driver;
+  string? modelId;
+};
+
+struct OnboardingInput {
+  string? threadId;
+  array<OnboardingAgentInput> agents;
+  string defaultAgentId;
+};
+
+struct OnboardingModelOption {
+  string id;
+  string label;
+  string provider;
+  string remoteId;
+  bool available;
+  bool recommended;
+  string detail;
+  string? agentId;
+};
+
+struct OnboardingStatus {
+  string? authorizationUrl;
+  array<AgentView> agents;
+  array<OnboardingModelOption> models;
+  array<ToolchainView> toolchains;
+  array<ExtensionOnboardingView> setups;
+  string? defaultAgentId;
+};
+
+struct SkillView {
+  string id;
+  string name;
+  string description;
+  string path;
+  bool enabled;
+};
+
+struct SlashCommandContributionView {
+  string extensionId;
+  string id;
+  string label;
+  string description;
+  array<string>? skills;
+};
+
+struct TerminalRunView {
+  string id;
+  string threadId;
+  string? ownerId;
+  string command;
+  string status;
+  string stdout;
+  string stderr;
+  double? exitCode;
+};
+
+struct ThreadMessageView {
+  string id;
+  string threadId;
+  string role;
+  string content;
+  array<MessagePartView> parts;
+  string status;
+  int64 streamSequence;
+  double createdAt;
+  string? attemptId;
+};
+
+struct ThreadView {
+  string id;
+  string title;
+  string agent;
+  string hostId;
+  string workspacePath;
+  string? modelId;
+  string? projectId;
+  array<string> workspaceBindingIds;
+};
+
+struct HostView {
+  string id;
+  string displayName;
+  string kind;
+  string connector;
+  string status;
+  array<string> agentIds;
+};
+
+struct DesktopPermissions {
+  bool managed;
+  bool screenRecording;
+  bool accessibility;
+  string? bundleId;
+  string expectedBundleId;
+};
+
+struct HostPowerStatus {
+  bool keepAwake;
+  bool active;
+  bool supported;
+  string? error;
+};
+
+struct ProjectView {
+  string id;
+  string name;
+  double sortOrder;
+  double createdAt;
+};
+
+struct RemoteEndpointView {
+  string id;
+  string displayName;
+  string transport;
+  string? host;
+  string? remoteId;
+  double? port;
+  string? user;
+  string? authKind;
+  string? hostFingerprint;
+  string? spiceWebsocketUrl;
+  double? lastSeenAt;
+  array<string> agentIds;
+  array<HostWorkspaceResource> workspaces;
+};
+
+struct WorkspaceBindingView {
+  string id;
+  string threadId;
+  string hostId;
+  string kind;
+  string? endpointId;
+  string? resourceId;
+  string root;
+  string alias;
+  double sortOrder;
+  string trust;
+};
+
+struct BindWorkspaceInput {
+  string threadId;
+  string kind;
+  string? endpointId;
+  string? resourceId;
+  string root;
+  string alias;
+};
+
+struct RegisterEndpointInput {
+  string displayName;
+  string transport;
+  string? host;
+  double? port;
+  string? user;
+  string? authKind;
+  string? secret;
+  string? hostFingerprint;
+  array<string>? agentIds;
+  array<HostWorkspaceResource>? workspaces;
+};
+
+struct RegisterEndpointResult {
+  string endpointId;
+  AppSnapshot snapshot;
+};
+
+struct TestSshEndpointResult {
+  bool reachable;
+  string detail;
+};
+
+struct DiscoverSshHostResult {
+  bool ready;
+  string host;
+  double port;
+  string user;
+  string fingerprint;
+  string root;
+  string alias;
+  string detail;
+};
+
+struct ShareWorkspaceLinkResult {
+  bool requiresReset;
+  string endpointAddrJson;
+  string endpointId;
+  string shareId;
+  string root;
+  string alias;
+  array<WorkspaceLinkPairingRequest> pending;
+  array<HostDeviceAccess> devices;
+  array<HostWorkspaceResource> workspaces;
+  array<HostAgentResource> agents;
+};
+
+struct WorkspaceLinkPairingRequest {
+  string clientId;
+  string name;
+  string code;
+};
+
+struct TestWorkspaceLinkResult {
+  bool connected;
+  string clientId;
+  string detail;
+  string? root;
+  array<string> agentIds;
+  array<HostWorkspaceResource> workspaces;
+  array<string> capabilities;
+};
+
+struct RemoteControlIceServer {
+  array<string> urls;
+  string? username;
+  string? credential;
+};
+
+struct RemoteControlStartOptions {
+  string authKey;
+  double? maxBitrateKbps;
+  double? targetFramerate;
+  int64? screenId;
+};
+
+struct RemoteControlSessionDescription {
+  string type;
+  string sdp;
+};
+
+struct RemoteControlIceCandidate {
+  string mid;
+  double mLineIndex;
+  string candidate;
+};
+
+struct RemoteControlSignal {
+  int64 sequence;
+  RemoteControlSessionDescription? description;
+  array<RemoteControlIceCandidate> candidates;
+};
+
+struct RemoteControlUpdate {
+  string sessionId;
+  string state;
+  string route;
+  string? error;
+  array<RemoteControlIceServer>? iceServers;
+  array<RemoteControlSignal> signals;
+};
+
+struct HostWorkspaceResource {
+  string shareId;
+  string root;
+  string alias;
+};
+
+struct HostAgentResource {
+  string id;
+  bool available;
+};
+
+struct HostDeviceAccess {
+  string clientId;
+  string name;
+  bool online;
+  array<string> workspaceIds;
+  array<string> agentIds;
+};
+
+struct SetHostDeviceAccessInput {
+  string clientId;
+  array<string> workspaceIds;
+  array<string> agentIds;
+};
+
+struct ToolInput {
+  string id;
+  string label;
+  string transport;
+  string target;
+  array<string> args;
+  bool enabled;
+  bool required;
+  string? credentialEnv;
+};
+
+struct ToolView {
+  string id;
+  string label;
+  string transport;
+  string target;
+  array<string> args;
+  bool enabled;
+  bool required;
+  bool available;
+  string detail;
+  string? credentialEnv;
+  string? extensionId;
+  string? toolchainId;
+  array<string> capabilities;
+};
+
+struct ToolchainView {
+  string id;
+  string label;
+  string kind;
+  string provider;
+  string? requestedVersion;
+  bool available;
+  bool installable;
+  bool managed;
+  string detail;
+  string? executable;
+  string? version;
+  string? installHint;
+  array<string> requiredToolchainIds;
+  string installStatus;
+  string? installError;
+};
+
+interface Browser {
+  Respond@0(string requestId, string resultJson) => (bool result);
+  ListDownloads@1() => (array<DownloadView> result);
+  PublishDownload@2(string path, string url) => (DownloadView result);
+  RevealDownload@3(string id) => (bool result);
+  RemoveDownload@4(string id) => (bool result);
+  DownloadDirectory@5() => (string result);
+  SetDownloadDirectory@6(string path) => (string result);
+  ReadLocalText@7(string url) => (string result);
+  ListLocalDirectory@8(string url) => (array<LocalFileEntry> result);
+  ReadLocalFile@9(string url) => (WorkspaceFile result);
+  CreateFilePreview@10(string url) => (PreviewInfo result);
+  RevokePreview@11(string id) => (bool result);
+  CreateHtmlPreview@12(string threadId, string path) => (PreviewInfo result);
+};
+
+struct LocalFileEntry {
+  string name;
+  string url;
+  bool isDirectory;
+};
+
+struct DownloadView {
+  string id;
+  string source;
+  string path;
+  string filename;
+  string url;
+  uint64 bytes;
+  uint64 createdAt;
+  bool removed;
+};
+
+interface Remoting {
+  Start@0(string endpointId, RemoteControlStartOptions options) => (int64 result);
+  Signal@1(int64 sessionId, RemoteControlSignal signal) => (bool result);
+  Snapshot@2(int64 sessionId, int64 afterSequence) => (RemoteControlUpdate result);
+  Clipboard@3(int64 sessionId, string text) => (bool result);
+  Stop@4(int64 sessionId) => (bool result);
+};
+
+interface Workspace {
+  Snapshot@0() => (AppSnapshot result);
+  CreateThread@1(CreateThreadInput input) => (AppSnapshot result);
+  SetThreadWorkspace@2(string threadId, string workspacePath) => (AppSnapshot result);
+  BrowserSuggestions@3(string? threadId, string query) => (array<BrowserSuggestion> result);
+  CreateProject@4(string name) => (AppSnapshot result);
+  RenameProject@5(string projectId, string name) => (AppSnapshot result);
+  MoveThreadToProject@6(string threadId, string projectId) => (AppSnapshot result);
+  BindWorkspace@7(BindWorkspaceInput input) => (AppSnapshot result);
+  UnbindWorkspace@8(string bindingId) => (AppSnapshot result);
+  UnbindRemoteHost@9(string threadId, string endpointId) => (AppSnapshot result);
+  RemoveRemoteHost@10(string endpointId) => (AppSnapshot result);
+  ConfigureHostSpice@11(string endpointId, string? websocketUrl) => (AppSnapshot result);
+  ResetLinkHosts@12() => (AppSnapshot result);
+  SetThreadWorkspaceBindings@13(string threadId, array<string> bindingIds) => (AppSnapshot result);
+  RegisterEndpoint@14(RegisterEndpointInput input) => (RegisterEndpointResult result);
+  TestSshEndpoint@15(RegisterEndpointInput input, string root) => (TestSshEndpointResult result);
+  DiscoverSshHost@16() => (DiscoverSshHostResult result);
+  ShareWorkspaceLink@17(string root, string alias) => (ShareWorkspaceLinkResult result);
+  ShareHostLink@18() => (ShareWorkspaceLinkResult result);
+  HostPowerStatus@19() => (HostPowerStatus result);
+  SetHostKeepAwake@20(bool enabled) => (HostPowerStatus result);
+  RegenerateHostLink@21() => (ShareWorkspaceLinkResult result);
+  RepairLocalHostAccess@22() => (ShareWorkspaceLinkResult result);
+  ResetLocalHostLinkIdentity@23() => (ShareWorkspaceLinkResult result);
+  ShareCurrentWorkspaceLink@24(string threadId) => (ShareWorkspaceLinkResult result);
+  SetWorkspaceLinkAccess@25(SetHostDeviceAccessInput input) => (bool result);
+  SubmitWorkspaceLinkPairing@26(string endpointAddrJson, string shareId, string code) => (string result);
+  RevokeWorkspaceLink@27(string shareId, string clientId) => (bool result);
+  TestWorkspaceLink@28(string endpointAddrJson, string shareId) => (TestWorkspaceLinkResult result);
+  DesktopPermissions@29() => (DesktopPermissions result);
+  RequestDesktopPermission@30(string permission) => (DesktopPermissions result);
+};
+
+interface Extensions {
+  ExtensionCatalog@0() => (ExtensionCatalogView result);
+  RunExtensionAction@1(ExtensionActionInput input) => (ExtensionActionResult result);
+};
+
+interface Setup {
+  OnboardingStatus@0() => (OnboardingStatus result);
+  ToolchainStatus@1() => (array<ToolchainView> result);
+  InstallToolchain@2(string toolchainId) => (array<ToolchainView> result);
+  OllamaModelJobs@3() => (array<OllamaModelJobView> result);
+  OllamaModels@4() => (OllamaModelCatalog result);
+  PullOllamaModel@5(string model) => (OllamaModelJobView result);
+  CompleteOnboarding@6(OnboardingInput input) => (AppSnapshot result);
+  RunExtensionSetupAction@7(ExtensionSetupActionInput input) => (OnboardingStatus result);
+  InstallExtension@8(string path) => (AppSnapshot result);
+  SetExtensionEnabled@9(string extensionId, bool enabled) => (AppSnapshot result);
+  RemoveExtension@10(string extensionId) => (AppSnapshot result);
+  CleanOnboardingState@11() => (OnboardingStatus result);
+};
+
+interface Workflow {
+  AdvanceWorkflow@0(string threadId) => (AppSnapshot result);
+  CreateGoal@1(string threadId, string title, string intent) => (AppSnapshot result);
+  AddTask@2(string goalId, string title, string? agent) => (AppSnapshot result);
+  AddGate@3(string goalId, string title) => (AppSnapshot result);
+  DelegateTask@4(string taskId) => (AppSnapshot result);
+  ResolveGate@5(string nodeId, bool approved) => (AppSnapshot result);
+  ResetWorkflows@6() => (AppSnapshot result);
+};
+
+struct MessageActionResult {
+  string threadId;
+  AppSnapshot snapshot;
+};
+
+interface Message {
+  SelectAgent@0(string threadId, string agent) => (AppSnapshot result);
+  SelectHost@1(string threadId, string hostId) => (AppSnapshot result);
+  SendMessage@2(string threadId, string content) => (AppSnapshot result);
+  SendMessageWithAttachments@3(string threadId, string content, array<MessageAttachmentInput> attachments) => (AppSnapshot result);
+  ReadMessageAttachment@4(string attachmentId) => (array<uint8> result);
+  CancelAttempt@5(string attemptId) => (AppSnapshot result);
+  ForkMessage@6(string threadId, string messageId) => (MessageActionResult result);
+  RestartMessage@7(string threadId, string messageId, string content) => (MessageActionResult result);
+};
+
+interface Content {
+  ReadHtmlPreview@0(string threadId, string path) => (HtmlPreview result);
+  ReadMarkdown@1(string threadId, string path) => (MarkdownDocument result);
+  SaveMarkdown@2(string threadId, string path, string content) => (MarkdownDocument result);
+  ReadWorkspaceFile@3(string threadId, string path) => (WorkspaceFile result);
+  SaveWorkspaceFile@4(string threadId, string path, array<uint8> bytes) => (WorkspaceFile result);
+};
+
+interface Terminal {
+  ShellProfiles@2() => (string result);
+  ConfigureShellProfiles@3(string configuration) => ();
+  OpenSession@4(string owner, string profileId, string directory, uint16 cols, uint16 rows) => (string result);
+  ReadSession@5(string id, uint64 cursor) => (string result);
+  WriteSession@6(string id, array<uint8> data) => ();
+  ResizeSession@7(string id, uint16 cols, uint16 rows) => ();
+  CloseSession@8(string id) => (bool result);
+  ListSessions@9() => (string result);
+  StartTerminal@0(string threadId, string command, string? ownerId, string? workspaceBindingId, bool? useThreadWorkspace) => (AppSnapshot result);
+  CancelTerminal@1(string runId) => (AppSnapshot result);
+};
+
+struct ExecutionCallView {
+  string callId;
+  string attemptId;
+  string tool;
+  string state;
+};
+
+struct PendingApprovalView {
+  string requestId;
+  string attemptId;
+  string tool;
+  string argumentsJson;
+  bool automaticAllowed;
+  bool reviewFallback;
+  int64 expiresAtMs;
+};
+
+interface Agent {
+  RespondApproval@0(string requestId, bool allow) => (bool result);
+  ExecutionCalls@1(string attemptId) => (array<ExecutionCallView> result);
+  RespondApprovalWithScope@2(string requestId, bool allow, bool automatic) => (bool result);
+  PendingApprovals@3(string attemptId) => (array<PendingApprovalView> result);
+  MarkApprovalPresented@4(string requestId) => (bool result);
+  ApprovalMode@5() => (string result);
+  SetApprovalMode@6(string mode) => (bool result);
+};
+
+interface Settings {
+  ImportSkill@0(string path, bool enabled) => (AppSnapshot result);
+  InstallBundledSkill@1(string skillId) => (AppSnapshot result);
+  SetSkillEnabled@2(string skillId, bool enabled) => (AppSnapshot result);
+  RemoveSkill@3(string skillId) => (AppSnapshot result);
+  UpsertTool@4(ToolInput input) => (AppSnapshot result);
+  RemoveTool@5(string toolId) => (AppSnapshot result);
+  CleanLegacyData@6() => (AppSnapshot result);
+  UpsertModel@7(ModelInput input) => (AppSnapshot result);
+  RemoveModel@8(string modelId) => (AppSnapshot result);
+  UpsertAgent@9(AgentInput input) => (AppSnapshot result);
+  RemoveAgent@10(string agentId) => (AppSnapshot result);
+  OpenSystemUrl@11(string url) => (bool result);
+};
+
+// File-scoped interface available to the isolated local preview origin.
+struct PreviewInfo {
+  string id;
+  string url;
+  string kind;
+  FileEditorContributionView? editor;
+};
+struct PreviewFile {
+  string name;
+  string extension;
+  int64 sizeBytes;
+  array<uint8> bytes;
+};
+interface Preview {
+  Describe@0(string id) => (PreviewInfo result);
+  ReadText@1(string id) => (string result);
+  ReadFile@2(string id) => (PreviewFile result);
+};

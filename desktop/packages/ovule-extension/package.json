@@ -1,0 +1,25 @@
+{
+  "name": "@ovule/extension",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "files": [
+    "runtime.mjs",
+    "index.d.ts",
+    "README.md",
+    "LICENSE",
+    "THIRD_PARTY_NOTICES.txt",
+    "build"
+  ],
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./runtime.mjs"
+    },
+    "./build": "./build/index.mjs"
+  },
+  "scripts": {
+    "test": "node contract-smoke.mjs"
+  },
+  "license": "MIT OR Apache-2.0"
+}

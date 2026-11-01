@@ -1,0 +1,77 @@
+.catalogPanel {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  min-height: 0;
+  overflow: hidden;
+}
+.catalogSidebar {
+  width: auto;
+  border-color: var(--line);
+}
+.catalogPanelCompact {
+  grid-template-columns: 58px minmax(0, 1fr);
+}
+.catalogPanelCompact .catalogSidebarHeader,
+.catalogPanelCompact :global([data-slot="sidebar-group-label"]) {
+  display: none;
+}
+.catalogPanelCompact :global([data-slot="sidebar-content"]) {
+  align-items: center;
+  margin-right: 0;
+  padding-right: 0;
+}
+.catalogNavigationTooltip {
+  width: 100%;
+  justify-content: center;
+}
+.catalogPanelCompact :global([data-slot="sidebar-menu-button"]) {
+  display: flex;
+  width: 34px;
+  height: 34px;
+  min-height: 34px;
+  flex: 0 0 34px;
+  align-items: center;
+  justify-content: center;
+  margin-inline: auto;
+  padding-inline: 0;
+}
+.catalogPanelCompact :global([data-slot="sidebar-menu-button"] > svg) {
+  flex: 0 0 auto;
+}
+.catalogPanelCompact :global([data-slot="sidebar-menu-button"] > span) {
+  display: none;
+}
+.catalogSidebarHeader {
+  padding: 14px 12px 10px;
+}
+.catalogSidebarHeading {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-width: 0;
+}
+.catalogSidebarMark {
+  display: grid;
+  width: 32px;
+  height: 32px;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--foreground);
+  color: var(--background);
+}
+.catalogSidebarTitle {
+  margin: 0;
+  color: var(--foreground);
+  font-size: var(--font-size-title);
+  font-weight: 600;
+}
+.catalogContent {
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding: 18px;
+  overscroll-behavior: contain;
+}

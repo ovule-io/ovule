@@ -1,0 +1,1 @@
+/cloudflare opens a configuration card directly without invoking an Agent. The user selects Sign in, completes Cloudflare device authorization, selects an account, then enables the connection service on this Host. A successful configuration does not prove desktop media reachability.

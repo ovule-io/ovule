@@ -1,0 +1,23 @@
+[package]
+name = "ovule-browser"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+[lints]
+workspace = true
+[dependencies]
+ovule-agent-api.workspace = true
+ovule-platform.workspace = true
+async-trait = "0.1"
+tuffite-ioc = { workspace = true }
+tuffite = { workspace = true, optional = true }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+tokio = { version = "1", features = ["sync", "time", "rt", "macros"] }
+rand = "0.10"
+url = "2"
+[features]
+framework = ["dep:tuffite"]
+[dev-dependencies]
+tempfile = "3"

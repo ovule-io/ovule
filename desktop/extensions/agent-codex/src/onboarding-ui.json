@@ -1,0 +1,33 @@
+{
+  "label": "OpenAI / Codex",
+  "description": "Install Codex and authenticate with ChatGPT or an OpenAI API key.",
+  "fields": [
+    {
+      "id": "apiKey",
+      "label": "OpenAI API key",
+      "kind": "secret",
+      "placeholder": "sk-..."
+    }
+  ],
+  "actions": [
+    {
+      "id": "install",
+      "label": "Install Codex agent"
+    },
+    {
+      "id": "chatgpt",
+      "label": "Sign in with ChatGPT"
+    },
+    {
+      "id": "api-key",
+      "label": "Use API key",
+      "field": "apiKey"
+    }
+  ],
+  "links": [
+    {
+      "label": "Open OpenAI API keys",
+      "url": "https://platform.openai.com/api-keys"
+    }
+  ]
+}

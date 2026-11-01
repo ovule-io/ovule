@@ -1,0 +1,29 @@
+[package]
+name = "ovule-remoting"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+tuffite-ioc = { workspace = true }
+tracing.workspace = true
+tuffite = { workspace = true, optional = true, features = ["remoting"] }
+
+async-trait = "0.1"
+base64 = "0.22"
+hmac = "0.13"
+rand = "0.10"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+sha1 = "0.11"
+tokio = { version = "1", features = ["rt-multi-thread", "macros", "sync", "time"] }
+
+[features]
+framework = ["dep:tuffite"]
+
+[dev-dependencies]
+tokio = { version = "1", features = ["test-util"] }

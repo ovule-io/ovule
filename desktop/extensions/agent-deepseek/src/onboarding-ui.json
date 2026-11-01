@@ -1,0 +1,30 @@
+{
+  "label": "DeepSeek",
+  "description": "Connect the official DeepSeek API and discover its current model catalog.",
+  "fields": [
+    {
+      "id": "apiKey",
+      "label": "DeepSeek API key",
+      "kind": "secret",
+      "required": true,
+      "placeholder": "sk-..."
+    }
+  ],
+  "actions": [
+    {
+      "id": "configure",
+      "label": "Save API key",
+      "field": "apiKey"
+    },
+    {
+      "id": "refresh",
+      "label": "Refresh models"
+    }
+  ],
+  "links": [
+    {
+      "label": "Open DeepSeek API keys",
+      "url": "https://platform.deepseek.com/api_keys"
+    }
+  ]
+}

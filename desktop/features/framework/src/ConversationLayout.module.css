@@ -1,0 +1,81 @@
+.chat {
+  --effective-sidebar-width: clamp(180px, var(--sidebar-width, 220px), 28vw);
+  position: relative;
+  display: block;
+  grid-column: 1;
+  grid-row: 1;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  border-radius: var(--app-pane-radius);
+  background: var(--surface);
+}
+.panelGroup {
+  width: 100%;
+  height: 100%;
+  background: var(--surface);
+}
+.panelGroup :global(.ui-resizable-panel) {
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+.sidebarPanel,
+.conversationPanel {
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  background: var(--surface);
+}
+.conversationPanel {
+  border-radius: 0;
+  background: var(--background);
+}
+.panelGroup :global(.ui-resizable-panel) > [data-chat-sidebar],
+.panelGroup :global(.ui-resizable-panel) > [data-chat-workspace] {
+  width: 100%;
+  height: 100%;
+}
+.sidebarDrawer > [data-chat-sidebar] {
+  width: 100%;
+  height: 100%;
+  border-right: 0;
+}
+.sidebarCollapsed {
+  grid-template-columns: 0 minmax(0, 1fr);
+}
+.hidden {
+  visibility: hidden;
+  pointer-events: none;
+}
+.sidebarCollapsed > [data-chat-sidebar] {
+  visibility: hidden;
+  overflow: hidden;
+  padding-inline: 0;
+  border-right: 0;
+}
+.resizeHandle {
+  position: relative;
+  z-index: 40;
+  flex: 0 0 0;
+  width: 0;
+  cursor: col-resize;
+  touch-action: none;
+}
+.resizeHandleBar {
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  left: -1px;
+  width: 2px;
+  border-radius: 2px;
+  background: transparent;
+}
+.resizeHandle:hover .resizeHandleBar,
+.resizeHandle:focus-visible .resizeHandleBar {
+  background: var(--ring);
+}
+:global(html[data-resizing]) {
+  cursor: col-resize;
+  user-select: none;
+}

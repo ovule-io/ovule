@@ -1,0 +1,33 @@
+[package]
+name = "ovule-terminal"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+tuffite-ioc = { workspace = true }
+ovule-toolchains = { workspace = true }
+ovule-workspace = { workspace = true }
+ovule-hosts = { workspace = true }
+ovule-platform.workspace = true
+tracing.workspace = true
+tuffite = { workspace = true, optional = true }
+
+processkit = { version = "3.3.4", features = ["tracing"] }
+serde_json = "1"
+serde = { version = "1", features = ["derive"] }
+portable-pty = "0.9"
+which = "8"
+tokio = { version = "1", features = ["io-util", "rt-multi-thread", "macros", "sync", "time"] }
+tokio-stream = "0.1"
+
+[dev-dependencies]
+tempfile = "3"
+ovule-workspace = { workspace = true, features = ["test-support"] }
+
+[features]
+framework = ["dep:tuffite"]

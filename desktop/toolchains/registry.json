@@ -1,0 +1,118 @@
+{
+  "schemaVersion": 1,
+  "toolchains": [
+    {
+      "id": "nodejs",
+      "label": "Node.js",
+      "kind": "runtime",
+      "executable": "node",
+      "candidates": ["node"],
+      "locations": {
+        "windows": ["{program_files}/nodejs/node.exe"]
+      },
+      "versionArgs": ["--version"],
+      "provider": {
+        "type": "archive",
+        "version": "24.21.0",
+        "artifacts": {
+          "windows-x86_64": {
+            "url": "https://nodejs.org/dist/v24.21.0/node-v24.21.0-win-x64.zip",
+            "sha256": "158f7685b44de51f6c0df1d153526cbcd3e1bc739a8dfc607721cef75de9e541",
+            "format": "zip",
+            "size": 37618919,
+            "maxExtractedBytes": 150000000,
+            "stripComponents": 1
+          },
+          "macos-aarch64": {
+            "url": "https://nodejs.org/dist/v24.21.0/node-v24.21.0-darwin-arm64.tar.gz",
+            "sha256": "bed7eea5325e1108f32ce5228ddd6a5f0f08a499ee42aa7442aea583702f6057",
+            "format": "tar.gz",
+            "size": 52909993,
+            "maxExtractedBytes": 250000000,
+            "stripComponents": 1
+          },
+          "macos-x86_64": {
+            "url": "https://nodejs.org/dist/v24.21.0/node-v24.21.0-darwin-x64.tar.gz",
+            "sha256": "1462cb3b3046b815cf8ea436d3da450ec1a9f11dac7e5a46b0ada5305d7e8097",
+            "format": "tar.gz",
+            "size": 54203979,
+            "maxExtractedBytes": 250000000,
+            "stripComponents": 1
+          },
+          "linux-aarch64": {
+            "url": "https://nodejs.org/dist/v24.21.0/node-v24.21.0-linux-arm64.tar.gz",
+            "sha256": "724282c3b43aec998aa9527380465b45d229e021b58035f5f4f63095eabfe5d5",
+            "format": "tar.gz",
+            "size": 57824078,
+            "maxExtractedBytes": 250000000,
+            "stripComponents": 1
+          },
+          "linux-x86_64": {
+            "url": "https://nodejs.org/dist/v24.21.0/node-v24.21.0-linux-x64.tar.gz",
+            "sha256": "6e1db87ef58b8819e5d5402eff1536491b18edd8eb7bee5ef7897876e88dc5ff",
+            "format": "tar.gz",
+            "size": 58088022,
+            "maxExtractedBytes": 250000000,
+            "stripComponents": 1
+          }
+        }
+      }
+    },
+    {
+      "id": "python",
+      "label": "Python",
+      "kind": "runtime",
+      "executable": "python",
+      "candidates": ["python", "python3"],
+      "locations": {
+        "windows": [
+          "{local_app_data}/Programs/Python/Python314/python.exe",
+          "{program_files}/Python314/python.exe"
+        ]
+      },
+      "versionArgs": ["--version"],
+      "provider": {
+        "type": "archive",
+        "version": "3.14.5",
+        "artifacts": {
+          "windows-x86_64": {
+            "url": "https://www.python.org/ftp/python/3.14.5/python-3.14.5-embed-amd64.zip",
+            "sha256": "ba6bd811c4eedb19195cf275770ef127e893d63701e24152606e2cb76f6d876a",
+            "format": "zip",
+            "size": 12048447,
+            "maxExtractedBytes": 80000000
+          }
+        }
+      }
+    },
+    {
+      "id": "ollama",
+      "label": "Ollama",
+      "kind": "model-runtime",
+      "executable": "ollama",
+      "candidates": ["ollama"],
+      "locations": {
+        "windows": [
+          "{local_app_data}/Programs/Ollama/ollama.exe",
+          "{program_files}/Ollama/ollama.exe"
+        ],
+        "macos": ["/Applications/Ollama.app/Contents/Resources/ollama"],
+        "linux": ["/usr/local/bin/ollama", "/usr/bin/ollama"]
+      },
+      "versionArgs": ["--version"],
+      "provider": {
+        "type": "archive",
+        "version": "0.34.0",
+        "artifacts": {
+          "windows-x86_64": {
+            "url": "https://github.com/ollama/ollama/releases/download/v0.34.0/ollama-windows-amd64.zip",
+            "sha256": "a7dd1b174f39d3d1b8a25d4cbc86045d0e190b17187bfdcbe2f2ee3b5a11470e",
+            "format": "zip",
+            "size": 1469375054,
+            "maxExtractedBytes": 8000000000
+          }
+        }
+      }
+    }
+  ]
+}

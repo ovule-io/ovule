@@ -1,0 +1,322 @@
+:host,
+ovule-office-editor {
+  display: block;
+  height: 100%;
+  min-height: 0;
+  min-width: 0;
+  width: 100%;
+  color: var(--text, #20231f);
+}
+.office-root {
+  height: 100%;
+  min-height: 0;
+  min-width: 0;
+  width: 100%;
+  overflow: auto;
+  background: #e8e9e6;
+}
+.office-empty,
+.office-error {
+  display: grid;
+  min-height: 260px;
+  place-items: center;
+  padding: 24px;
+  color: #656b65;
+}
+.office-error {
+  color: #a33c35;
+}
+.office-word {
+  height: 100%;
+  overflow: auto;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 16px;
+}
+.office-word .docx-wrapper {
+  display: grid;
+  align-items: start;
+  justify-items: center;
+  gap: 16px;
+  padding: 0;
+  background: transparent;
+}
+.office-word-page {
+  overflow: hidden;
+  scroll-margin-top: 16px;
+  box-shadow: 0 6px 22px #0002;
+  background: white;
+}
+.office-word section.docx {
+  margin: 0;
+  transform-origin: top left;
+  background: white;
+  box-shadow: none;
+}
+.office-sheet {
+  display: grid;
+  height: 100%;
+  min-width: 0;
+  width: 100%;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr);
+  background: #fff;
+}
+.office-sheet-tabs {
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+  padding: 7px 8px;
+  border-bottom: 1px solid #d9ddd8;
+  background: #f5f6f4;
+}
+.office-sheet-tabs button,
+.office-presentation-nav button {
+  border: 1px solid #c9ceca;
+  border-radius: 5px;
+  padding: 4px 9px;
+  background: #fff;
+  color: #27302b;
+  font: inherit;
+}
+.office-sheet-tabs button[aria-selected="true"] {
+  border-color: #43a987;
+  background: #e8f8f1;
+}
+.office-grid-wrap {
+  min-height: 0;
+  min-width: 0;
+  width: 100%;
+  overflow: auto;
+}
+.office-grid {
+  border-collapse: separate;
+  border-spacing: 0;
+  color: #20231f;
+  font:
+    11px/1.35 system-ui,
+    sans-serif;
+}
+.office-grid th {
+  position: sticky;
+  z-index: 2;
+  top: 0;
+  min-width: 42px;
+  padding: 5px 7px;
+  border-right: 1px solid #d9ddd8;
+  border-bottom: 1px solid #c9ceca;
+  background: #f1f3f0;
+  color: #69706b;
+  font-weight: 500;
+}
+.office-grid th:first-child {
+  left: 0;
+  z-index: 3;
+}
+.office-grid td {
+  min-width: 96px;
+  max-width: 260px;
+  padding: 0;
+  border-right: 1px solid #e1e4e1;
+  border-bottom: 1px solid #e1e4e1;
+  background: #fff;
+}
+.office-grid td input {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 96px;
+  border: 0;
+  padding: 5px 7px;
+  outline: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+}
+.office-grid td input:focus {
+  box-shadow: inset 0 0 0 2px #52bd96;
+}
+.office-grid td input:read-only {
+  color: #555c57;
+  cursor: default;
+}
+.office-row-number {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  text-align: right;
+}
+.office-presentation {
+  display: grid;
+  height: 100%;
+  min-width: 0;
+  width: 100%;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr) auto;
+  place-items: center;
+  background: #222522;
+}
+.office-presentation-stage {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+.office-presentation canvas {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  background: white;
+  box-shadow: 0 8px 28px #0008;
+}
+.office-presentation-nav {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 9px;
+  color: #e7eae7;
+}
+.office-pdf {
+  display: grid;
+  justify-items: center;
+  gap: 18px;
+  min-height: 100%;
+  padding: 20px;
+  background: #3a3d3a;
+}
+.office-pdf-page {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  background: white;
+  box-shadow: 0 8px 28px #0008;
+}
+
+.office-word-layout {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  overflow: hidden;
+}
+.office-word-workspace {
+  display: grid;
+  grid-template-columns: 140px minmax(0, 1fr);
+  min-height: 0;
+  min-width: 0;
+}
+.office-word-workspace.thumbnails-hidden {
+  grid-template-columns: minmax(0, 1fr);
+}
+.office-document-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--document-border);
+  background: var(--document-toolbar);
+  color: var(--document-text);
+  font: 12px system-ui;
+}
+.office-document-toolbar select {
+  margin-left: auto;
+  max-width: 130px;
+  font: inherit;
+  color: inherit;
+  background: transparent;
+  border: 1px solid var(--document-border);
+  border-radius: 6px;
+  height: 30px;
+  padding: 3px 8px;
+}
+.office-thumbnails-toggle {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+.office-thumbnails-toggle:hover {
+  background: var(--document-border);
+}
+.office-page-thumbnails {
+  overflow: auto;
+  min-height: 0;
+  padding: 16px 10px;
+  border-right: 1px solid var(--document-border);
+  background: var(--document-sidebar);
+}
+.office-page-thumbnails[hidden] {
+  display: none;
+}
+.office-page-thumbnail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  width: 100%;
+  margin: 0 0 12px;
+  padding: 6px 4px;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  color: var(--document-muted);
+  font: 11px system-ui;
+  background: transparent;
+  cursor: pointer;
+}
+.office-page-thumbnail:hover {
+  background: var(--document-border);
+}
+.office-thumbnail-frame {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  flex: none;
+  background: white;
+  border-radius: 1px;
+  box-shadow: 0 1px 4px #0002;
+  pointer-events: none;
+}
+.office-page-thumbnail[aria-current="page"] {
+  background: var(--document-border);
+  color: var(--document-selected);
+}
+.office-page-thumbnail[aria-current="page"] .office-thumbnail-frame {
+  outline: 2px solid var(--document-muted);
+  outline-offset: 2px;
+}
+.office-page-thumbnail:focus-visible,
+.office-thumbnails-toggle:focus-visible {
+  outline: 2px solid var(--document-muted);
+  outline-offset: 2px;
+}
+
+.office-thumbnail-frame section.docx {
+  margin: 0;
+  transform-origin: top left;
+  background: white;
+  box-shadow: none;
+}
+
+.office-word-layout {
+  --document-toolbar: #fafafa;
+  --document-text: #52525b;
+  --document-border: #e4e4e7;
+  --document-sidebar: #f4f4f5;
+  --document-muted: #71717a;
+  --document-selected: #18181b;
+}
+:host-context([data-theme="dark"]) .office-word-layout {
+  color-scheme: dark;
+  --document-toolbar: #18181b;
+  --document-text: #a1a1aa;
+  --document-border: #3f3f46;
+  --document-sidebar: #202023;
+  --document-muted: #a1a1aa;
+  --document-selected: #fafafa;
+}

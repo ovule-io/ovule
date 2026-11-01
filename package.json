@@ -1,0 +1,16 @@
+{
+  "name": "ovule-workflows",
+  "private": true,
+  "type": "module",
+  "packageManager": "bun@1.4.2",
+  "scripts": {
+    "install:desktop": "mise run install",
+    "dev": "mise run dev",
+    "dev:prepare": "mise run prepare",
+    "build": "mise run build",
+    "package": "mise run package",
+    "package:debug": "mise run package-debug",
+    "doctor": "mise run doctor",
+    "tuff": "mise run tuff"
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "version": "ovule-harness-cases/2",
+  "cases": [
+    {
+      "id": "skills.progressive",
+      "suite": "contract",
+      "grader": "Metadata contains no body; activation and referenced resource return pinned text"
+    },
+    {
+      "id": "memory.durable",
+      "suite": "contract",
+      "grader": "Write, restart, search and get preserve provenance and revision"
+    },
+    {
+      "id": "memory.isolation",
+      "suite": "contract",
+      "grader": "Cross-Thread access, stale CAS and project writes fail"
+    },
+    {
+      "id": "assembly.routes",
+      "suite": "contract",
+      "grader": "Planning grants no context tools; remote ACP never falls back to local"
+    },
+    {
+      "id": "assembly.budget",
+      "suite": "contract",
+      "grader": "Context over character budget fails before dispatch"
+    },
+    {
+      "id": "telemetry.privacy",
+      "suite": "contract",
+      "grader": "Successful and failed tool calls emit structured traces without body text"
+    },
+    {
+      "id": "browser.native",
+      "suite": "native",
+      "grader": "Real Explorer form changes via model tool loop; screenshot arrives as typed image"
+    },
+    {
+      "id": "context.native",
+      "suite": "native",
+      "grader": "Real Rig loop activates Skill and writes/recalls memory across Attempts and process restart"
+    },
+    {
+      "id": "computer.native",
+      "suite": "native",
+      "grader": "CRD screenshot through actual Agent tool loop; missing permission is skip, never pass"
+    },
+    {
+      "id": "telemetry.native",
+      "suite": "native",
+      "grader": "Persisted attempt manifest and tool diagnostics survive restart"
+    },
+    {
+      "id": "approval.native",
+      "suite": "native",
+      "grader": "Real provider tool loop waits for host dialog; deny returns a denied result without physical input and survives restart telemetry"
+    }
+  ]
+}

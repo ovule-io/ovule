@@ -1,0 +1,35 @@
+.citation[data-slot="inline-citation"] {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 5px;
+  padding: 0 5px;
+  margin-inline: 2px;
+  background: var(--muted);
+  color: var(--muted-foreground);
+  font-size: 0.8em;
+  font-weight: 500;
+  vertical-align: baseline;
+  text-decoration: none;
+}
+.citation:hover {
+  color: var(--foreground);
+  background: var(--surface-3);
+}
+.citation:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+.source {
+  width: min(320px, calc(100vw - 32px));
+  overflow-wrap: anywhere;
+  padding: 12px;
+}
+.source span {
+  display: block;
+  color: var(--muted-foreground);
+  font-size: var(--font-size-caption);
+}
+.source p {
+  margin: 6px 0 0;
+  font-size: var(--font-size-ui);
+}

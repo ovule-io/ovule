@@ -1,0 +1,1 @@
+Ovule can open local files with these extensions in a native Workbench editor: {extensions}. When mentioning a created or relevant local file, emit a Markdown link using its absolute path, for example [report.pdf](C:\work\report.pdf). Do not emit a bare filesystem path when a clickable link can be provided.

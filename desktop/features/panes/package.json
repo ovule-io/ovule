@@ -1,0 +1,75 @@
+{
+  "name": "@ovule/panes",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./operations": {
+      "types": "./src/operations.d.ts"
+    },
+    "./pane": {
+      "types": "./src/pane.d.ts"
+    },
+    "./panes-options": {
+      "types": "./src/panes-options.d.ts"
+    },
+    "./panes": {
+      "types": "./src/panes.d.ts"
+    },
+    "./tab": {
+      "types": "./src/tab.d.ts"
+    },
+    "./toolbar/route": {
+      "types": "./src/toolbar/route.d.ts"
+    },
+    "./toolbar/view-data": {
+      "types": "./src/toolbar/view-data.d.ts"
+    },
+    "./toolbar/view": {
+      "types": "./src/toolbar/view.d.ts"
+    },
+    "./view-data": {
+      "types": "./src/view-data.d.ts"
+    },
+    "./view": {
+      "types": "./src/view.d.ts"
+    },
+    "./panes.token": "./src/panes.token.ts",
+    "./app.provider": "./src/app.provider.ts",
+    "./main.provider": "./src/main.provider.ts",
+    "./pane.provider": "./src/pane.provider.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@ovule/framework": "workspace:*",
+    "@ovule/conversation": "workspace:*",
+    "@ovule/hosts": "workspace:*",
+    "@ovule/ioc": "workspace:*",
+    "@ovule/omnibox": "workspace:*",
+    "@ovule/remoting": "workspace:*",
+    "@ovule/shell": "workspace:*",
+    "@ovule/shell-api": "workspace:*",
+    "@ovule/terminal": "workspace:*",
+    "@ovule/ui": "workspace:*",
+    "@ovule/workflow": "workspace:*",
+    "@ovule/workspace": "workspace:*",
+    "lucide-react": "1.43.0",
+    "react": ">=18",
+    "react-dom": ">=18",
+    "react-i18next": "^16.2.1",
+    "zustand": "5.0.15"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "4.3.3",
+    "@types/node": "26.5.0",
+    "@types/react": "19.2.18",
+    "@types/react-dom": "19.2.7",
+    "prettier": "3.6.2",
+    "tailwindcss": "4.3.3",
+    "typescript": "5.9.3",
+    "vite": "8.2.2"
+  },
+  "license": "MIT OR Apache-2.0"
+}

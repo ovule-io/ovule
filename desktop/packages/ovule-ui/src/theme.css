@@ -1,0 +1,189 @@
+:root {
+  color-scheme: light;
+  font-family:
+    "Geist Variable",
+    Geist,
+    "Geist Sans",
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+  font-synthesis: none;
+
+  /*
+   * Background hierarchy:
+   * - --app-background is reserved for window chrome.
+   * - --background is the shared canvas for workspaces, panes, threads, tools,
+   *   terminals, loading states, and embedded setup pages.
+   * - --card, --popover, and --surface-* provide raised content layers.
+   *
+   * Do not reintroduce canvas aliases such as --bg, --framework-bg, or
+   * --terminal-bg. Components should use the semantic token directly.
+   *
+   * Light background hierarchy (OKLCH L): app chrome 0.91 -> content canvas
+   * 0.99 -> card/dialog/popover 1. Nested surfaces step down to 0.97 and
+   * hover/active surfaces to 0.95 so adjacent layers remain distinguishable.
+   */
+  --app-background: oklch(0.91 0.025 270);
+  --app-background-image:
+    radial-gradient(
+      circle at 0% 0%,
+      oklch(0.935 0.035 290 / 88%),
+      transparent 42%
+    ),
+    linear-gradient(
+      0deg,
+      oklch(0.93 0.034 280),
+      var(--app-background) 60%,
+      oklch(0.885 0.03 245)
+    );
+  --app-chrome-hover: color-mix(in oklch, var(--foreground) 10%, transparent);
+  /* Reserved for top-level Chat, Onboarding, and Workbench panes. */
+  --app-pane-radius: 12px;
+  --app-pane-shadow: 0 2px 3px -1px oklch(0.35 0.025 260 / 14%);
+  --background: oklch(0.99 0.002 255);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: #70d6b1;
+  --primary-foreground: #082019;
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.985 0 0);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+  --sidebar: var(--background);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: #70d6b1;
+  --sidebar-primary-foreground: #082019;
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-hover: oklch(0.955 0 0);
+  --sidebar-active: oklch(0.922 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+
+  /* Ovule semantic roles built from the same palette. */
+  --color-surface-tertiary: var(--card);
+  --surface: var(--card);
+  --surface-2: var(--secondary);
+  --surface-3: oklch(0.95 0 0);
+  --line: var(--border);
+  --line-strong: var(--input);
+  --text: var(--foreground);
+  --faint: var(--muted-foreground);
+  --primary-soft: color-mix(in srgb, var(--primary) 16%, var(--background));
+  --success: var(--chart-2);
+  --success-soft: color-mix(in oklch, var(--success) 12%, var(--background));
+  --danger: var(--destructive);
+  --danger-soft: color-mix(in srgb, var(--destructive) 10%, var(--background));
+  --warning: oklch(0.555 0.163 48.998);
+  --warning-soft: oklch(0.987 0.022 95.277);
+  --blue: oklch(0.488 0.243 264.376);
+  --blue-soft: color-mix(in oklch, var(--blue) 10%, var(--background));
+  --shadow: 0 10px 30px oklch(0.145 0 0 / 10%);
+  --composer: color-mix(in oklch, var(--card) 92%, transparent);
+
+  /* Specialized surfaces inherit the neutral system instead of a second theme. */
+  --terminal-toolbar: var(--card);
+  --terminal-border: var(--border);
+  --terminal-fg: var(--foreground);
+  --terminal-muted: var(--muted-foreground);
+  --terminal-hover: var(--accent);
+  --terminal-search: var(--popover);
+  --terminal-cursor: var(--primary);
+  --terminal-selection: color-mix(in oklch, var(--primary) 24%, transparent);
+  --terminal-scrollbar: color-mix(
+    in oklch,
+    var(--muted-foreground) 36%,
+    transparent
+  );
+
+  /* A restrained shadcn-like type scale for product UI. */
+  --font-sans:
+    "Geist Variable", Geist, "Geist Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono:
+    "Cascadia Code", "JetBrains Mono", ui-monospace, SFMono-Regular, Consolas,
+    monospace;
+  --font-size-caption: 0.75rem;
+  --font-size-ui: 0.875rem;
+  --font-size-title: 1rem;
+  --line-height-caption: 1rem;
+  --line-height-ui: 1.25rem;
+  --radius: 0.625rem;
+}
+
+:root[data-theme="dark"] {
+  /*
+   * Dark background lightness hierarchy (OKLCH L): content canvas 0.205 ->
+   * app chrome 0.25 -> card/dialog/popover 0.265 -> nested surfaces 0.29 ->
+   * hover/active surfaces ~0.33. The chrome is intentionally cooler and
+   * lighter than the neutral content canvas, matching the visual separation
+   * used by the light theme while keeping raised content steps continuous.
+   */
+  color-scheme: dark;
+  --app-background: oklch(0.25 0.035 285);
+  --app-background-image:
+    radial-gradient(
+      circle at 0% 0%,
+      oklch(0.31 0.055 300 / 72%),
+      transparent 42%
+    ),
+    linear-gradient(
+      0deg,
+      oklch(0.275 0.045 295),
+      var(--app-background) 58%,
+      oklch(0.225 0.038 255)
+    );
+  --app-pane-shadow: 0 2px 3px -1px oklch(0 0 0 / 34%);
+  --background: oklch(0.205 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.265 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.265 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.29 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.29 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.29 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --destructive-foreground: oklch(0.985 0 0);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+  --sidebar: var(--background);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-hover: var(--sidebar-accent);
+  --sidebar-active: var(--sidebar-accent);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
+  --surface-3: color-mix(in oklch, var(--secondary) 94%, var(--foreground));
+  --warning: var(--chart-3);
+  --warning-soft: color-mix(in oklch, var(--warning) 12%, var(--background));
+  --blue: var(--chart-1);
+  --shadow: 0 18px 50px oklch(0 0 0 / 34%);
+}

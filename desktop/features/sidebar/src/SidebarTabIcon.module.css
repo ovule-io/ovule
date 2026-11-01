@@ -1,0 +1,22 @@
+.icon {
+  display: inline-grid;
+  place-items: center;
+  width: 16px;
+  height: 16px;
+  flex: none;
+}
+.icon img,
+.icon svg {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+}
+.icon .dark {
+  display: none;
+}
+:global(:root[data-theme="dark"]) .icon .light {
+  display: none;
+}
+:global(:root[data-theme="dark"]) .icon .dark {
+  display: block;
+}

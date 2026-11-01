@@ -1,0 +1,40 @@
+{
+  "name": "@ovule/workspace",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./contract": {
+      "types": "./src/contract.d.ts"
+    },
+    "./operations": {
+      "types": "./src/operations.d.ts"
+    },
+    "./state": {
+      "types": "./src/state.d.ts"
+    },
+    "./workspace": {
+      "types": "./src/workspace.d.ts"
+    },
+    "./workspace.token": "./src/workspace.token.ts",
+    "./workspace.provider": "./src/workspace.provider.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@ovule/ioc": "workspace:*",
+    "@ovule/shell-api": "workspace:*"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "4.3.3",
+    "@types/node": "26.5.0",
+    "@types/react": "19.2.18",
+    "@types/react-dom": "19.2.7",
+    "prettier": "3.6.2",
+    "tailwindcss": "4.3.3",
+    "typescript": "5.9.3",
+    "vite": "8.2.2"
+  },
+  "license": "MIT OR Apache-2.0"
+}

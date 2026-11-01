@@ -1,0 +1,135 @@
+.cm-file-breadcrumb-container {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+}
+.cm-file-breadcrumb-measure {
+  position: fixed;
+  top: -10000px;
+  left: 0;
+  visibility: hidden;
+  pointer-events: none;
+  display: flex;
+  width: max-content;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: var(--font-size-ui);
+}
+.cm-file-breadcrumb-measure li {
+  padding: 4px;
+  white-space: nowrap;
+}
+.cm-file-breadcrumb {
+  min-width: 0;
+  width: 100%;
+}
+.cm-file-breadcrumb .cm-breadcrumb-list {
+  width: 100%;
+  flex-wrap: nowrap;
+  gap: 5px;
+}
+.cm-file-breadcrumb .cm-breadcrumb-item {
+  min-width: 0;
+  flex-shrink: 0;
+}
+.cm-file-breadcrumb .cm-breadcrumb-item:last-child {
+  flex-shrink: 1;
+}
+.cm-file-breadcrumb .cm-breadcrumb-separator {
+  flex: none;
+  display: flex;
+}
+.cm-file-crumb {
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  padding: 4px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+.cm-file-crumb:hover,
+.cm-file-crumb[data-state="open"] {
+  background: var(--accent);
+  color: var(--foreground);
+}
+.cm-file-crumb[aria-current="page"] {
+  color: var(--foreground);
+  font-weight: 500;
+}
+.cm-file-picker-popover {
+  width: min(360px, calc(100vw - 24px));
+  padding: 6px;
+}
+.cm-file-picker {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.cm-file-picker header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+.cm-file-picker header span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.cm-file-picker input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 6px 8px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: inherit;
+  border-radius: 5px;
+}
+.cm-file-picker-entries {
+  max-height: min(360px, 55vh);
+  overflow: auto;
+}
+.cm-file-picker button,
+.cm-file-picker-hidden button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  border: 0;
+  border-radius: 4px;
+  padding: 7px 8px;
+  font: inherit;
+  text-align: left;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+.cm-file-picker header button {
+  width: auto;
+  flex: none;
+}
+.cm-file-picker button:hover,
+.cm-file-picker-hidden button:hover,
+.cm-file-picker button[aria-current="page"] {
+  background: var(--accent);
+}
+.cm-file-picker button svg,
+.cm-file-picker-hidden button svg {
+  flex: none;
+}
+.cm-file-picker button span {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.cm-file-picker p {
+  margin: 8px;
+  color: var(--muted-foreground);
+}

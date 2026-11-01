@@ -1,0 +1,47 @@
+.list {
+  display: grid;
+  gap: 12px;
+}
+.icon {
+  flex-shrink: 0;
+  align-self: flex-start;
+  margin-top: 2px;
+}
+.details {
+  margin-top: 10px;
+  font-size: var(--font-size-caption);
+}
+.details summary {
+  cursor: pointer;
+  color: var(--muted-foreground);
+}
+.attempt {
+  color: var(--muted-foreground);
+}
+.preview {
+  max-height: 35vh;
+  overflow: auto;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.automatic {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-top: 12px;
+  font-size: var(--font-size-caption);
+}
+
+.modeTrigger {
+  max-width: 190px;
+  overflow: hidden;
+  color: var(--muted-foreground);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.modeDescription {
+  max-width: min(280px, calc(100vw - 48px));
+  padding: 8px 12px;
+  font-size: var(--font-size-caption);
+  color: var(--muted-foreground);
+}

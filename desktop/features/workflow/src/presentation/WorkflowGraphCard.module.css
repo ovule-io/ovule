@@ -1,0 +1,315 @@
+.threadWorkflowCard {
+  position: relative;
+  margin: 18px 0 12px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 17px;
+  background: var(--card);
+  box-shadow: 0 1px 2px oklch(0.145 0 0 / 5%);
+  cursor: pointer;
+}
+.threadWorkflowHeader,
+.threadWorkflowFooter,
+.workflowLiveAttempt {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.threadWorkflowHeader > :first-child {
+  min-width: 0;
+}
+.workflowHeaderActions {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.threadWorkflowTitle {
+  display: -webkit-box;
+  overflow: hidden;
+  margin: 5px 0 0;
+  font-size: var(--font-size-title);
+  font-weight: 600;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+.workflowState {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 4px 8px;
+  background: var(--surface);
+  color: var(--muted-foreground);
+  font-size: var(--font-size-caption);
+  text-transform: capitalize;
+}
+.workflowStateDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--success);
+}
+.workflowStateDot.blocked {
+  background: var(--danger);
+}
+.workflowStateDot.running,
+.workflowStateDot.replanning {
+  background: var(--blue);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--blue) 18%, transparent);
+}
+.threadGoalIntent {
+  max-width: 680px;
+  margin: 8px 0 14px;
+  color: var(--muted-foreground);
+  font-size: var(--font-size-ui);
+  line-height: 1.55;
+}
+.workflowGraphShell {
+  overflow-x: auto;
+  padding: 4px 3px 10px;
+  min-height: min-content;
+}
+.workflowGraph {
+  display: flex;
+  min-width: min-content;
+  align-items: center;
+}
+.workflowOrigin {
+  display: grid;
+  flex: 0 0 auto;
+  width: 30px;
+  height: 30px;
+  place-items: center;
+  border-radius: 9px;
+  background: var(--text);
+  color: var(--surface);
+}
+.workflowEmptyGraph {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+}
+.workflowLevel {
+  position: relative;
+  display: grid;
+  flex: 0 0 auto;
+  grid-template-columns: 24px auto;
+  align-items: stretch;
+}
+.workflowLevelConnector {
+  position: relative;
+  min-height: 58px;
+}
+.workflowLevelConnector::before {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  left: 0;
+  height: 2px;
+  background: var(--line-strong);
+  content: "";
+}
+.workflowLevel.parallel .workflowLevelConnector::after {
+  position: absolute;
+  top: 29px;
+  right: 11px;
+  bottom: 29px;
+  width: 2px;
+  background: var(--line-strong);
+  content: "";
+}
+.workflowBranchStack {
+  display: grid;
+  gap: 8px;
+}
+.workflowBranch {
+  position: relative;
+  display: flex;
+  min-height: 58px;
+  align-items: center;
+}
+.workflowBranch::before {
+  position: absolute;
+  top: 50%;
+  right: 100%;
+  width: 12px;
+  height: 2px;
+  background: var(--line-strong);
+  content: "";
+}
+.workflowEdge {
+  width: 24px;
+  height: 2px;
+  background: var(--line-strong);
+}
+.workflowEdge.succeeded,
+.workflowEdge.approved {
+  background: var(--success);
+}
+.workflowEdge.running {
+  background: var(--blue);
+}
+.workflowGraphNode {
+  display: grid;
+  width: 212px;
+  grid-template-columns: 22px minmax(0, 1fr);
+  align-items: start;
+  gap: 7px;
+  height: calc(2.7 * var(--font-size-ui) + 1.4 * var(--font-size-caption) + 18px);
+  min-height: 0;
+  border: 1px solid var(--line-strong);
+  border-radius: 10px;
+  padding: 7px 9px;
+  background: var(--surface);
+  color: var(--text);
+  text-align: left;
+}
+.workflowNodeBody {
+  display: grid;
+  min-width: 0;
+  overflow: hidden;
+}
+.workflowGraphNode.gate {
+  border-radius: 6px;
+}
+.workflowGraphNode.succeeded,
+.workflowGraphNode.approved {
+  border-color: color-mix(in srgb, var(--success) 55%, var(--line));
+}
+.workflowGraphNode.running,
+.workflowGraphNode.dispatched {
+  border-color: color-mix(in srgb, var(--blue) 55%, var(--line));
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--blue) 8%, transparent);
+}
+.workflowGraphNode.failed,
+.workflowGraphNode.blocked,
+.workflowGraphNode.rejected {
+  border-color: color-mix(in srgb, var(--danger) 55%, var(--line));
+}
+.workflowNodeIcon {
+  display: grid;
+  width: 22px;
+  height: 22px;
+  place-items: center;
+  border-radius: 7px;
+  background: var(--surface-3);
+  color: var(--muted-foreground);
+}
+.workflowNodeIcon.gate {
+  border-radius: 4px;
+  background: var(--warning-soft);
+  color: var(--warning);
+}
+.workflowNodeIcon.succeeded,
+.workflowNodeIcon.approved {
+  background: var(--success-soft);
+  color: var(--success);
+}
+.workflowNodeIcon.running {
+  background: var(--blue-soft);
+  color: var(--blue);
+}
+.workflowNodeLine {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.workflowNodeTitle {
+  display: -webkit-box;
+  height: 2.7em;
+  max-height: 2.7em;
+  margin: 0;
+  font-size: var(--font-size-ui);
+  font-weight: 500;
+  line-height: 1.35;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+.workflowNodeDetail {
+  margin-top: 3px;
+  color: var(--faint);
+  font-size: var(--font-size-caption);
+  text-transform: capitalize;
+}
+.workflowNodeActivity {
+  max-width: 100%;
+  margin-top: 2px;
+  color: var(--muted-foreground);
+  font-size: var(--font-size-caption);
+}
+.workflowEmptyGraph {
+  color: var(--faint);
+  font-size: var(--font-size-ui);
+}
+.threadWorkflowFooter {
+  margin-top: 8px;
+}
+.progressTrack {
+  flex: 1;
+}
+.progressValue {
+  background: var(--foreground);
+}
+.workflowGraphNode:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px color-mix(in oklch, var(--foreground) 14%, transparent);
+}
+.workflowProgress {
+  flex: 0 0 auto;
+  color: var(--faint);
+  font-size: var(--font-size-caption);
+}
+.workflowLiveAttempt {
+  display: grid;
+  gap: 8px;
+  margin: 12px -16px -16px;
+  border-top: 1px solid var(--line);
+  padding: 8px 16px;
+  background: color-mix(in srgb, var(--surface) 78%, transparent);
+  color: var(--muted-foreground);
+  font-size: var(--font-size-ui);
+}
+.workflowLiveHeader {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.workflowLiveAgent {
+  color: var(--text);
+}
+.workflowLiveSummary {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.workflowLiveOutput {
+  max-height: 180px;
+  overflow: auto;
+  border-left: 2px solid var(--blue);
+  padding: 4px 0 4px 10px;
+  color: var(--text);
+  font-size: var(--font-size-ui);
+  line-height: 1.55;
+}
+.workflowLiveOutput > :first-child {
+  margin-top: 0;
+}
+.workflowLiveOutput > :last-child {
+  margin-bottom: 0;
+}
+
+.flatWorkflow {
+  position: relative;
+  padding: 0;
+  margin: 16px 0;
+  min-width: 0;
+}

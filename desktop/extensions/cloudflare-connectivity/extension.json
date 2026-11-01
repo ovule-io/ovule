@@ -1,0 +1,134 @@
+{
+  "id": "io.ovule.connectivity.cloudflare",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "schemaVersion": 1,
+  "apiVersion": 1,
+  "contributes": {
+    "toolchains": [
+      {
+        "id": "cf-cli",
+        "label": "Cloudflare CLI",
+        "kind": "provider-cli",
+        "onboarding": false,
+        "executable": "cf",
+        "candidates": [
+          "cf"
+        ],
+        "versionArgs": [
+          "--version"
+        ],
+        "requiredToolchainIds": [
+          "nodejs"
+        ],
+        "provider": {
+          "type": "npm",
+          "package": "cf",
+          "version": "1.0.0-beta.12",
+          "integrity": "sha512-tyQ+Jpnw+4NDwDtl7ZNteXBm7N0TeJ6gYww79kkabpcYoCEXkUUpmt9BlDUKH8ub17tjAeiuyqa9NQzH0vp2Aw==",
+          "registry": "https://registry.npmjs.org/",
+          "allowScripts": false
+        }
+      }
+    ],
+    "messageBlocks": [
+      {
+        "kind": "cloudflare-connectivity",
+        "tag": "ovule-cloudflare-connectivity",
+        "module": "dist/ui.js",
+        "agentInstructions": "This is a user-operated connection setup card. Never request or output credentials.",
+        "example": {}
+      }
+    ],
+    "skills": [
+      {
+        "id": "cloudflare-connectivity",
+        "path": "skills/cloudflare-connectivity/SKILL.md"
+      }
+    ],
+    "slashCommands": [
+      {
+        "id": "cloudflare",
+        "label": "Cloudflare",
+        "description": "Sign in and set up this Host’s cross-network connection service",
+        "handler": "connectivity.setup",
+        "target": "cloudflare-turn",
+        "skills": [
+          "cloudflare-connectivity"
+        ],
+        "workflow": "workflows/setup.md",
+        "statusBlock": "cloudflare-connectivity",
+        "fallback": {
+          "title": "Cloudflare setup",
+          "intent": "Configure this Host’s connection service",
+          "response": "Use the configuration card to sign in.",
+          "nodes": [
+            {
+              "id": "configure",
+              "kind": "gate",
+              "title": "Sign in and select an account"
+            }
+          ]
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "status",
+        "handler": "connectivity.status",
+        "target": "cloudflare-turn"
+      },
+      {
+        "id": "login",
+        "handler": "connectivity.login",
+        "target": "cloudflare-turn"
+      },
+      {
+        "id": "accounts",
+        "handler": "connectivity.accounts",
+        "target": "cloudflare-turn"
+      },
+      {
+        "id": "create",
+        "handler": "connectivity.create",
+        "target": "cloudflare-turn"
+      },
+      {
+        "id": "cancel",
+        "handler": "connectivity.cancel",
+        "target": "cloudflare-turn"
+      },
+      {
+        "id": "open",
+        "handler": "connectivity.open",
+        "target": "cloudflare-turn"
+      },
+      {
+        "id": "open-external",
+        "handler": "connectivity.open-external",
+        "target": "cloudflare-turn"
+      }
+    ]
+  },
+  "permissions": {
+    "process": [
+      "cf-cli"
+    ],
+    "workspace": false,
+    "network": [
+      "https://rtc.live.cloudflare.com/*",
+      "https://api.cloudflare.com/*",
+      "https://dash.cloudflare.com/*"
+    ],
+    "secrets": [
+      "OVULE_CLOUDFLARE_TURN"
+    ],
+    "environment": [
+      "CLOUDFLARE_AUTH_USE_KEYRING"
+    ]
+  },
+  "ui": {
+    "entry": "dist/ui.js"
+  }
+}

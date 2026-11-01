@@ -1,0 +1,92 @@
+{
+  "id": "io.ovule.provider.deepseek",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "schemaVersion": 1,
+  "apiVersion": 1,
+  "runtime": {
+    "kind": "javascript",
+    "entry": "dist/extension.mjs"
+  },
+  "contributes": {
+    "agents": [],
+    "channels": [],
+    "skills": [],
+    "models": [
+      {
+        "id": "deepseek-flash",
+        "label": "DeepSeek Flash",
+        "provider": "deepseek",
+        "remoteId": "deepseek-flash",
+        "agents": ["ovule"],
+        "recommended": true,
+        "description": "Fast DeepSeek model with thinking and non-thinking modes"
+      },
+      {
+        "id": "deepseek-v4-pro",
+        "label": "DeepSeek V4 Pro",
+        "provider": "deepseek",
+        "remoteId": "deepseek-v4-pro",
+        "agents": ["ovule"],
+        "description": "High-capability DeepSeek model through the official API"
+      }
+    ],
+    "onboarding": [
+      {
+        "id": "deepseek",
+        "label": "DeepSeek",
+        "description": "Connect the official DeepSeek API and discover its current model catalog.",
+        "icon": "key",
+        "modelProvider": "deepseek",
+        "fields": [
+          {
+            "id": "apiKey",
+            "label": "DeepSeek API key",
+            "kind": "secret",
+            "required": true,
+            "placeholder": "sk-..."
+          }
+        ],
+        "actions": [
+          {
+            "id": "configure",
+            "label": "Save API key",
+            "handler": "model-provider.configure",
+            "field": "apiKey",
+            "provider": "deepseek",
+            "credentialReference": "DEEPSEEK_API_KEY",
+            "endpoint": "https://api.deepseek.com/models"
+          },
+          {
+            "id": "refresh",
+            "label": "Refresh models",
+            "handler": "model-provider.refresh",
+            "provider": "deepseek",
+            "credentialReference": "DEEPSEEK_API_KEY",
+            "endpoint": "https://api.deepseek.com/models"
+          }
+        ],
+        "links": [
+          {
+            "label": "Open DeepSeek API keys",
+            "url": "https://platform.deepseek.com/api_keys"
+          }
+        ],
+        "status": {
+          "handler": "secret.configured",
+          "credentialReference": "DEEPSEEK_API_KEY",
+          "readyDetail": "DeepSeek API key is securely configured.",
+          "missingDetail": "Enter a DeepSeek API key to discover and enable models."
+        }
+      }
+    ]
+  },
+  "permissions": {
+    "process": [],
+    "workspace": false,
+    "network": ["https://api.deepseek.com/*"],
+    "secrets": ["DEEPSEEK_API_KEY"],
+    "environment": []
+  }
+}

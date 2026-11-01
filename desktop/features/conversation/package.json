@@ -1,0 +1,86 @@
+{
+  "name": "@ovule/conversation",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./composer/composer": {
+      "types": "./src/composer/composer.d.ts"
+    },
+    "./composer/message-draft": {
+      "types": "./src/composer/message-draft.d.ts"
+    },
+    "./composer/operations": {
+      "types": "./src/composer/operations.d.ts"
+    },
+    "./composer/route": {
+      "types": "./src/composer/route.d.ts"
+    },
+    "./composer/suggestions": {
+      "types": "./src/composer/suggestions.d.ts"
+    },
+    "./composer/view-data": {
+      "types": "./src/composer/view-data.d.ts"
+    },
+    "./message-telemetry/route": {
+      "types": "./src/message-telemetry/route.d.ts"
+    },
+    "./messages/message-list": {
+      "types": "./src/messages/message-list.d.ts"
+    },
+    "./messages/route": {
+      "types": "./src/messages/route.d.ts"
+    },
+    "./route": {
+      "types": "./src/route.d.ts"
+    },
+    "./selection/selection": {
+      "types": "./src/selection/selection.d.ts"
+    },
+    "./state": {
+      "types": "./src/state.d.ts"
+    },
+    "./view-data": {
+      "types": "./src/view-data.d.ts"
+    },
+    "./view": {
+      "types": "./src/view.d.ts"
+    },
+    "./conversation.token": "./src/conversation.token.ts",
+    "./main.provider": "./src/main.provider.ts",
+    "./app.provider": "./src/app.provider.ts",
+    "./thread.provider": "./src/thread.provider.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@ovule/framework": "workspace:*",
+    "@ovule/i18n": "workspace:*",
+    "@ovule/ioc": "workspace:*",
+    "@ovule/message-parts": "workspace:*",
+    "@ovule/panes": "workspace:*",
+    "@ovule/settings": "workspace:*",
+    "@ovule/shell": "workspace:*",
+    "@ovule/shell-api": "workspace:*",
+    "@ovule/terminal": "workspace:*",
+    "@ovule/ui": "workspace:*",
+    "@ovule/workflow": "workspace:*",
+    "@ovule/workspace": "workspace:*",
+    "lucide-react": "1.43.0",
+    "react": ">=18",
+    "react-i18next": "^16.2.1",
+    "zustand": "5.0.15"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "4.3.3",
+    "@types/node": "26.5.0",
+    "@types/react": "19.2.18",
+    "@types/react-dom": "19.2.7",
+    "prettier": "3.6.2",
+    "tailwindcss": "4.3.3",
+    "typescript": "5.9.3",
+    "vite": "8.2.2"
+  },
+  "license": "MIT OR Apache-2.0"
+}

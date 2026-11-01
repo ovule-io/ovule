@@ -1,0 +1,125 @@
+.panel:global(.terminal-panel) {
+  grid-template-rows: minmax(0, 1fr);
+  background: var(--background);
+}
+.toolbar {
+  display: none;
+  min-width: 0;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  border-bottom: 1px solid var(--terminal-border);
+  padding: 0 8px 0 11px;
+  background: var(--terminal-toolbar);
+  color: var(--terminal-muted);
+}
+.ptyPanel {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  min-height: 0;
+  height: 100%;
+  background: var(--background);
+  color: var(--terminal-fg);
+}
+.ptyToolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 8px;
+  border-bottom: 1px solid var(--terminal-border);
+}
+.ptyToolbar select,
+.ptyToolbar button {
+  background: var(--background);
+  color: inherit;
+  border: 1px solid var(--terminal-border);
+  border-radius: 4px;
+}
+.identity,
+.toolbarActions,
+.search {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+}
+.identity {
+  gap: 7px;
+}
+.identityTitle {
+  color: var(--terminal-fg);
+  font-size: var(--font-size-ui);
+  font-weight: 500;
+}
+.identityStatus {
+  color: var(--terminal-muted);
+  font-size: var(--font-size-caption);
+}
+.statusDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--terminal-cursor);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--terminal-cursor) 14%, transparent);
+}
+.toolbarActions {
+  gap: 2px;
+}
+.toolbarButton {
+  display: grid;
+  width: 26px;
+  height: 25px;
+  place-items: center;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  color: var(--terminal-muted);
+}
+.toolbarButton:hover {
+  background: var(--terminal-hover);
+  color: var(--terminal-fg);
+}
+.toolbarButton:disabled {
+  pointer-events: none;
+  opacity: 0.35;
+}
+.cancel {
+  color: var(--destructive);
+}
+.search {
+  height: 27px;
+  overflow: hidden;
+  border: 1px solid var(--terminal-border);
+  border-radius: 6px;
+  background: var(--terminal-search);
+}
+.searchInput {
+  width: 130px;
+  min-width: 70px;
+  border: 0;
+  outline: 0;
+  padding: 0 7px;
+  background: transparent;
+  color: var(--terminal-fg);
+  font-size: var(--font-size-ui);
+}
+.shell {
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  background: var(--background);
+  cursor: text;
+}
+.shell :global(.xterm) {
+  box-sizing: border-box;
+  height: 100%;
+  padding: 8px 9px;
+  background-color: var(--background);
+}
+.shell :global(.xterm-viewport) {
+  background-color: var(--background);
+  scrollbar-width: thin;
+  scrollbar-color: var(--terminal-scrollbar) transparent;
+}
+.shell :global(.xterm-screen) {
+  background-color: var(--background);
+}

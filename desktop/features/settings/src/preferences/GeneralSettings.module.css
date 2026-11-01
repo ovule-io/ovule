@@ -1,0 +1,77 @@
+.sections {
+  display: grid;
+  gap: 16px;
+  width: 100%;
+  max-width: 720px;
+  container-type: inline-size;
+}
+.section {
+  display: grid;
+  gap: 16px;
+  min-width: 0;
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+}
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.title {
+  margin: 0;
+  font-size: var(--font-size-ui);
+  font-weight: 600;
+  line-height: 1.5;
+}
+.row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(180px, 240px);
+  align-items: center;
+  gap: 16px;
+}
+.note {
+  margin: 0;
+  color: var(--muted-foreground);
+  font-size: var(--font-size-caption);
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+.group {
+  display: grid;
+  gap: 12px;
+}
+.groupTitle {
+  margin: 0;
+  font-size: var(--font-size-ui);
+  font-weight: 500;
+}
+.permissionRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+.permissionLabel {
+  display: grid;
+  gap: 4px;
+}
+.footer {
+  display: grid;
+  gap: 8px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+@container (max-width: 480px) {
+  .row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+  .section {
+    padding: 16px;
+  }
+}

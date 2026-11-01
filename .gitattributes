@@ -1,0 +1,13 @@
+# Preserve manifest hashes across Windows/macOS checkouts, including text assets.
+vendors/tuffite-framework/** -text
+
+# Distribution identities and text remain reviewable; large runtime artifacts use LFS.
+vendors/tuffite-framework/**/*.dylib filter=lfs diff=lfs merge=lfs -text
+vendors/tuffite-framework/**/*.dll filter=lfs diff=lfs merge=lfs -text
+vendors/tuffite-framework/**/*.exe filter=lfs diff=lfs merge=lfs -text
+vendors/tuffite-framework/**/*.lib filter=lfs diff=lfs merge=lfs -text
+vendors/tuffite-framework/**/*.pdb filter=lfs diff=lfs merge=lfs -text
+vendors/tuffite-framework/**/*.dat filter=lfs diff=lfs merge=lfs -text
+vendors/tuffite-framework/**/*.pak filter=lfs diff=lfs merge=lfs -text
+vendors/tuffite-framework/**/*.bin filter=lfs diff=lfs merge=lfs -text
+vendors/tuffite-framework/**/tuffite_launcher filter=lfs diff=lfs merge=lfs -text

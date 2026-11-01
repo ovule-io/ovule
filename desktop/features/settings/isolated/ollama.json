@@ -1,0 +1,26 @@
+{
+  "label": "Ollama",
+  "description": "Install Ollama and pull a local model for private on-device inference.",
+  "fields": [
+    {
+      "id": "model",
+      "label": "Ollama model",
+      "kind": "text",
+      "required": true,
+      "placeholder": "qwen3-coder"
+    }
+  ],
+  "actions": [
+    {
+      "id": "pull",
+      "label": "Install and pull model",
+      "field": "model"
+    }
+  ],
+  "links": [
+    {
+      "label": "Open Ollama models",
+      "url": "https://ollama.com/search"
+    }
+  ]
+}

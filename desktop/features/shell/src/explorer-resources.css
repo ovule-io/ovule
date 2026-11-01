@@ -1,0 +1,86 @@
+.explorer-resource-ui {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+.explorer-pdf {
+  position: absolute;
+  inset: 0;
+  overflow: auto;
+  pointer-events: auto;
+  background: #525659;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+}
+.explorer-pdf canvas {
+  max-width: 100%;
+  background: white;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px #0004;
+}
+.explorer-pdf-status {
+  color: white;
+  font-size: 13px;
+}
+.explorer-transfer-preview {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.browser-surface,
+.tool-surface,
+.explorer-resource-host {
+  position: relative;
+}
+
+.explorer-loading-indicator {
+  position: absolute;
+  z-index: 9;
+  inset: 0 0 auto;
+  height: 2px;
+  overflow: hidden;
+  pointer-events: none;
+}
+.explorer-loading-indicator[hidden] {
+  display: none;
+}
+.explorer-loading-indicator::after {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 40%;
+  border-radius: 2px;
+  background: linear-gradient(90deg, transparent, var(--primary, #8b7cf6), transparent);
+  animation: explorer-loading-marquee 3.6s ease-in-out infinite;
+  content: "";
+}
+@keyframes explorer-loading-marquee {
+  0% {
+    transform: translateX(-100%);
+  }
+  24% {
+    transform: translateX(55%);
+  }
+  72% {
+    transform: translateX(110%);
+  }
+  100% {
+    transform: translateX(350%);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .explorer-loading-indicator::after {
+    width: 100%;
+    animation: none;
+    background: var(--primary, #8b7cf6);
+    opacity: 0.65;
+  }
+}

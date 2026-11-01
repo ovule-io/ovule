@@ -1,0 +1,96 @@
+.ovule-control-viewport {
+  --ovule-control-surface-radius: var(--app-pane-radius, 12px);
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  border-radius: 0 0 var(--ovule-control-surface-radius) var(--ovule-control-surface-radius);
+  /* Alpha clipping is needed for embedded Explorer compositor surfaces. The
+     toolbar joins square upper corners; two circles shape only the lower ones.
+     Keep the mask driven by the same radius as the feedback border. */
+  mask-image:
+    linear-gradient(#fff, #fff), linear-gradient(#fff, #fff),
+    radial-gradient(circle closest-side, #fff 99%, transparent 100%),
+    radial-gradient(circle closest-side, #fff 99%, transparent 100%);
+  mask-size:
+    100% calc(100% - var(--ovule-control-surface-radius)),
+    calc(100% - 2 * var(--ovule-control-surface-radius)) 100%,
+    calc(2 * var(--ovule-control-surface-radius)) calc(2 * var(--ovule-control-surface-radius)),
+    calc(2 * var(--ovule-control-surface-radius)) calc(2 * var(--ovule-control-surface-radius));
+  mask-position:
+    top,
+    center,
+    bottom left,
+    bottom right;
+  mask-repeat: no-repeat;
+  mask-mode: alpha;
+}
+.ovule-control-feedback {
+  position: absolute;
+  inset: 0;
+  z-index: 8;
+  overflow: hidden;
+  border-radius: inherit;
+  /* Clip the halo and gradients to the same rounded border box as the surface,
+     including asymmetric viewport corners below an Explorer toolbar. */
+  clip-path: border-box;
+  pointer-events: none !important;
+  opacity: 0;
+  transition: opacity 240ms ease-out;
+  /* A transparent center preserves the embedded page / video compositor. */
+  box-shadow:
+    inset 0 0 0 2px #8b7cf6aa,
+    inset 0 0 24px 3px #846ef34d;
+  background:
+    radial-gradient(ellipse at 0 0, #8b7cf64d, transparent 38%),
+    radial-gradient(ellipse at 100% 100%, #44cddf38, transparent 38%);
+}
+.ovule-control-feedback[data-active] {
+  opacity: 1;
+}
+.ovule-control-feedback-desktop {
+  position: fixed;
+  z-index: 100;
+}
+.ovule-control-pointer {
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  margin: -14px;
+  border-radius: 50%;
+  border: 2px solid #faf8ff;
+  background: #8b7cf64d;
+  box-shadow:
+    0 0 0 5px #8b7cf633,
+    0 0 18px #8b7cf6aa;
+  opacity: 0;
+  transform: scale(1);
+  transition:
+    opacity 160ms,
+    transform 120ms;
+}
+.ovule-control-pointer[data-visible] {
+  opacity: 1;
+}
+.ovule-control-pointer[data-pressed="true"] {
+  transform: scale(0.72);
+  background: #8b7cf6b3;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ovule-control-feedback,
+  .ovule-control-pointer {
+    transition: none;
+  }
+}
+@media (forced-colors: active) {
+  .ovule-control-feedback {
+    background: transparent;
+    box-shadow: none;
+    outline: 2px solid Highlight;
+    outline-offset: -2px;
+  }
+  .ovule-control-pointer {
+    background: Highlight;
+    border-color: Canvas;
+    box-shadow: none;
+  }
+}

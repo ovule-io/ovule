@@ -1,0 +1,151 @@
+{
+  "id": "io.ovule.visuals",
+  "version": "0.1.0",
+  "apiVersion": 1,
+  "contributes": {
+    "agents": [],
+    "channels": [],
+    "skills": [],
+    "models": [],
+    "capabilities": [
+      {
+        "id": "visualization.echarts",
+        "label": "ECharts visualization",
+        "description": "Render declarative chart data in Thread messages."
+      },
+      {
+        "id": "drawing.excalidraw",
+        "label": "Excalidraw scene",
+        "description": "Render declarative drawing scenes in Thread messages."
+      }
+    ],
+    "messageBlocks": [
+      {
+        "kind": "echarts",
+        "capability": "visualization.echarts",
+        "agentInstructions": "Use this block when the user asks for a chart or when a chart explains data better than prose. Put a standard ECharts option object in data.option. Prefer inline data and do not create an HTML file unless the user explicitly asks for one.",
+        "example": {
+          "option": {
+            "title": {
+              "text": "Attempt latency"
+            },
+            "tooltip": {
+              "trigger": "axis"
+            },
+            "xAxis": {
+              "type": "category",
+              "data": ["Plan", "Run", "Verify"]
+            },
+            "yAxis": {
+              "type": "value"
+            },
+            "series": [
+              {
+                "type": "bar",
+                "data": [12, 42, 18]
+              }
+            ]
+          }
+        },
+        "ui": {
+          "type": "isolated",
+          "tag": "ovule-echarts"
+        }
+      },
+      {
+        "kind": "excalidraw",
+        "capability": "drawing.excalidraw",
+        "agentInstructions": "Use this block for diagrams or sketches. Put Excalidraw-compatible scene elements in data.elements and an optional title in data.title.",
+        "example": {
+          "title": "Request flow",
+          "elements": [
+            {
+              "type": "rectangle",
+              "x": 20,
+              "y": 20,
+              "width": 160,
+              "height": 64
+            },
+            {
+              "type": "text",
+              "x": 48,
+              "y": 40,
+              "text": "Ovule"
+            }
+          ]
+        },
+        "ui": {
+          "type": "isolated",
+          "tag": "ovule-excalidraw"
+        }
+      },
+      {
+        "kind": "interactive-ui",
+        "agentInstructions": "Use this block for useful interactive forms, comparisons, calculators, or decision cards. Supply a title and a self-contained HTML document in data.html. Inline CSS and JavaScript in <script> tags are supported. Use addEventListener; inline onclick/onchange attributes and external scripts are not supported. Execution stays in an isolated iframe; network, host APIs, popups and navigation are unavailable. Use window.ovule.compose(prompt) to place a follow-up in the user composer; the user reviews and sends it. Never request passwords or API keys. Forms can handle input locally. Keep the HTML below 128 KiB.",
+        "example": {
+          "title": "Choose next step",
+          "html": "<button id=\"verify\">Verify configuration</button><script>document.querySelector(\"#verify\").addEventListener(\"click\",()=>window.ovule.compose(\"Help me verify the configuration\"));</script>"
+        },
+        "ui": {
+          "type": "iframe"
+        }
+      }
+    ],
+    "fileEditors": [
+      {
+        "id": "office-word",
+        "label": "Word preview",
+        "extensions": ["docx", "dotx"],
+        "mode": "read-only",
+        "threadPresentation": "card",
+        "tag": "ovule-office-editor",
+        "module": "dist/ui.js"
+      },
+      {
+        "id": "office-spreadsheet",
+        "label": "Spreadsheet editor",
+        "extensions": ["xlsx", "csv"],
+        "mode": "editable",
+        "threadPresentation": "card",
+        "tag": "ovule-office-editor",
+        "module": "dist/ui.js"
+      },
+      {
+        "id": "office-spreadsheet-preview",
+        "label": "Macro spreadsheet preview",
+        "extensions": ["xlsm"],
+        "mode": "read-only",
+        "threadPresentation": "card",
+        "tag": "ovule-office-editor",
+        "module": "dist/ui.js"
+      },
+      {
+        "id": "office-presentation",
+        "label": "PowerPoint preview",
+        "extensions": ["pptx", "pptm", "ppsx"],
+        "mode": "read-only",
+        "threadPresentation": "card",
+        "tag": "ovule-office-editor",
+        "module": "dist/ui.js"
+      },
+      {
+        "id": "office-pdf",
+        "label": "PDF preview",
+        "extensions": ["pdf"],
+        "mode": "read-only",
+        "threadPresentation": "card",
+        "tag": "ovule-office-editor",
+        "module": "dist/ui.js"
+      }
+    ]
+  },
+  "permissions": {
+    "workspace": true
+  },
+  "private": true,
+  "schemaVersion": 1,
+  "type": "module",
+  "ui": {
+    "entry": "dist/ui.js"
+  }
+}

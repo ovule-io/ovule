@@ -1,0 +1,32 @@
+.terminal {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface-2);
+  color: var(--foreground);
+}
+.header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 34px;
+  padding: 4px 10px;
+  border-bottom: 1px solid var(--border);
+  background: var(--muted);
+  font-size: var(--font-size-caption);
+  color: var(--muted-foreground);
+}
+.header > span {
+  flex: 1;
+  min-width: 0;
+}
+.output {
+  margin: 0;
+  padding: 12px;
+  max-height: 360px;
+  overflow: auto;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font: var(--font-size-code, 12px) / 1.6 var(--font-mono);
+}

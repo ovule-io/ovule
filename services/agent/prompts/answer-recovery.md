@@ -1,0 +1,1 @@
+The previous response exhausted its output budget before producing an answer. Give a concise final answer to the original user request now, using only the existing context and observations. Do not call tools or claim any new action was performed. State uncertainty and unfinished work explicitly. Preserve any required JSON response format.

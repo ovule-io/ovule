@@ -1,0 +1,458 @@
+.workspaceTitlebarRoot {
+  position: relative;
+  min-width: 0;
+}
+.explorerTitlebar {
+  position: relative;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  height: 56px;
+  min-width: 0;
+  padding: 4px 7px;
+  border-bottom: 1px solid var(--line);
+  background: var(--background);
+}
+.titlebarSlot {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+.activeTabSlot {
+  flex: 1;
+}
+.trailingActionsSlot {
+  flex: none;
+}
+.titlebarButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex: none;
+  min-width: 26px;
+  height: 30px;
+  padding: 4px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+}
+.titlebarButton:disabled {
+  color: var(--faint);
+  opacity: 0.45;
+}
+.titlebarButton:hover,
+.titlebarButton.selected {
+  background: var(--surface-3);
+  color: var(--text);
+}
+.titlebarButton:focus-visible {
+  outline: none;
+  background: var(--accent);
+  color: var(--accent-foreground);
+}
+.paneTabIcons {
+  display: flex;
+  align-items: center;
+}
+.workspaceTabIndicators {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.paneTabsRegion {
+  position: relative;
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+}
+.paneTabButton {
+  width: 32px;
+  min-width: 32px;
+  height: 32px;
+  padding: 0;
+  border-radius: 999px;
+}
+.paneCount {
+  min-width: 24px;
+  height: 24px;
+  padding-inline: 4px;
+  border: 0;
+  font-size: var(--font-size-caption);
+}
+.paneAddMenu {
+  position: relative;
+  display: flex;
+  flex: none;
+}
+.paneTabAvatar {
+  width: 32px;
+  height: 32px;
+}
+.titlebarIcon {
+  width: 16px;
+  height: 16px;
+}
+.tabFavicon {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  flex: none;
+}
+.paneAvatarFavicon {
+  width: 20px;
+  height: 20px;
+}
+.paneActiveFavicon {
+  width: 20px;
+  height: 20px;
+}
+.paneDivider {
+  width: 1px;
+  height: 10px;
+  margin: 0 4px;
+  background: var(--line);
+  flex: none;
+}
+.paneActiveTab {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+  height: 42px;
+  text-align: left;
+  color: var(--text);
+  border-radius: 6px;
+  transition: background-color 0.12s ease;
+}
+.paneActiveTabActions {
+  display: none;
+  gap: 1px;
+  padding: 0 6px;
+  flex: none;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.12s ease;
+}
+.paneActiveTab:hover .paneActiveTabActions,
+.paneActiveTab:focus-within .paneActiveTabActions {
+  display: flex;
+  align-items: center;
+  opacity: 1;
+  pointer-events: auto;
+}
+.paneActiveTabAction {
+  width: 28px;
+  min-width: 28px;
+}
+.paneActiveTabAction:hover,
+.paneActiveTabAction:focus-visible {
+  background: color-mix(in srgb, var(--foreground) 10%, var(--surface-3));
+  color: var(--foreground);
+}
+.paneActiveTab:hover,
+.paneActiveTab:focus-within {
+  background: var(--surface-3);
+}
+.paneActiveTabTrigger {
+  justify-content: flex-start;
+  flex: 1;
+  min-width: 0;
+  height: 42px;
+}
+.paneActiveTabTrigger:hover,
+.paneActiveTabTrigger:focus-visible {
+  background: transparent;
+}
+.paneActiveTabTitle {
+  color: var(--text);
+  opacity: 1;
+}
+.paneActiveTabText {
+  flex: 1;
+  min-width: 0;
+}
+.paneToolbarActions {
+  display: flex;
+  flex: 0 1 auto;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  overflow: hidden;
+}
+.paneText {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: left;
+}
+.paneTitle {
+  color: var(--text);
+  font-size: var(--font-size-ui);
+  font-weight: 500;
+}
+.paneSubtitle {
+  color: var(--faint);
+  font-size: var(--font-size-caption);
+}
+.paneOmnibox {
+  position: relative;
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: 8px;
+  height: 36px;
+  min-width: 0;
+  padding: 0 10px;
+  border: 1px solid var(--input);
+  border-radius: 12px;
+  background: var(--background);
+  color: var(--muted-foreground);
+}
+.paneOmnibox > svg,
+.paneOmnibox svg {
+  flex-shrink: 0;
+}
+.paneOmnibox .paneOmniboxInput {
+  width: 0;
+  flex: 1;
+  min-width: 0;
+  height: 34px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--text);
+  box-shadow: none;
+}
+.paneOmnibox:focus-within {
+  border-color: color-mix(in srgb, #9691ed 55%, var(--border));
+  box-shadow: 0 0 0 1px #9691ed12;
+}
+.paneOmnibox .paneOmniboxInput:focus-visible {
+  border: 0;
+  outline: 0;
+  box-shadow: none;
+}
+.paneDropdown {
+  position: absolute;
+  z-index: 60;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  max-height: min(420px, 60vh);
+  overflow: auto;
+  min-width: var(--radix-popover-trigger-width, 200px);
+  padding: 6px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: var(--popover);
+  color: var(--popover-foreground);
+  box-shadow: var(--shadow);
+}
+.paneOmniboxDropdown {
+  position: relative;
+  top: auto;
+  left: auto;
+  right: auto;
+  width: var(--radix-popover-trigger-width);
+  min-width: var(--radix-popover-trigger-width);
+  max-width: var(--radix-popover-content-available-width);
+}
+.paneTabsDropdown {
+  top: calc(100% + 11px);
+  left: 0;
+  right: 0;
+  display: grid;
+  gap: 1px;
+}
+.paneIndicatorDropdown {
+  top: calc(100% + 12px);
+  right: auto;
+  left: 0;
+  display: grid;
+  width: 220px;
+  gap: 1px;
+}
+.paneIndicatorDropdownButton {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 100%;
+  height: 32px;
+  padding: 0 8px;
+}
+.paneDropdownButton {
+  display: flex;
+  flex-wrap: nowrap;
+  width: 100%;
+  height: auto;
+  padding: 8px;
+}
+.paneDropdownSelected {
+  background: var(--accent);
+  color: var(--accent-foreground);
+}
+.paneMenuRow {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+  height: 32px;
+  padding-left: 4px;
+  border-radius: 6px;
+  color: var(--muted-foreground);
+  cursor: pointer;
+}
+.paneMenuRow:hover,
+.paneMenuRow.selected {
+  background: var(--accent);
+  color: var(--accent-foreground);
+}
+.paneMenuRow:focus-visible {
+  outline: none;
+  background: var(--accent);
+  color: var(--accent-foreground);
+}
+.paneMenuTitle {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.paneMenuClose {
+  display: flex;
+  flex-wrap: nowrap;
+  width: 28px;
+  min-width: 28px;
+  height: 28px;
+  margin-right: 2px;
+  border: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.12s ease;
+}
+.paneMenuRow:hover .paneMenuClose,
+.paneMenuRow:focus-within .paneMenuClose {
+  opacity: 1;
+  pointer-events: auto;
+}
+.paneMenuClose:hover {
+  background: color-mix(in srgb, var(--text) 9%, transparent);
+}
+.paneAddDropdown {
+  top: calc(100% + 20px);
+  right: auto;
+  left: 0;
+  width: max-content;
+  min-width: min(200px, var(--pane-add-max-width, calc(100vw - 32px)));
+  max-width: var(--pane-add-max-width, calc(100vw - 32px));
+  box-sizing: border-box;
+}
+.paneAddDropdownButton {
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
+  height: 32px;
+  padding: 0 8px;
+  text-align: left;
+  white-space: nowrap;
+}
+.paneAddDropdownButton > svg {
+  flex: none;
+  width: 16px;
+  height: 16px;
+}
+.paneAddDropdownButton > span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.terminalDialog {
+  width: min(520px, calc(100vw - 32px));
+}
+.terminalLocationList {
+  display: grid;
+  gap: 4px;
+  max-height: min(420px, 55vh);
+  overflow: auto;
+}
+.terminalLocationRow {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--background);
+}
+.terminalLocationRow:hover {
+  border-color: var(--muted-foreground);
+  background: var(--surface-2);
+}
+.terminalLocationChoice {
+  display: flex;
+  flex: 1;
+  justify-content: flex-start;
+  gap: 10px;
+  min-width: 0;
+  height: auto;
+  padding: 10px;
+  text-align: left;
+}
+.terminalLocationChoice:hover,
+.terminalLocationChoice:focus-visible {
+  background: transparent;
+}
+.terminalLocationIcon {
+  display: flex;
+  flex: none;
+  width: 16px;
+  height: 16px;
+  color: var(--muted-foreground);
+}
+.terminalLocationIcon > svg {
+  width: 16px;
+  height: 16px;
+}
+.terminalLocationText {
+  display: grid;
+  flex: 1;
+  min-width: 0;
+  gap: 2px;
+}
+.terminalLocationTitle,
+.terminalLocationDescription {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.terminalLocationTitle {
+  font-size: var(--font-size-ui);
+  font-weight: 500;
+}
+.terminalLocationDescription {
+  color: var(--muted-foreground);
+  font-size: var(--font-size-caption);
+}
+
+.workspacePaneToolbar {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  gap: 4px;
+  min-width: 0;
+}
+.workspacePaneTitle {
+  flex: 1;
+  padding-inline: 6px;
+}

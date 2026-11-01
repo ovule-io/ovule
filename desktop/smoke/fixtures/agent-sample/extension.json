@@ -1,0 +1,44 @@
+{
+  "id": "io.ovule.agent.sample",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "schemaVersion": 1,
+  "apiVersion": 1,
+  "runtime": {
+    "kind": "javascript",
+    "entry": "dist/extension.mjs"
+  },
+  "contributes": {
+    "toolchains": [
+      {
+        "id": "sample",
+        "label": "Sample ACP CLI",
+        "kind": "agent-cli",
+        "onboarding": false,
+        "executable": "sample",
+        "candidates": ["sample", "sample-alias"],
+        "versionArgs": ["--version"],
+        "provider": {
+          "type": "external"
+        }
+      }
+    ],
+    "agents": [
+      {
+        "id": "sample",
+        "label": "Sample ACP",
+        "executableCandidates": ["sample", "sample-alias"],
+        "toolchain": "sample"
+      }
+    ],
+    "channels": [],
+    "skills": [],
+    "models": []
+  },
+  "permissions": {
+    "process": ["sample", "sample-alias"],
+    "workspace": true,
+    "environment": ["NO_COLOR"]
+  }
+}

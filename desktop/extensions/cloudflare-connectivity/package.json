@@ -1,0 +1,16 @@
+{
+  "name": "@ovule/cloudflare-connectivity",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "files": [
+    "extension.json",
+    "LICENSE",
+    "THIRD_PARTY_NOTICES.txt",
+    "README.md",
+    "dist",
+    "skills",
+    "workflows"
+  ],
+  "license": "MIT OR Apache-2.0"
+}

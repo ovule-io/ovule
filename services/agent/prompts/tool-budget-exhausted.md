@@ -1,0 +1,1 @@
+The tool-call budget is now exhausted. Do not request more tools. Give the user a final answer using the observations already collected, state any uncertainty and unfinished work, and explain the next useful step. Do not claim unperformed actions succeeded.

@@ -1,0 +1,124 @@
+[tools]
+bun = "1.4.2"
+node = "22.22.0"
+rust = "1.91.0"
+git-lfs = "3.6.1"
+
+[tools."cargo:https://github.com/tuffite/tuffite.git"]
+version = "rev:4b1498ac309edecdc55f12eeb93db1816b6204f4"
+crate = "tuffite"
+bin = "tuff"
+features = ["cli"]
+locked = true
+
+[env]
+# Shared by tuff (before Cargo runs) and build.rs; update this one release pin.
+TUFFITE_FRAMEWORK_DIST_RELEASE_TAG = "v0.1.1"
+_.path = ["{{config_root}}/scripts/bin"]
+
+[tasks.dev]
+description = "Prepare and launch Ovule with Vite HMR"
+run = [
+  "mise run install",
+  "mise run native",
+  "mise run frontend",
+  "bun scripts/tuff.mjs dev --manifest tuffite.json",
+]
+
+[tasks.prepare]
+description = "Build and validate the development package"
+run = [
+  "mise run install",
+  "mise run native",
+  "mise run frontend",
+  "bun scripts/tuff.mjs dev --manifest tuffite.json --prepare-only",
+]
+
+[tasks.build]
+depends = ["install"]
+usage = '''
+flag "--release"
+flag "-v --verbose" count=#true
+'''
+run = [
+  "bun scripts/tuff.mjs build --manifest tuffite.json {% if usage.release | default(value=false) %}--release{% endif %}{% for i in range(end=usage.verbose | default(value=0) | int) %} -v{% endfor %}",
+  "mise run frontend {% if usage.release | default(value=false) %}-- --release{% endif %}",
+]
+
+[tasks.package]
+run = [
+  "mise run install",
+  "mise run native -- --release",
+  "mise run frontend -- --release",
+  "mise run notices",
+  "bun scripts/tuff.mjs package --manifest tuffite.json --destination dist --name ovule-production --force",
+]
+
+[tasks.notices]
+description = "Collect native dependency license notices for distribution"
+tools = { python = "3.14" }
+run = "python scripts/rust_notices.py"
+
+[tasks.package-debug]
+description = "Build a standalone debug package without starting the HMR server"
+run = [
+  "mise run install",
+  "mise run native",
+  "mise run frontend",
+  "bun scripts/tuff.mjs dev --manifest tuffite.json --package dist/ovule-debug --prepare-only",
+]
+
+[tasks.install]
+description = "Install the locked desktop dependencies"
+depends = ["sdk:check"]
+run = "bun install --cwd desktop --frozen-lockfile"
+
+[tasks."sdk:check"]
+description = "Check that CLI, Rust and JS SDK commits agree"
+run = "bun scripts/sdk-pins.mjs"
+
+[tasks.native]
+description = "Build Rust and generate ShellAPI bindings"
+run = "bun scripts/tuff.mjs build --manifest tuffite.json"
+
+[tasks.frontend]
+description = "Build frontend and extension resources"
+usage = 'flag "--release"'
+run = "bun scripts/frontend.mjs {% if usage.release | default(value=false) %}--release{% endif %}"
+
+[tasks.dev-clean]
+tools = { python = "3.14" }
+run = "python scripts/clean_dev_package.py"
+
+[tasks.dev-fresh]
+run = ["mise run dev-clean", "mise run dev"]
+
+[tasks.reset-data]
+tools = { python = "3.14" }
+run = "python scripts/reset_data.py"
+
+[tasks.smoke-crd]
+tools = { python = "3.14" }
+run = "python scripts/smoke_crd.py"
+
+[tasks.check]
+tools = { python = "3.14" }
+run = [
+  "node --test scripts/environment.test.mjs scripts/local-sdk.test.mjs scripts/build-channel.test.mjs",
+  "python scripts/cargo.py check",
+  "bun run --cwd desktop check",
+  "python scripts/cargo.py fmt",
+  "python scripts/cargo.py test",
+  "python scripts/cargo.py clippy",
+]
+
+[tasks.doctor]
+run = "bun scripts/tuff.mjs doctor --manifest tuffite.json"
+
+[tasks.tuff]
+description = "Run the pinned Tuffite CLI"
+run = "bun scripts/tuff.mjs"
+
+[tasks."eval:harness"]
+description = "Repeat deterministic harness tasks and write versioned evaluation evidence"
+run = "python3 scripts/harness_eval.py"

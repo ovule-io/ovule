@@ -1,0 +1,4 @@
+interface:
+  display_name: "Smoke Ovule App"
+  short_description: "Run layered cross-platform Ovule release smoke tests"
+  default_prompt: "Use $smoke-ovule-app to validate this Ovule package end to end."

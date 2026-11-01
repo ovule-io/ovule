@@ -1,0 +1,236 @@
+/* Overrides on top of @ovule/ui/sidebar for the Chat surface. */
+
+.sidebar {
+  grid-column: 1;
+  grid-row: 1;
+  transition:
+    padding 0.18s ease,
+    visibility 0.18s step-start;
+}
+
+.sidebarSearch {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  width: 100%;
+  height: 36px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  padding: 0 9px;
+  background: color-mix(in srgb, var(--surface) 70%, transparent);
+  color: var(--faint);
+  text-align: left;
+}
+
+.sidebarSearchLabel {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  font-size: var(--font-size-ui);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sidebarSearchShortcut {
+  flex: none;
+  font: var(--font-size-caption) / 1 var(--font-mono);
+}
+.sidebarPrimaryMenu {
+  margin-top: 4px;
+}
+.sidebarNewConversation {
+  min-height: 32px;
+  font-size: var(--font-size-ui);
+}
+
+.threadTextLine {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.threadTitle {
+  font-size: var(--font-size-ui);
+  font-weight: 400;
+  line-height: var(--line-height-ui);
+}
+
+.artifactIcon {
+  flex: 0 0 16px !important;
+  width: 16px;
+  display: grid;
+  place-items: center;
+}
+.artifactRow {
+  gap: 1px;
+  min-height: 28px;
+}
+.artifactSelect {
+  height: 28px;
+  min-height: 28px;
+  padding-block: 4px;
+  padding-left: 6px;
+}
+.artifactTitle {
+  line-height: 20px;
+}
+.artifactAction {
+  position: static;
+  margin: 0;
+  transform: none;
+}
+.artifactActionTooltip {
+  position: absolute;
+  top: 50%;
+  z-index: 2;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-50%);
+  transition: opacity 0.12s ease;
+}
+.artifactRow:hover .artifactActionTooltip,
+.artifactRow:focus-within .artifactActionTooltip {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.threadHeader {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  gap: 1px;
+  padding-inline: 4px;
+  border-radius: 8px;
+}
+.threadHeader .threadRow,
+.threadHeader .sidebarNewConversation {
+  flex: 1;
+  min-width: 0;
+}
+.threadHeader .threadIconButton {
+  display: inline-flex;
+  flex: none;
+  justify-content: center;
+  align-items: center;
+  width: 22px;
+  min-width: 22px;
+  height: 26px;
+  padding: 2px;
+  border: 0;
+  background: transparent;
+  color: var(--muted-foreground);
+}
+.threadIconButton svg {
+  flex: none;
+}
+.expandedChevron {
+  transform: rotate(90deg);
+}
+.threadMore {
+  opacity: 0;
+  pointer-events: none;
+}
+.threadHeader:hover .threadMore,
+.threadHeader:focus-within .threadMore,
+.threadHeader .threadMore[data-state="open"] {
+  opacity: 1;
+  pointer-events: auto;
+}
+@media (hover: none) {
+  .threadMore {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+.actionError {
+  display: block;
+  padding: 4px 8px;
+  color: var(--danger);
+  font-size: var(--font-size-caption);
+}
+.archiveToggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+.threadHeader .threadRow {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0;
+  padding-inline: 4px;
+}
+
+.threadHeader:hover,
+.threadHeader:focus-within,
+.threadHeader:has(.threadMore[data-state="open"]) {
+  background: var(--sidebar-hover);
+}
+.threadHeader[data-active="true"] {
+  background: var(--sidebar-active);
+}
+.threadHeader .threadRow,
+.threadHeader .threadRow:hover,
+.threadHeader .threadRow[data-active="true"] {
+  background: transparent;
+}
+
+.tabsGroupHeader {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  padding-right: 4px;
+  gap: 1px;
+}
+.tabsGroupHeader .tabsGroupLabel {
+  flex: 1;
+  min-width: 0;
+}
+.tabsGroupHeader .groupIconButton {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  min-width: 22px;
+  height: 26px;
+  padding: 2px;
+  border: 0;
+  background: transparent;
+  color: var(--muted-foreground);
+}
+.tabsGroupContent[hidden] {
+  display: none;
+}
+.tabsClearAction {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.12s ease;
+}
+.tabsGroupHeader:hover .tabsClearAction,
+.tabsGroupHeader:focus-within .tabsClearAction {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.sidebar [data-slot="sidebar-content"] {
+  gap: 0;
+}
+.sidebar [data-slot="sidebar-group"] {
+  padding-block: 2px;
+}
+.sidebar [data-slot="sidebar-group-label"] {
+  padding-block: 6px 4px;
+}
+
+.sidebar [data-sidebar-tabs] .artifactSelect:not([data-active="true"]) {
+  color: var(--text);
+}
+.sidebar [data-sidebar-tabs] + [data-sidebar-conversations] {
+  border-top: 0;
+}

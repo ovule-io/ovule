@@ -1,0 +1,448 @@
+.conversation {
+  --thread-content-gutter: clamp(22px, 5vw, 70px);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  background: var(--background);
+}
+.conversationActiveTabSlot {
+  justify-content: flex-end;
+}
+.threadTitlebarControls {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 3px;
+  min-width: 0;
+}
+.workspacePath {
+  display: block;
+  min-width: 0;
+  margin-top: 0;
+  overflow: hidden;
+  color: var(--faint);
+  font: var(--font-size-caption) / var(--line-height-caption) var(--font-mono);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.agentSelect {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  flex: none;
+  max-width: min(220px, 34vw);
+  height: 30px;
+  padding: 0;
+  color: var(--muted-foreground);
+}
+.agentSelectIcon {
+  position: absolute;
+  z-index: 1;
+  left: 8px;
+  pointer-events: none;
+}
+.agentSelectTrigger {
+  height: 30px;
+  width: min(200px, 30vw);
+  min-width: 0;
+  max-width: 200px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  padding: 0 8px 0 29px;
+  background: var(--surface-2);
+}
+
+.agentSelectTrigger > span:first-child {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.agentSelectTrigger > svg {
+  flex: none;
+}
+
+.hostSelectContent {
+  width: min(360px, calc(100vw - 24px));
+  max-width: min(360px, calc(100vw - 24px));
+}
+
+.hostSelectItem {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.hostSelectItem > span:last-child {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.goalComposer {
+  position: absolute;
+  z-index: 8;
+  top: 52px;
+  right: 22px;
+  width: min(420px, calc(100% - 44px));
+}
+.goalComposerHeader {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+.goalComposerContent {
+  display: grid;
+  gap: 8px;
+}
+.goalComposerTextarea {
+  min-height: 90px;
+  resize: vertical;
+}
+.goalComposerFooter {
+  justify-content: flex-end;
+}
+.timeline {
+  min-width: 0;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+.messageScrollerViewport {
+  padding: 28px var(--thread-content-gutter) 4px;
+}
+.messageScrollToBottom {
+  position: absolute;
+  z-index: 4;
+  bottom: 10px;
+  left: 50%;
+  display: grid;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  padding: 0;
+  transform: translateX(-50%);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--background);
+  color: var(--foreground);
+  box-shadow: 0 8px 24px rgb(0 0 0 / 22%);
+  cursor: pointer;
+  opacity: 1;
+  transition:
+    opacity 140ms ease,
+    transform 140ms ease,
+    background-color 140ms ease;
+}
+.messageScrollToBottom:hover {
+  background: var(--surface-2);
+}
+.messageScrollToBottom[data-active="false"] {
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, 8px);
+}
+.messageTurn {
+  margin-bottom: 13px;
+}
+.messageContent {
+  min-width: 0;
+}
+.messageCard {
+  width: 100%;
+  min-width: 0;
+  max-width: none;
+  margin-bottom: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 11px;
+  background: transparent;
+}
+.messageCard.system {
+  background: transparent;
+}
+.statusNotice {
+  margin: 8px 0 0;
+  color: var(--muted-foreground);
+  font-size: var(--font-size-caption);
+}
+.statusNotice,
+.statusNotice summary {
+  align-items: center;
+  gap: 6px;
+}
+p.statusNotice,
+.statusNotice summary {
+  display: flex;
+}
+.statusNotice summary {
+  cursor: pointer;
+}
+.statusNotice pre {
+  margin: 8px 0;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  max-height: 25vh;
+  overflow: auto;
+}
+.statusNotice svg {
+  flex-shrink: 0;
+}
+
+.messageAuthor {
+  display: block;
+  margin-bottom: 5px;
+  color: var(--muted-foreground);
+  font-size: var(--font-size-caption);
+  font-weight: 500;
+  text-transform: capitalize;
+}
+.messageMeta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 3px;
+  margin-top: 6px;
+  color: var(--faint);
+  font-size: var(--font-size-caption);
+}
+.messageDebug {
+  display: grid;
+  width: 18px;
+  height: 18px;
+  place-items: center;
+  border: 0;
+  border-radius: 5px;
+  padding: 0;
+  background: transparent;
+  color: var(--faint);
+  opacity: 0.66;
+}
+.messageDebug:hover,
+.messageDebug:focus-visible {
+  background: var(--surface-3);
+  color: var(--text);
+  opacity: 1;
+}
+.emptyGoal {
+  display: grid;
+  place-items: center;
+  padding: 66px 20px;
+  text-align: center;
+  color: var(--faint);
+}
+.emptyGoalTitle {
+  margin: 14px 0 5px;
+  color: var(--text);
+  font-size: var(--font-size-title);
+  font-weight: 600;
+}
+.emptyGoalDescription {
+  max-width: 340px;
+  margin: 0 0 14px;
+  color: var(--muted-foreground);
+  font-size: var(--font-size-ui);
+}
+.messageError {
+  flex: 1 0 100%;
+  min-width: 0;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+  color: var(--danger);
+  overflow-wrap: anywhere;
+  font-size: var(--font-size-ui);
+}
+.legacyWorkflowNotice {
+  flex: none;
+  flex-wrap: wrap;
+  z-index: 7;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 8px 14px 0;
+  border: 1px solid color-mix(in srgb, var(--danger) 42%, var(--line));
+  border-radius: 9px;
+  padding: 9px 11px;
+  background: color-mix(in srgb, var(--danger) 7%, var(--surface));
+  color: var(--muted-foreground);
+  font-size: var(--font-size-ui);
+}
+.legacyWorkflowReset {
+  flex: none;
+  white-space: nowrap;
+}
+
+.conversation {
+  grid-column: 2;
+  grid-row: 1;
+  border-radius: 0;
+}
+.timeline {
+  flex: 1;
+  min-height: 0;
+  padding-top: 24px;
+}
+
+.activeWorkflow {
+  position: absolute;
+  z-index: 15;
+  top: 58px;
+  right: 16px;
+  width: min(340px, calc(100% - 32px));
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--background);
+  box-shadow: 0 4px 16px #0001;
+  max-height: calc(100% - 90px);
+  overflow: auto;
+}
+.activityHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  cursor: grab;
+  touch-action: none;
+  font-size: var(--font-size-caption);
+}
+.activityHeader > span {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 600;
+}
+.activityHeader button {
+  display: grid;
+  place-items: center;
+  flex: none;
+  border: 0;
+  border-radius: 5px;
+  padding: 4px;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+.activityHeader button:hover,
+.activityRow:hover {
+  background: var(--muted);
+}
+.activityProgress {
+  display: block;
+  padding: 0 12px 10px;
+  color: var(--muted-foreground);
+  font-size: var(--font-size-caption);
+}
+.workflowActivity {
+  display: grid;
+  gap: 8px;
+  padding: 12px;
+  border-top: 1px solid var(--line);
+  font-size: var(--font-size-caption);
+}
+.workflowActivity small {
+  display: block;
+  color: var(--muted-foreground);
+}
+.activityRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  width: 100%;
+  padding: 8px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--foreground);
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+}
+.activityRow > span {
+  flex: 1;
+  min-width: 0;
+}
+.activityRow strong,
+.activityRow small {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.activityRow strong {
+  font-weight: 500;
+}
+.activityRow svg {
+  flex: none;
+}
+
+.activityRestore {
+  position: absolute;
+  z-index: 15;
+  right: 16px;
+}
+.activityRestore button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--background);
+  color: var(--foreground);
+  cursor: pointer;
+  font-size: var(--font-size-caption);
+}
+
+.activeWorkflow .workflowActivity {
+  max-height: 320px;
+  overflow: auto;
+}
+
+.historyLoader {
+  display: flex;
+  justify-content: center;
+  min-height: 40px;
+  overflow-anchor: none;
+}
+
+.messageActions {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.promptEditor {
+  display: grid;
+  width: 100%;
+  min-width: 0;
+  gap: 6px;
+}
+.promptEditor textarea {
+  display: block;
+  width: 100%;
+  min-height: 1.5em;
+  max-height: 45vh;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  outline: none;
+  resize: none;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  line-height: inherit;
+  box-shadow: none;
+}
+.promptEditor textarea:focus-visible {
+  outline: none;
+  box-shadow: none;
+}

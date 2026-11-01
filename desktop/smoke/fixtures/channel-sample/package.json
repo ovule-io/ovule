@@ -1,0 +1,15 @@
+{
+  "name": "@ovule-test/channel-sample",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "dependencies": {
+    "@ovule/extension": "^0.1.0"
+  },
+  "files": [
+    "extension.json",
+    "dist",
+    "skills",
+    "workflows"
+  ]
+}

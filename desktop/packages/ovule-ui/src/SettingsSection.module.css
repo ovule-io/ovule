@@ -1,0 +1,331 @@
+.toolsTabs {
+  min-width: 0;
+  margin-top: 16px;
+}
+.toolsTabsList {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  min-height: 36px;
+  justify-content: flex-start;
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: var(--surface-2);
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: thin;
+}
+.toolsTabsList :global([data-slot="tabs-trigger"]) {
+  min-width: max-content;
+  flex: 0 0 auto;
+  white-space: nowrap;
+  line-height: 1;
+}
+.toolsTabContent {
+  min-width: 0;
+  margin-top: 14px;
+}
+.catalogSectionHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+.catalogSectionHeading {
+  min-width: 0;
+  flex: 1;
+}
+.catalogSectionTitle {
+  margin: 0;
+  font-size: var(--font-size-title);
+  font-weight: 600;
+}
+.catalogSectionNote {
+  margin: 5px 0 0;
+  color: var(--muted-foreground);
+  font-size: var(--font-size-ui);
+  line-height: 1.5;
+}
+.catalogIntegratedSection {
+  margin-top: 16px;
+}
+.catalogForm {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 13px;
+  padding: 11px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: var(--surface);
+}
+.catalogField {
+  display: grid;
+  gap: 5px;
+  min-width: 0;
+}
+.catalogFieldLabel,
+.catalogChecksLegend {
+  color: var(--faint);
+  font-size: var(--font-size-ui);
+  font-weight: 500;
+}
+.catalogFieldControl {
+  width: 100%;
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  outline: 0;
+  padding: 7px 8px;
+  background: var(--surface-2);
+  color: var(--text);
+  font-size: var(--font-size-ui);
+}
+.catalogTextarea {
+  min-height: 68px;
+  resize: vertical;
+}
+.catalogFieldFull,
+.catalogChecks {
+  grid-column: 1 / -1;
+}
+.catalogCheck,
+.catalogChecks {
+  color: var(--muted-foreground);
+  font-size: var(--font-size-ui);
+}
+.catalogCheck {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 24px;
+  line-height: 1.35;
+}
+.catalogCheckbox {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 16px;
+  margin: 0;
+}
+.catalogChecks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  margin: 0;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  padding: 8px;
+}
+.catalogActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 5px;
+  grid-column: 1 / -1;
+}
+.catalogModelDiscovery {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+.catalogModelDiscoveryError {
+  min-width: 0;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.catalogList {
+  display: grid;
+  gap: 7px;
+  margin-top: 13px;
+}
+.catalogCard {
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+}
+.catalogCardTitle {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.catalogCardMeta {
+  display: block;
+  margin-top: 5px;
+  overflow: hidden;
+  color: var(--faint);
+  font-size: var(--font-size-caption);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.catalogCardDetail {
+  margin: 6px 0 8px;
+  color: var(--muted-foreground);
+  font-size: var(--font-size-ui);
+  line-height: 1.45;
+}
+.catalogCardActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 4px;
+}
+
+@media (max-width: 640px) {
+  .catalogPanel {
+    grid-template-columns: 196px minmax(0, 1fr);
+  }
+  .catalogContent {
+    padding: 14px;
+  }
+  .catalogForm {
+    grid-template-columns: 1fr;
+  }
+}
+.catalogCardFootnote {
+  display: block;
+  margin: -3px 0 8px;
+  color: var(--faint);
+  font-size: var(--font-size-caption);
+}
+.catalogToolbar {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 12px;
+}
+.catalogDiscoveredModels {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 12px;
+}
+.catalogDiscoveredHeader {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--muted-foreground);
+  font-size: var(--font-size-ui);
+}
+.catalogDiscoveredModel {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 6px 9px;
+  background: var(--surface);
+  color: var(--text);
+  font-size: var(--font-size-ui);
+}
+.catalogError {
+  margin-top: 8px;
+  color: var(--danger);
+  font-size: var(--font-size-ui);
+}
+.catalogNotice {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  color: var(--success);
+  font-size: var(--font-size-ui);
+}
+.health {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--danger);
+}
+.health.ok {
+  background: var(--success);
+}
+.health.warning {
+  background: var(--warning, #d59b2d);
+}
+.legacyWarning {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 14px;
+  padding: 10px;
+  border: 1px solid color-mix(in srgb, var(--warning, #d59b2d) 45%, var(--line));
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--warning, #d59b2d) 8%, var(--surface));
+  color: var(--foreground);
+}
+.legacyWarningCopy {
+  display: grid;
+  min-width: 0;
+  flex: 1;
+  gap: 3px;
+  font-size: var(--font-size-ui);
+}
+.legacyWarningText,
+.legacyWarningId {
+  color: var(--muted-foreground);
+  font-size: var(--font-size-caption);
+}
+.capabilityGroups {
+  display: grid;
+  gap: 16px;
+  margin-top: 16px;
+}
+.capabilityGroup {
+  min-width: 0;
+}
+.capabilityGroupHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 6px;
+}
+.capabilityGroupTitle,
+.externalMcpHeading {
+  margin: 0;
+  font-size: var(--font-size-ui);
+  font-weight: 600;
+}
+.capabilityGroupCount,
+.capabilityHealth {
+  color: var(--faint);
+  font-size: var(--font-size-caption);
+}
+.capabilityHealth {
+  margin-left: auto;
+}
+.capabilityTags,
+.capabilityExposures {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin: 7px 0;
+}
+.capabilityTag,
+.capabilityExposure {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 2px 6px;
+  color: var(--muted-foreground);
+  font-size: var(--font-size-caption);
+}
+.capabilityExposure {
+  opacity: 0.62;
+}
+.capabilityExposure.exposureReady {
+  border-color: color-mix(in srgb, var(--success) 40%, var(--line));
+  opacity: 1;
+}
+.capabilityEmpty {
+  margin: 8px 0 0;
+  color: var(--faint);
+  font-size: var(--font-size-ui);
+}
+.externalMcpHeading {
+  margin-top: 20px;
+}

@@ -1,0 +1,65 @@
+{
+  "id": "io.ovule.office",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "schemaVersion": 1,
+  "apiVersion": 1,
+  "contributes": {
+    "fileEditors": [
+      {
+        "id": "office-word",
+        "label": "Word preview",
+        "extensions": ["docx", "dotx"],
+        "mode": "read-only",
+        "threadPresentation": "card",
+        "tag": "ovule-office-editor",
+        "module": "dist/web/office-editor.mjs",
+        "style": "dist/web/office-editor.css"
+      },
+      {
+        "id": "office-spreadsheet",
+        "label": "Spreadsheet editor",
+        "extensions": ["xlsx", "csv"],
+        "mode": "editable",
+        "threadPresentation": "card",
+        "tag": "ovule-office-editor",
+        "module": "dist/web/office-editor.mjs",
+        "style": "dist/web/office-editor.css"
+      },
+      {
+        "id": "office-spreadsheet-preview",
+        "label": "Macro spreadsheet preview",
+        "extensions": ["xlsm"],
+        "mode": "read-only",
+        "threadPresentation": "card",
+        "tag": "ovule-office-editor",
+        "module": "dist/web/office-editor.mjs",
+        "style": "dist/web/office-editor.css"
+      },
+      {
+        "id": "office-presentation",
+        "label": "PowerPoint preview",
+        "extensions": ["pptx", "pptm", "ppsx"],
+        "mode": "read-only",
+        "threadPresentation": "card",
+        "tag": "ovule-office-editor",
+        "module": "dist/web/office-editor.mjs",
+        "style": "dist/web/office-editor.css"
+      },
+      {
+        "id": "office-pdf",
+        "label": "PDF preview",
+        "extensions": ["pdf"],
+        "mode": "read-only",
+        "threadPresentation": "card",
+        "tag": "ovule-office-editor",
+        "module": "dist/web/office-editor.mjs",
+        "style": "dist/web/office-editor.css"
+      }
+    ]
+  },
+  "permissions": {
+    "workspace": true
+  }
+}

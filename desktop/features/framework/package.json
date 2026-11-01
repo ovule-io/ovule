@@ -1,0 +1,59 @@
+{
+  "name": "@ovule/framework",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./conversation-layout/view-data": {
+      "types": "./src/conversation-layout/view-data.d.ts"
+    },
+    "./conversation-layout/view": {
+      "types": "./src/conversation-layout/view.d.ts"
+    },
+    "./framework": {
+      "types": "./src/framework.d.ts"
+    },
+    "./view-data": {
+      "types": "./src/view-data.d.ts"
+    },
+    "./view": {
+      "types": "./src/view.d.ts"
+    },
+    "./framework.token": "./src/framework.token.ts",
+    "./overlay/main-overlay": {
+      "types": "./src/overlay/main-overlay.d.ts"
+    },
+    "./route": {
+      "types": "./src/route.d.ts"
+    },
+    "./app.provider": "./src/app.provider.ts",
+    "./main.provider": "./src/main.provider.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@ovule/conversation": "workspace:*",
+    "@ovule/ioc": "workspace:*",
+    "@ovule/panes": "workspace:*",
+    "@ovule/sidebar": "workspace:*",
+    "@ovule/ui": "workspace:*",
+    "@ovule/workbench": "workspace:*",
+    "react": ">=18",
+    "react-i18next": "^16.2.1",
+    "zustand": "5.0.15",
+    "@ovule/shell": "workspace:*",
+    "lucide-react": "1.43.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "4.3.3",
+    "@types/node": "26.5.0",
+    "@types/react": "19.2.18",
+    "@types/react-dom": "19.2.7",
+    "prettier": "3.6.2",
+    "tailwindcss": "4.3.3",
+    "typescript": "5.9.3",
+    "vite": "8.2.2"
+  },
+  "license": "MIT OR Apache-2.0"
+}

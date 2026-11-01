@@ -1,0 +1,82 @@
+{
+  "name": "@ovule/settings",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./agents/state": {
+      "types": "./src/agents/state.d.ts"
+    },
+    "./agents/view-data": {
+      "types": "./src/agents/view-data.d.ts"
+    },
+    "./extensions/extensions": {
+      "types": "./src/extensions/extensions.d.ts"
+    },
+    "./models/state": {
+      "types": "./src/models/state.d.ts"
+    },
+    "./models/view-data": {
+      "types": "./src/models/view-data.d.ts"
+    },
+    "./onboarding/route": {
+      "types": "./src/onboarding/route.d.ts"
+    },
+    "./onboarding/view-data": {
+      "types": "./src/onboarding/view-data.d.ts"
+    },
+    "./preferences/preferences": {
+      "types": "./src/preferences/preferences.d.ts"
+    },
+    "./settings/operations": {
+      "types": "./src/settings/operations.d.ts"
+    },
+    "./settings/settings": {
+      "types": "./src/settings/settings.d.ts"
+    },
+    "./settings/state": {
+      "types": "./src/settings/state.d.ts"
+    },
+    "./settings/view-data": {
+      "types": "./src/settings/view-data.d.ts"
+    },
+    "./skills/state": {
+      "types": "./src/skills/state.d.ts"
+    },
+    "./tools/state": {
+      "types": "./src/tools/state.d.ts"
+    },
+    "./settings.token": "./src/settings.token.ts",
+    "./thread.provider": "./src/thread.provider.ts",
+    "./settings.provider": "./src/settings.provider.ts",
+    "./app.provider": "./src/app.provider.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@ovule/conversation": "workspace:*",
+    "@ovule/hosts": "workspace:*",
+    "@ovule/i18n": "workspace:*",
+    "@ovule/ioc": "workspace:*",
+    "@ovule/panes": "workspace:*",
+    "@ovule/shell": "workspace:*",
+    "@ovule/shell-api": "workspace:*",
+    "@ovule/ui": "workspace:*",
+    "@ovule/workspace": "workspace:*",
+    "lucide-react": "1.43.0",
+    "react": ">=18",
+    "react-i18next": "^16.2.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "4.3.3",
+    "@types/node": "26.5.0",
+    "@types/react": "19.2.18",
+    "@types/react-dom": "19.2.7",
+    "prettier": "3.6.2",
+    "tailwindcss": "4.3.3",
+    "typescript": "5.9.3",
+    "vite": "8.2.2"
+  },
+  "license": "MIT OR Apache-2.0"
+}

@@ -1,0 +1,185 @@
+{
+  "id": "io.ovule.agent.codex",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "schemaVersion": 1,
+  "apiVersion": 1,
+  "runtime": {
+    "kind": "javascript",
+    "entry": "dist/extension.mjs"
+  },
+  "contributes": {
+    "toolchains": [
+      {
+        "id": "codex",
+        "label": "Codex CLI",
+        "kind": "agent-cli",
+        "executable": "codex",
+        "candidates": [
+          "codex"
+        ],
+        "versionArgs": [
+          "--version"
+        ],
+        "requiredToolchainIds": [
+          "nodejs"
+        ],
+        "provider": {
+          "type": "npm",
+          "package": "@openai/codex",
+          "version": "0.154.0",
+          "integrity": "sha512-FV/x1OHXYv/ifjf3mXj9ThTTAWcUZN6cGIRQRhRxkKNOPuImu1WW0c8ev1vUkE9XGH90dEnYG1tBjIkxRikg0w==",
+          "registry": "https://registry.npmjs.org/",
+          "allowScripts": false
+        }
+      },
+      {
+        "id": "codex-acp",
+        "label": "Codex ACP",
+        "kind": "agent-acp",
+        "executable": "codex-acp",
+        "candidates": [
+          "codex-acp"
+        ],
+        "versionArgs": [
+          "--version"
+        ],
+        "requiredToolchainIds": [
+          "nodejs"
+        ],
+        "provider": {
+          "type": "npm",
+          "package": "@agentclientprotocol/codex-acp",
+          "version": "1.13.1",
+          "integrity": "sha512-NAbXTb6GRReox7B+8RN9VRB+sKUqFJh5Vg7Ex7RskYCO8EsYPJKN1WJvN7mOqjCKKK9lVDrNxtP7Bp/OUKPyAg==",
+          "registry": "https://registry.npmjs.org/",
+          "allowScripts": true
+        }
+      }
+    ],
+    "agents": [
+      {
+        "id": "codex",
+        "label": "Codex",
+        "executableCandidates": [
+          "codex-acp"
+        ],
+        "toolchain": "codex-acp"
+      }
+    ],
+    "channels": [],
+    "skills": [],
+    "models": [],
+    "onboarding": [
+      {
+        "id": "codex",
+        "label": "OpenAI / Codex",
+        "description": "Install Codex and authenticate with ChatGPT or an OpenAI API key.",
+        "icon": "key",
+        "agentIds": [
+          "codex"
+        ],
+        "modelProvider": "openai",
+        "fields": [
+          {
+            "id": "apiKey",
+            "kind": "secret"
+          }
+        ],
+        "actions": [
+          {
+            "id": "install",
+            "handler": "toolchain.install",
+            "toolchains": [
+              "codex-acp"
+            ]
+          },
+          {
+            "id": "chatgpt",
+            "handler": "authorization.launch",
+            "toolchains": [
+              "codex"
+            ],
+            "toolchain": "codex",
+            "args": [
+              "app-server"
+            ],
+            "authorization": {
+              "initialize": {
+                "id": 1,
+                "method": "initialize",
+                "params": {
+                  "clientInfo": {
+                    "name": "ovule",
+                    "title": "Ovule",
+                    "version": "0.1.0"
+                  },
+                  "capabilities": null
+                }
+              },
+              "afterInitialize": [
+                {
+                  "method": "initialized"
+                },
+                {
+                  "id": 2,
+                  "method": "account/login/start",
+                  "params": {
+                    "type": "chatgpt"
+                  }
+                }
+              ],
+              "authorizationResponseId": 2,
+              "urlPointer": "/result/authUrl",
+              "completionMethod": "account/login/completed",
+              "successPointer": "/params/success"
+            }
+          },
+          {
+            "id": "api-key",
+            "handler": "authorization.stdin",
+            "toolchains": [
+              "codex"
+            ],
+            "toolchain": "codex",
+            "args": [
+              "login",
+              "--with-api-key"
+            ],
+            "field": "apiKey"
+          }
+        ],
+        "links": [
+          {
+            "url": "https://platform.openai.com/api-keys"
+          }
+        ],
+        "status": {
+          "handler": "command.probe",
+          "toolchain": "codex",
+          "args": [
+            "login",
+            "status"
+          ],
+          "readyDetail": "OpenAI account is authenticated.",
+          "missingDetail": "Sign in with ChatGPT or an OpenAI API key."
+        },
+        "tag": "ovule-onboarding"
+      }
+    ]
+  },
+  "permissions": {
+    "process": [
+      "codex",
+      "codex-acp"
+    ],
+    "workspace": true,
+    "environment": [
+      "NO_COLOR"
+    ]
+  },
+  "ui": {
+    "entry": "dist/ui.js"
+  }
+}

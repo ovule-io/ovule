@@ -1,0 +1,54 @@
+.file-preview-state {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  padding: 32px;
+  box-sizing: border-box;
+  background: var(--background);
+  color: var(--foreground);
+  overflow: auto;
+}
+.file-preview-state-content {
+  width: min(100%, 440px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+}
+.file-preview-state-icon {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  background: var(--muted);
+  color: var(--muted-foreground);
+}
+.file-preview-state h1 {
+  margin: 0;
+  font-size: 17px;
+  line-height: 1.4;
+  font-weight: 600;
+}
+.file-preview-state p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--muted-foreground);
+}
+.file-preview-state-name {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  font: 12px/1.5 var(--font-mono);
+  color: var(--muted-foreground);
+}
+.file-preview-state-spin {
+  animation: previewStateSpin 1s linear infinite;
+}
+@keyframes previewStateSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}

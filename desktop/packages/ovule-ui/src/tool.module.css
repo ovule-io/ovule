@@ -1,0 +1,9 @@
+.badge {
+  color: var(--muted-foreground);
+  font-size: var(--font-size-caption);
+  white-space: nowrap;
+}
+
+.tool[data-state="error"] .badge {
+  color: var(--warning, var(--muted-foreground));
+}
