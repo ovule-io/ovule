@@ -1,0 +1,15 @@
+{
+  "tab_size": 2,
+  "hard_tabs": false,
+  "preferred_line_length": 100,
+  "format_on_save": "off",
+  "languages": {
+    "JavaScript": { "formatter": "prettier", "format_on_save": "on" },
+    "TypeScript": { "formatter": "prettier", "format_on_save": "on" },
+    "TSX": { "formatter": "prettier", "format_on_save": "on" },
+    "JSON": { "formatter": "prettier", "format_on_save": "on" },
+    "JSONC": { "formatter": "prettier", "format_on_save": "on" },
+    "CSS": { "formatter": "prettier", "format_on_save": "on" },
+    "HTML": { "formatter": "prettier", "format_on_save": "on" }
+  }
+}

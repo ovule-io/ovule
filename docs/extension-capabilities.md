@@ -2,14 +2,13 @@
 
 ## 1. Scope
 
-CRD Computer Use、Human handoff/Appshot 和 Ollama setup 属于宿主能力，
-声明编译在 `crates/ovule-extension-api/src/host.json`，不再通过空扩展发布。
-`io.ovule.host` 是现有 `extensionId` DTO 中的宿主路由标识，不对应安装包、
-运行时或扩展生命周期。扩展管理不列出该标识；宿主命名空间不能被安装包覆盖。
-`computer-use`、`human-handoff`、`ollama` ID 保持稳定；settings reconciliation
-迁移旧 Essentials / CRD 工具归属，并保留禁用状态。旧 Essentials setup 请求仍能解析。
-Cloudflare、Office 和可视化等具有独立实现的扩展继续单独维护。
-能力分层、可调用性和后续扩展合同见 [Agent harness](ovule-harness.md)。
+CRD Computer Use, Human handoff/Appshot and Ollama setup are Host capabilities.
+Their declarations compile from `crates/ovule-extension-api/src/host.json` rather
+than empty extension packages. `io.ovule.host` is a reserved routing owner in the
+existing `extensionId` DTO, not an installable package or runtime. Settings migrate
+legacy Essentials/CRD ownership while preserving disabled state; operation IDs
+remain stable. Cloudflare, Office and visualizations retain independent extension
+implementations. See [Agent harness](ovule-harness.md) for capability projections.
 
 Ovule extensions can contribute Agents, Models, onboarding/setup surfaces,
 Computer Use providers, local file editors, product capabilities, and renderers for typed Thread message

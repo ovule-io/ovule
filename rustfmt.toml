@@ -1,0 +1,8 @@
+# Match the existing stable rustfmt output, including rust-analyzer's stdin mode.
+edition = "2024"
+style_edition = "2024"
+max_width = 100
+tab_spaces = 4
+hard_tabs = false
+newline_style = "Unix"
+use_small_heuristics = "Default"

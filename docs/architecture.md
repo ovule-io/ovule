@@ -12,7 +12,7 @@ The frontend separates application composition from capability implementation:
 | `desktop/features/*` npm packages            | Source-owning subdomains with declaration/token/provider public APIs               |
 | `@ovule/ui`                  | Reusable themed UI primitives                                                 |
 | `@ovule/ioc`                 | Factory identities, construction dependencies and read-only React consumption |
-| `@ovule/ioc-registry`       | Registries, scopes, instance ownership and Provider lifecycle                 |
+| `@ovule/ioc-container`       | Registries, scopes, instance ownership and Provider lifecycle                 |
 | `@ovule/shell-api`           | Generated application transport contracts and schema                          |
 | `@ovule/extension`           | Extension contracts and runtime helpers                                       |
 

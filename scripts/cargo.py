@@ -13,6 +13,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import tomllib
 
 
 def tuffite_cli_fingerprint(framework: Path) -> str:
@@ -160,7 +161,15 @@ def main() -> int:
         if args.action == "check":
             command.extend(("--workspace", "--no-default-features", "--features", "ssh_transport"))
         if args.action == "fmt":
-            command.extend(("--all", "--", "--check"))
+            # A system Cargo/rustfmt can precede Mise's shims on PATH. Use the
+            # repository toolchain for both checking and applying formatting.
+            toolchain = tomllib.loads((app_root / "rust-toolchain.toml").read_text())["toolchain"]["channel"]
+            command = ["rustup", "run", toolchain, *command]
+            write = "--write" in args.arguments
+            args.arguments = [arg for arg in args.arguments if arg != "--write"]
+            command.extend(("--all", "--"))
+            if not write:
+                command.append("--check")
         elif args.action == "test":
             command.extend(("--workspace", "--no-default-features", "--features", "ssh_transport"))
         elif args.action == "clippy":

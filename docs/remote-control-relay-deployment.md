@@ -88,15 +88,21 @@ Authorization: Bearer <TURN_KEY_API_TOKEN>
 
 Use the `urls`, `username`, and `credential` returned by that API exactly as issued. Do not use the API token or TURN key as a coturn REST shared secret.
 
-The current Ovule Host provider intentionally accepts a TURN REST shared secret and derives per-device/session credentials itself. It does not yet consume Cloudflare's generated credential response, so Cloudflare TURN cannot currently be configured directly through `OVULE_TURN_SHARED_SECRET[_FILE]`. Supporting it requires a Host-side ICE provider that calls the Cloudflare credential API and keeps the API token on the Host. Until that provider exists, use coturn/eturnal for end-to-end Ovule testing.
+Cloudflare support is implemented by the optional
+[Cloudflare connectivity extension](../desktop/extensions/cloudflare-connectivity/README.md).
+Its trusted native module implements `IceConfigProvider`; the remoting domain sees
+only the generic port and ICE model. The module is currently compiled with the
+application: installing frontend code does not load arbitrary native providers.
 
-Cloudflare's official TURN documentation states that managed TURN is free when used with its Realtime SFU and otherwise charges for outbound TURN traffic; current public product pricing also advertises an included monthly allowance on some plans. Treat the account dashboard and billing page as authoritative rather than assuming the relay is universally free.
+Configure the receiving Host with `/cloudflare`; the extension handles official CLI
+authorization, account selection, encrypted TURN-key storage and per-session
+credential generation. Client devices need only pairing. Saved configuration and
+a successful status refresh do not prove that media used TURN.
 
-Official references:
-
-- <https://developers.cloudflare.com/realtime/turn/>
-- <https://developers.cloudflare.com/realtime/turn/generate-credentials/>
-- <https://developers.cloudflare.com/realtime/turn/faq/>
+The generic TURN REST environment variables are for coturn/eturnal; do not put a
+Cloudflare API token in `OVULE_TURN_SHARED_SECRET`. Review current account billing
+and traffic limits before enabling a managed relay. Long sessions need reconnect
+because in-place credential refresh is not implemented.
 
 ## Operations
 
@@ -104,34 +110,23 @@ Monitor direct/relay route ratio, allocation failures, RTT, loss, regional bandw
 
 If no relay candidate is gathered, verify the REST shared secret, Host clock, URL/transport reachability, certificate chain, and relay port allocation range. If a relay candidate exists but cannot connect, verify that both Client and Host networks can reach the selected UDP/TCP/TLS transport.
 
-## 验证桌面实际选路
+## Verify the selected route
 
-远程桌面底部的“连接路径”显示选中 ICE candidate pair 的实际路径：直连或
-TURN。悬停查看两端候选类型、可用的协议与中继域名；只有选中候选提供域名时才
-标识 Cloudflare。Host 配置的 TURN 服务单独列出，配置成功不代表本次连接使用了
-中继，也不代表服务已通过连通性验证。未知候选不显示为直连。
+The desktop status bar reports the selected ICE candidate pair as direct, TURN or
+unknown, with available candidate types and protocol details. Configured servers
+are shown separately. A configured Cloudflare provider is not proof that the
+selected candidate used Cloudflare; identify the provider only when route evidence
+supports it.
 
-工具栏“连接模式”可选“自动选择”或“仅 TURN 中继”。切换会重建会话；后者为
-Client 设置 WebRTC `iceTransportPolicy: relay`，使媒体和输入必须使用 TURN
-候选，没有 TURN 时明确失败。它不会改变 Remote Host 的 Link 控制通道选路。
-同一 Wi-Fi/VPN 下也能验证 TURN，连接成功后仍应确认底部为 TURN。若 Host 只配置
-Cloudflare TURN，此时即可确认通过该服务；缺少选中候选 URL 时不会凭配置冒认。
+Switch connection mode from automatic to TURN-only to rebuild the session with
+Client `iceTransportPolicy: relay`. This restricts WebRTC media/input candidates,
+not the Host Link control route. Missing relay candidates must fail explicitly.
+First test automatic mode, then TURN-only video and input on the same network;
+repeat on separate networks and restricted UDP/TCP/TLS routes.
 
-人工验收：先自动连接并观察路径，再切换仅 TURN 并确认连接成功、视频和输入正常；
-最后用不同网络（例如一端手机热点）重复。仅 TURN 成功证明中继路径可用，不替代
-实际跨 NAT、网络切换和弱网验证。
-
-中文输入验收：在本机切换中文输入法，远端输入 `yuancheng` 应只得到“远程”；
-点击已有文本中间后再次输入，应插入光标处。再检查英文、方向键、退格、拖选和
-Ctrl/Cmd 快捷键。新增原生 smoke 会检查首个非 composing 的 `y` keydown、重复
-final input 事件及点击后插入，但合成 composition 事件仍不能代替真实系统输入法。
-
-### 2026-10-20 本机回归
-
-已通过 41 项 remoting/本地化测试、8 项消息卡片交互测试、TypeScript/ESLint、
-前端生产构建，以及最终 `dist/ovule-remoting-validation` 的两组原生 smoke。
-双实例桌面覆盖首帧与重连、9 点坐标、拖动、原生键盘、断线释放，以及点击已有
-文本中间后插入 `abc远程def`（无首字母、无重复提交）。Cloudflare 卡片覆盖内容
-高度、保存说明、刷新/错误重试、语言切换，使用拦截动作，不创建真实云资源。
-另已通过实际路径显示、未配置 TURN 时强制中继明确失败、切回自动模式恢复连接。
-真实系统中文输入法、真实 Cloudflare TURN 和跨 NAT/双机验证仍按上方矩阵验收。
+For the packaged Cloudflare setup and relay-only smoke commands, use the extension
+README. Require a selected relay pair, decoded frames, keyboard/Unicode input and
+Stop cleanup. Synthetic composition events do not replace a real system IME;
+check insertion at the caret, navigation, backspace, selection and modifiers.
+Single-device relay tests do not replace two-device NAT, firewall, network-change
+or weak-network acceptance. Keep run logs private and redact credentials.

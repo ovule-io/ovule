@@ -10,7 +10,7 @@ tab. Three theme modes, Thread/Goal/Workflow timeline, catalog panels, static
 `<explorer>` local HTML preview, Milkdown WYSIWYG, and bounded one-shot xterm.js
 Terminal are implemented. Preview leases, source/split Markdown modes, conflict
 detection, persistent PTY takeover, and Browser Use snapshot/action automation
-remain target design; see `implementation-status.md`.
+remain target design; see `README.md`.
 
 ## 1. Product direction
 
@@ -35,7 +35,7 @@ reset, shared primitives, and intentional cross-renderer Markdown/workflow
 contracts. Prettier is a required Web-source check.
 
 The interface supports system-detected Chinese or English plus explicit
-`中文`/`English` selection. Only product chrome is translated; user content,
+Chinese/English selection. Only product chrome is translated; user content,
 workspace paths, model/Agent identifiers, and runtime diagnostics remain in
 their source language.
 

@@ -3,55 +3,27 @@
     "assets": [
       {
         "file": "desktop/dist/client/index.html",
-        "origins": [
-          "ovule://-"
-        ],
-        "paths": [
-          "/main",
-          "/thread",
-          "/pane",
-          "/explorer",
-          "/",
-          "/index.html"
-        ]
+        "origins": ["ovule://-"],
+        "paths": ["/main", "/thread", "/pane", "/explorer", "/", "/index.html"]
       },
       {
         "directory": "desktop/dist/client/assets",
-        "origins": [
-          "ovule://-",
-          "ovule://*.artifact",
-          "ovule://*.preview",
-          "ovule://*.local"
-        ],
-        "paths": [
-          "/assets/*"
-        ]
+        "origins": ["ovule://-", "ovule://*.artifact", "ovule://*.preview", "ovule://*.local"],
+        "paths": ["/assets/*"]
       },
       {
         "file": "desktop/dist/client/shell_api.js",
-        "origins": [
-          "ovule://-",
-          "ovule://*.local"
-        ],
-        "paths": [
-          "/shell_api.js"
-        ]
+        "origins": ["ovule://-", "ovule://*.local"],
+        "paths": ["/shell_api.js"]
       },
       {
         "directory": "desktop/dist/resources/web/extensions",
-        "origins": [
-          "ovule://-",
-          "ovule://*.artifact"
-        ],
-        "paths": [
-          "/extensions/*"
-        ]
+        "origins": ["ovule://-", "ovule://*.artifact"],
+        "paths": ["/extensions/*"]
       },
       {
         "file": "desktop/dist/client/preview.html",
-        "origins": [
-          "ovule://*.local"
-        ],
+        "origins": ["ovule://*.local"],
         "paths": [
           "/image",
           "/code",
@@ -69,9 +41,7 @@
       "maxResponseBytes": 1048576,
       "timeoutSeconds": 30
     },
-    "schemes": [
-      "ovule"
-    ],
+    "schemes": ["ovule"],
     "windows": [
       {
         "decorations": false,
@@ -110,9 +80,7 @@
           "executeJavaScript": true
         },
         "identifier": "app-shell",
-        "origins": [
-          "ovule://-"
-        ],
+        "origins": ["ovule://-"],
         "shellApi": [
           {
             "method": "ovule.Agent.ApprovalMode"
@@ -650,10 +618,7 @@
       },
       {
         "identifier": "artifact-and-preview",
-        "origins": [
-          "ovule://*.artifact",
-          "ovule://*.preview"
-        ],
+        "origins": ["ovule://*.artifact", "ovule://*.preview"],
         "shellApi": [
           {
             "method": "tuffite.Path.Directories"
@@ -665,9 +630,7 @@
       },
       {
         "identifier": "document-preview",
-        "origins": [
-          "ovule://*.local"
-        ],
+        "origins": ["ovule://*.local"],
         "shellApi": [
           {
             "method": "ovule.Preview.Describe"
@@ -683,12 +646,7 @@
       {
         "csp": "default-src 'self'; connect-src 'self' ws: wss:; script-src 'self' 'nonce-ovule-spa' 'sha256-X+PV4o5mNco/Pvq+pI48kE+2DEZFB7C85wagfp0G5Bc=' 'sha256-7Jd2j+/dVXRgQ8V+qmwGHURb1YpFcJvFTBg5hMsQGV8=' 'sha256-duhaxWNI+6QAukUMmlYrkl97X+e0pxobkwS+TpY5/CQ=' 'sha256-RBZNiG3Ztb26Xi/69+VRecU4BPhrfxcvspLXMRrrCNE='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https: http:; frame-src 'self' https:; object-src 'none'; base-uri 'none'",
         "identifier": "document-csp",
-        "origins": [
-          "ovule://-",
-          "ovule://*.artifact",
-          "ovule://*.preview",
-          "ovule://*.local"
-        ]
+        "origins": ["ovule://-", "ovule://*.artifact", "ovule://*.preview", "ovule://*.local"]
       }
     ]
   }

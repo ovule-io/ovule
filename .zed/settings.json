@@ -1,0 +1,25 @@
+{
+  "tab_size": 2,
+  "hard_tabs": false,
+  "preferred_line_length": 100,
+  "format_on_save": "off",
+  "lsp": {
+    "rust-analyzer": {
+      "initialization_options": {
+        "rustfmt": {
+          "overrideCommand": ["rustup", "run", "1.91.0", "rustfmt"]
+        }
+      }
+    }
+  },
+  "languages": {
+    "Rust": {
+      "tab_size": 4,
+      "formatter": "language_server",
+      "format_on_save": "on"
+    },
+    "Python": {
+      "tab_size": 4
+    }
+  }
+}

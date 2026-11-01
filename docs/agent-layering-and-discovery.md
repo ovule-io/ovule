@@ -220,7 +220,7 @@ These are contract and resource tests rather than model effectiveness benchmarks
 
 Next priorities are durable model rollout and recovery commit contracts, followed
 by unified request budgets and compaction. Use the existing
-[capability gap review](agent-capability-gap-review.md) to guide crash injection and
+[harness contracts](ovule-harness.md) to guide crash injection and
 side-effect replay prevention. Journals cannot reconstruct complete model history,
 and timeout does not imply rollback. Multi-agent projection should reuse Workflow's
 durable task tree. Retrieval and automatic Memory consolidation remain optional
@@ -274,7 +274,7 @@ effectiveness evaluation remain separate.
 
 Value-returning provider calls project bounded input, output and error previews into
 expandable conversation cards. Execution diagnostics and journal entries remain
-body-free. See [tool observability](agent-tool-observability.md) for persistence,
+body-free. See [tool observability](observability.md) for persistence,
 redaction limits, historical evidence and desktop input boundaries.
 
 ## Scoped execution permissions

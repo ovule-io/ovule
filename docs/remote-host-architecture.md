@@ -1,6 +1,8 @@
 # Ovule Remote Host architecture
 
-Status: target MVP architecture, 2026-09-27.
+Status: target architecture. Durable Host-supervised Runs, reconnect journals and
+new Host kinds below are planned unless explicitly listed as implemented. Current
+Link identity/resource/grant invariants are summarized at the end of this page.
 
 Ovule replaces the current Remote Workspace product model with Remote Host.
 A Host is an execution environment that owns Workspaces, Agent installations,
@@ -412,3 +414,30 @@ it no longer collides with the actual Workspace resource.
 - Revocation prevents all new process, terminal input, and tool operations.
 - A development container rebuild cannot accept commands from its old instance.
 
+
+## Implemented Link identity and authorization invariants
+
+Host public keys identify Hosts; serialized addresses are routing metadata. Exact
+opaque Host resource IDs identify Workspaces; paths describe confinement roots.
+Pairing proves device possession of the OTP, while device names remain self-reported
+hints. Pair-link token rotation invalidates pending invitations without revoking
+existing paired devices. Pending OTPs are ephemeral; device grants are durable.
+
+Persist inventory independently of Thread bindings. Binding validates Host/resource
+ownership and is idempotent for Thread, endpoint and resource. Unbinding preserves
+inventory. Refresh reconciles removed resources and prunes stale bindings. Every
+Host file/process call rechecks device/resource grants; ACP executable launch also
+rechecks its Agent runtime grant. Client-side Rig profile policy is not yet a
+cryptographic claim attached to every generic Workspace call.
+
+Grant changes use clone/validate/atomic-persist/swap so persistence failures cannot
+silently diverge memory and disk. Connection caches include routing and credential
+configuration and invalidate stale entries. Resource identity, local authorization
+schema and named wire capabilities are separate contracts; see
+[Remote Control](remote-control-architecture.md) for current Link evolution.
+
+The existing `RemoteEndpoint` still combines durable Host identity and transport
+metadata. Split Host/connection/instance concerns before adding provisioning state.
+Do not infer a durable disconnected Run supervisor from the current desktop-hosted
+Agent process. Shared resource removal, Run leases and new Host providers retain
+the implementation boundaries described above.

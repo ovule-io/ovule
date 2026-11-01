@@ -34,7 +34,7 @@ Open a new terminal after installing on Windows. You also need Git and a native 
 ### 2. Clone and install
 
 ```sh
-git clone https://github.com/cronymax/ovule.git
+git clone https://github.com/ovule-io/ovule.git
 cd ovule
 mise trust
 mise install
@@ -64,6 +64,9 @@ A compatible Tuffite Framework Distribution is required. Run `mise run doctor` t
 | `mise run dev` | Launch the app with hot reload |
 | `mise run prepare` | Build a development package without launching |
 | `mise run check` | Run code checks and tests |
+| `mise run format` | Format Rust and desktop sources |
+| `mise run format:check` | Check formatting without rewriting files |
+| `mise run public-source:check` | Check public source boundaries and credential signatures |
 | `mise run package-debug` | Create a standalone debug package in `dist/ovule-debug` |
 | `mise run package` | Create a production package in `dist/` |
 | `mise run doctor` | Inspect the Framework and development environment |
@@ -72,8 +75,9 @@ Keep machine-specific paths and SDK overrides in ignored `mise.local.toml`.
 
 ## Development
 
+- [Contributing](CONTRIBUTING.md): formatting, Zed setup, and validation commands.
 - [Local development](docs/local-development.md): runtime selection, debugging, and native smoke checks.
-- [Documentation](docs/README.md): architecture, extensions, and implementation status.
+- [Documentation](docs/README.md): current architecture, extensions, and operational guides.
 - [Standalone builds and distribution](docs/open-source.md): dependencies, licenses, and packaging details.
 
 ## License

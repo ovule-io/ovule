@@ -1,2 +1,5 @@
 dist/
 node_modules/
+# Generated bundles and ShellAPI bindings retain their generator's formatting.
+**/dist/
+packages/ovule-shell-api/generated/

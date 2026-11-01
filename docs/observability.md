@@ -228,8 +228,10 @@ The diagnostics view and `ovule doctor` report:
 - Channel connection and outbox state;
 - redacted recent errors.
 
-An export bundle is previewed before writing and excludes credentials, prompts,
-raw output, artifacts, and source code unless the user individually opts them in.
+The reply dialog's diagnostic bundle includes message content and nearby context,
+Attempt metadata, model rounds and the tool journal. It does not read SecretStore
+or environment variables. Redaction is best-effort; review the bundle before sharing.
+Older records cannot recover payloads or metrics that were never retained.
 
 ## 13. Acceptance tests
 
@@ -244,3 +246,25 @@ raw output, artifacts, and source code unless the user individually opts them in
 - A multi-hour run stays within configured database, memory, and scrollback
   limits.
 
+
+## Tool previews and diagnostic limits
+
+`ToolExecutor::run_value` emits bounded input/output/error previews on a stable tool
+card. Rig dispatch and application Attempt MCP share this path. Generic `run`
+callers and external ACP tool notifications may retain status-only projections.
+Previews are conversation content with the normal persistence/export lifecycle;
+execution diagnostics and journal observations remain body-free.
+
+Redact structured credential fields and known input secrets echoed by results;
+omit binary/base64 fields and enforce depth, item and text limits. These previews
+are not complete payload archives or a guarantee that free-form output is secret-free.
+Empty Workspace selections must not advertise usable Workspace tools or invented
+binding IDs. Discovery and ordinary tools share the model loop budget, so repeated
+discovery can exhaust a turn without completing its task.
+
+Raw Computer Use key actions require an explicit pressed/released direction.
+Backend acceptance proves neither application focus nor shortcut/command success.
+Callers must balance down/up events; prompt instructions are not an automatic retry
+or modifier-cleanup state machine. A successful assistant turn only establishes
+that an answer was produced. Separate observations, hypotheses and unfinished
+checks in diagnostics and user-facing conclusions.
