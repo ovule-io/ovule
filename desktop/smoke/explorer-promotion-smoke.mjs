@@ -22,12 +22,12 @@ await build({
       },
     },
   },
-  logLevel: "warn",
+  logLevel: "error",
 });
 const stylesheets = (await readdir(output)).filter((file) => file.endsWith(".css"));
 await writeFile(
   path.join(output, "index.html"),
-  `<!doctype html><style>body{margin:0;font-family:system-ui;background:#201638;--surface:#f7f7f8;--background:#fff;--text:#222;--muted-foreground:#555;--line-strong:#ddd;--app-pane-radius:12px}test-explorer{background:#e8e7e3;display:block;width:100%;height:100%}[data-tool-surface]>div{height:100%;width:100%}.app-shell{position:relative;width:100vw;height:100vh;backdrop-filter:blur(28px)}</style>${stylesheets.map((file) => `<link rel="stylesheet" href="./${file}">`).join("")}<div id="root" class="app-shell"></div><script type="module" src="./explorer-promotion-fixture.js"></script>`,
+  `<!doctype html><style>*,*::before,*::after{box-sizing:border-box}body{margin:0;font-family:system-ui;background:#201638;--surface:#f7f7f8;--background:#fff;--text:#222;--muted-foreground:#555;--line-strong:#ddd;--app-pane-radius:12px}test-explorer{background:#e8e7e3;display:block;width:100%;height:100%}[data-tool-surface]>div{height:100%;width:100%}.app-shell{position:relative;width:100vw;height:100vh;backdrop-filter:blur(28px)}</style>${stylesheets.map((file) => `<link rel="stylesheet" href="./${file}">`).join("")}<div id="root" class="app-shell"></div><script type="module" src="./explorer-promotion-fixture.js"></script>`,
 );
 const browser = await chromium.launch({
   executablePath:
@@ -91,7 +91,7 @@ try {
         actions: actions.map((button) => button.getBoundingClientRect().toJSON()),
       };
     });
-    assert.equal(toolbar.height, 28);
+    assert.equal(toolbar.height, 33); // 24px controls + 8px padding + 1px border.
     assert.equal(toolbar.buttonCount, 4);
     assert.ok(toolbar.buttonHeights.every((height) => height <= 28));
     assert.equal(toolbar.actions.length, 4);
@@ -188,13 +188,19 @@ try {
     before = await page.evaluate(() => {
       window.promotionTest.paint.blocked = true;
       const source = window.originalExplorer;
-      source.getNavigationState = () =>
-        new Promise((resolve) => {
+      window.releaseNavigation = undefined;
+      window.navigationReadAttempts = 0;
+      window.promotionTest.transferControl.pendingCreates = 1;
+      source.getNavigationState = () => {
+        if (++window.navigationReadAttempts <= 2)
+          return Promise.reject(new TypeError("Explorer is not attached"));
+        return new Promise((resolve) => {
           window.releaseNavigation = async () => {
             delete source.getNavigationState;
             resolve(await source.getNavigationState());
           };
         });
+      };
       return { ...window.promotionTest.lifecycle };
     });
     await page
@@ -208,6 +214,7 @@ try {
     await page.locator('[data-explorer-preview][aria-busy="true"]').waitFor();
     assert.equal(await page.getByRole("button", { name: "Close", exact: true }).isDisabled(), true);
     assert.equal(await page.evaluate(() => window.promotionTest.lifecycle.created), before.created);
+    await page.waitForFunction(() => typeof window.releaseNavigation === "function");
     await page.evaluate(() => window.releaseNavigation());
     await page.waitForFunction(() => !window.promotionTest.overlays.current().explorer);
     // Destination rendering must not hold the source modal open. Keep the
@@ -311,16 +318,20 @@ try {
       () => window.transferredExplorer.history.at(-1) === "https://example.com/explicit",
     );
   }
-  // The initial transfer marker must not leave later retries as empty hosts.
+  // Retrying a transferred pane reuses its live guest without replaying attach.
+  const retryLoads = await page.evaluate(() => window.promotionTest.lifecycle.loads);
   await page.evaluate(() => window.transferredExplorer.dispatchEvent(new Event("loaderror")));
   await page.getByRole("button", { name: "Reload pane", exact: true }).click();
   await page.waitForFunction(() => {
-    const element = [...document.querySelectorAll("[data-tool-tab] test-explorer")].at(-1);
-    if (!element || element === window.transferredExplorer) return false;
+    const element = window.transferredExplorer;
     const tabId = element.closest("[data-tool-tab]").dataset.toolTab;
     const tab = window.promotionTest.explorer.current().instances.find((item) => item.id === tabId);
-    return !element.deferred && element.src === (tab.url || tab.target);
+    return (
+      !element.hasAttribute("data-explorer-transfer-target") &&
+      element.history.at(-1) === (tab.url || tab.target)
+    );
   });
+  assert.equal(await page.evaluate(() => window.promotionTest.lifecycle.loads), retryLoads + 1);
   const disconnected = await page.evaluate(() => window.promotionTest.lifecycle.disconnected);
   await page.evaluate(() => {
     for (const tab of window.promotionTest.explorer.current().instances)

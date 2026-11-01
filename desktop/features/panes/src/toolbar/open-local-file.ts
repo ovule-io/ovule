@@ -11,7 +11,7 @@ export async function openLocalFile({
   dialog: ShellService["dialog"];
   panes: Pick<PanesService, "openTab" | "updateTab">;
   title: string;
-  options: Pick<OpenPaneOptions, "threadId" | "draftId" | "placement">;
+  options: Pick<OpenPaneOptions, "threadId" | "draftId" | "placement" | "replaceBlankId">;
 }): Promise<{ opened: boolean }> {
   const selected = await (await dialog()).openFile({ title });
   if (!selected) return { opened: false };

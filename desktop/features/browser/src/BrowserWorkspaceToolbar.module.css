@@ -19,6 +19,10 @@
   width: 16px;
   height: 16px;
 }
+.action[aria-pressed="true"] {
+  background: var(--surface-2);
+  color: var(--foreground);
+}
 .action:disabled {
   opacity: 0.45;
 }

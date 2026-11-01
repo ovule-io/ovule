@@ -25,6 +25,7 @@ export type PaneInstance = {
   threadId?: string;
   draftId?: string;
   workspaceBindingId?: string;
+  shellProfileId?: string;
   useThreadWorkspace?: boolean;
   target?: string;
   autoLoad?: boolean;

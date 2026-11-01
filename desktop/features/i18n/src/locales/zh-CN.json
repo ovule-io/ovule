@@ -161,7 +161,8 @@
     "closeDialog": "关闭对话框",
     "copied": "已复制",
     "actionRequested": "已请求",
-    "actionFailed": "操作失败，请重试。"
+    "actionFailed": "操作失败，请重试。",
+    "cancel": "取消"
   },
   "nodeKind": {
     "task": "任务",
@@ -204,7 +205,14 @@
     "file": "文件",
     "attachment": "附件",
     "unknown": "{{kind}} 内容",
-    "noRenderer": "当前没有可用于此内容的渲染器。"
+    "noRenderer": "当前没有可用于此内容的渲染器。",
+    "copyImage": "复制图片",
+    "saveImage": "保存图片",
+    "imageAction": {
+      "copied": "图片已复制",
+      "saved": "图片已保存",
+      "failed": "图片操作未完成，请重试。"
+    }
   },
   "titlebar": {
     "hideSidebar": "隐藏侧栏",
@@ -535,6 +543,11 @@
     "mCPConfig": " · MCP 配置"
   },
   "browser": {
+    "showPreview": "显示预览",
+    "showSource": "显示源码",
+    "revealInFinder": "在 Finder 中显示",
+    "revealInExplorer": "在资源管理器中显示",
+    "revealFailed": "无法定位本地文件",
     "savingDownload": "正在保存…",
     "downloading": "下载中",
     "downloadSaveFailed": "保存到下载目录失败",
@@ -1097,7 +1110,10 @@
     "harnessJournal": "持久执行记录（最近 64 条）",
     "harnessJournalUnavailable": "执行记录暂不可用。",
     "harnessUnsettled": "未结算：重试前请检查是否已产生副作用",
-    "loadEarlier": "加载更早的消息"
+    "loadEarlier": "加载更早的消息",
+    "copyMessage": "复制消息",
+    "saveMessage": "保存消息",
+    "messageCopied": "消息已复制"
   },
   "agentApproval": {
     "reviewFallback": "Approve for me 已启用，但此命令或权限范围仍需你确认。",
@@ -1119,6 +1135,21 @@
     "allowOnce": "仅允许本次"
   },
   "desktopPermissions": {
+    "captureVerified": "当前进程在最近一分钟内已成功截图",
+    "notConfirmed": "当前运行的构建未获授权",
+    "preflightNote": "这里检测的是当前运行的应用。预检未通过，不等于系统设置中同名应用的开关已关闭；最近成功截图会单独显示。",
+    "inputMonitoring": "输入监控",
+    "inputMonitoringHelp": "仅监听全局输入的工具需要。点击“请求授权”可向 macOS 注册此应用；普通鼠标和键盘控制使用辅助功能权限。",
+    "automation": "自动化",
+    "automationHelp": "Apple Events 需要按目标应用分别授权，不能代替屏幕录制或辅助功能权限。",
+    "filesAndFolders": "文件与文件夹",
+    "filesAndFoldersHelp": "访问受保护文件夹后，Ovule 才会出现在此列表。需要时系统会请求权限，也可以通过文件选择器选择文件夹。仅打开系统设置不会触发授权提示。",
+    "fullDiskAccess": "完全磁盘访问权限",
+    "fullDiskAccessHelp": "可选权限。macOS 不提供完全磁盘访问授权弹窗。请在系统设置中点击 +，或从 Finder 将当前运行的 Ovule.app 拖入列表并启用。",
+    "systemManaged": "由 macOS 管理，无法可靠查询统一状态",
+    "buildIdentity": "运行中的可执行文件与代码签名",
+    "otherCopies": "相同 Bundle ID 的其他已注册副本",
+    "copiesNote": "Bundle ID 相同不代表隐私授权相同。macOS 还检查代码签名要求；不同路径或重新构建的应用可能对应不同授权。",
     "title": "权限",
     "description": "允许此 Host 共享屏幕，并接收键盘和鼠标输入。远程桌面与电脑操作共用以下系统权限。",
     "loading": "正在检查系统权限…",
@@ -1134,6 +1165,19 @@
     "authorize": "授权",
     "restart": "更改权限后，请完全退出并重新打开此 Host 应用。权限仅适用于当前电脑上的此应用版本。返回此处可刷新状态。",
     "refresh": "刷新权限",
-    "desktopGroup": "远程桌面与电脑操作"
+    "desktopGroup": "远程桌面与电脑操作",
+    "about": "关于 Ovule {{version}}",
+    "bundleId": "Bundle ID",
+    "appLocation": "应用位置",
+    "checked": "权限已于 {{time}} 检查",
+    "openSettings": "打开系统设置",
+    "requestAccess": "请求授权",
+    "showApp": "在 Finder 中显示应用",
+    "adHocRecovery": "此构建使用 ad-hoc 签名。重新构建后，macOS 可能仍保留旧签名的已启用条目。若仍无法访问，请移除旧 Ovule 条目，重新添加当前运行的应用，再退出并重新打开 Ovule。刷新只检查权限，不会修复旧授权。",
+    "automationUnavailable": "尚未启用 Apple Events 集成。只有向具体支持的应用请求控制权限后，Ovule 才会出现在“自动化”列表中；打开系统设置不会创建条目。",
+    "repair": "修复授权…",
+    "repairTitle": "重置 Ovule 的{{permission}}授权？",
+    "repairDescription": "仅清除此 Ovule Bundle ID 对应的这项旧授权记录，同 ID 的其他副本也会受影响。随后重新向 macOS 请求授权。确认后请为当前运行的应用启用权限，再完全退出并重新打开 Ovule。此操作不会自动授予权限。",
+    "repairConfirm": "重置并重新请求授权"
   }
 }

@@ -13,6 +13,9 @@ import "./styles.css";
 const Html = lazy(() =>
   import("./html/preview").then((module) => ({ default: module.HtmlPreview })),
 );
+const Image = lazy(() =>
+  import("./image/preview").then((module) => ({ default: module.ImagePreview })),
+);
 const Code = lazy(() =>
   import("./code/preview").then((module) => ({ default: module.CodePreview })),
 );
@@ -73,7 +76,17 @@ function PreviewApp() {
   if (error) return <FilePreviewState error={error} />;
   if (!info) return <FilePreviewState kind="loading" />;
 
+  const source = params.get("mode") === "source";
+  if (source && ["html", "markdown", "image"].includes(info.kind))
+    return (
+      <Code
+        url={info.url}
+        language={info.kind === "html" ? "html" : info.kind === "markdown" ? "markdown" : "xml"}
+        loadText={readText}
+      />
+    );
   if (info.kind === "html") return <Html url={info.url} loadText={readText} />;
+  if (info.kind === "image") return <Image url={info.url} loadFile={readFile} />;
   if (info.kind === "code")
     return <Code url={info.url} language={fileCodeLanguage(info.url)} loadText={readText} />;
   // Relative links remain file URLs: the host receives navigation and issues a fresh grant.

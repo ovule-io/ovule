@@ -1920,11 +1920,15 @@ export const mockWorkspaceApi: WorkspaceApi = {
     };
   },
   desktopPermissions: async () => ({
+    appVersion: "0.1.0",
     managed: false,
     screenRecording: false,
     accessibility: false,
     bundleId: null,
     expectedBundleId: "io.ovule.desktop",
+    otherBundlePaths: [],
+    screenCaptureVerified: false,
+    inputMonitoring: false,
   }),
   requestDesktopPermission: async () => {
     throw new Error("System permissions are unavailable in preview");

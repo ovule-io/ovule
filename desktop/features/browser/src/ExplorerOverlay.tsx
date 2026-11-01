@@ -33,6 +33,8 @@ import type {
 
 import {
   captureExplorerTransferPreview,
+  detachExplorerWhenReady,
+  isExplorerNotAttached,
   beginExplorerOverlayExit,
   showExplorerTransferPreview,
   waitForExplorerPaint,
@@ -188,6 +190,7 @@ function ExplorerOverlayContent({
     };
     let metadataRevision = 0;
     const syncMetadata = (event: Event) => {
+      if (disposed || transferInProgress.current) return;
       const revision = ++metadataRevision;
       const detail = (event as CustomEvent<Partial<ExplorerNavigationState>>).detail;
       if (detail) acceptMetadata(detail);
@@ -195,9 +198,17 @@ function ExplorerOverlayContent({
         void element
           .getNavigationState()
           .then((state) => {
-            if (revision === metadataRevision) acceptMetadata(state);
+            if (!transferInProgress.current && revision === metadataRevision) acceptMetadata(state);
           })
-          .catch(console.error);
+          .catch((error) => {
+            if (
+              !disposed &&
+              !transferInProgress.current &&
+              revision === metadataRevision &&
+              !isExplorerNotAttached(error)
+            )
+              console.error(error);
+          });
     };
     const loaded = (event: Event) => {
       setFailed(false);
@@ -282,20 +293,27 @@ function ExplorerOverlayContent({
       await request.agent?.beginTransfer();
       requireExplorerTransfer(source);
       const previewReady = captureExplorerTransferPreview(source);
-      const state = await source.getNavigationState();
       if (overlays.current().explorer !== request) return;
       const preview = await previewReady;
       removeSourcePreview = await showExplorerTransferPreview(source, preview);
       // Activating a pane changes the surrounding thread layout. Take ownership
       // before that update so the source cannot be detached by a DOM remount.
       await escapeBinding.current?.pause();
-      transfer = await source.detach();
+      const detached = await detachExplorerWhenReady(source, {
+        isCurrent: () => overlays.current().explorer === request && explorer.current === source,
+      });
+      transfer = detached.transfer;
+      const state = detached.state;
+      const targetUrl =
+        state.url && state.url !== "about:blank"
+          ? localExplorerAddress(state.url)
+          : currentUrl.current;
       newTabId = workbench.openTab("browser", {
         placement,
         threadId,
         draftId,
         newInstance: true,
-        target: localExplorerAddress(state.url) || currentUrl.current,
+        target: targetUrl,
         autoLoad: false,
         reuseExistingTarget: false,
       });
@@ -303,7 +321,7 @@ function ExplorerOverlayContent({
       overlays.promoteExplorer(newTabId);
       workbench.updateTab(newTabId, {
         title: state.title || metadata.title || currentUrl.current,
-        url: localExplorerAddress(state.url) || currentUrl.current,
+        url: targetUrl,
         canGoBack: state.canGoBack,
         canGoForward: state.canGoForward,
       });

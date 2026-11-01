@@ -1,10 +1,11 @@
 import workspaceTokens from "@ovule/workspace/workspace.token";
 import { create, type ServiceOf } from "@ovule/ioc";
 import { useService } from "@ovule/ioc/react";
+import { mergeSuggestions } from "./suggestions";
 import { Button } from "@ovule/ui/button";
 import { cn } from "@ovule/ui/cn";
 import { Input } from "@ovule/ui/form";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState, useMemo } from "react";
 
 import type { BrowserSuggestion } from "@ovule/shell-api";
 import type { OmniboxViewProps } from "./view";
@@ -79,6 +80,7 @@ export function Omnibox({
   autoFocus,
   selectOnFocus = false,
   suggestionsEnabled = true,
+  additionalSuggestions,
   debounceMs = 100,
   initialActive = 0,
   formatTitle,
@@ -88,12 +90,16 @@ export function Omnibox({
   const panel = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState(initialActive);
-  const { items: suggestions, query: suggestionsQuery } = useBrowserSuggestions({
+  const { items: remoteSuggestions, query: suggestionsQuery } = useBrowserSuggestions({
     threadId,
     query: value,
     enabled: suggestionsEnabled && open,
     debounceMs,
   });
+  const suggestions = useMemo(
+    () => mergeSuggestions(value, remoteSuggestions, additionalSuggestions ?? []),
+    [value, remoteSuggestions, additionalSuggestions],
+  );
   useEffect(() => setActive(initialActive), [initialActive, suggestions]);
 
   const currentQuery = suggestionsQuery === value.trim();

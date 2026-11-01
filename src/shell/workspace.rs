@@ -468,6 +468,13 @@ fn map_desktop_permissions(
     value: ovule_platform::permissions::DesktopPermissions,
 ) -> crate::shell_api::DesktopPermissions {
     crate::shell_api::DesktopPermissions {
+        app_version: value.app_version,
+        bundle_path: value.bundle_path,
+        executable_path: value.executable_path,
+        signing_identity: value.signing_identity,
+        other_bundle_paths: value.other_bundle_paths,
+        screen_capture_verified: value.screen_capture_verified,
+        input_monitoring: value.input_monitoring,
         managed: value.managed,
         screen_recording: value.screen_recording,
         accessibility: value.accessibility,

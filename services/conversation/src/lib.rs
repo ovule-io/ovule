@@ -41,6 +41,9 @@ pub mod providers {
                     deps.depends_on::<Service<dyn AgentSessionService>>()?,
                     deps.depends_on::<Service<dyn crate::workspace::WorkspaceEventSink>>()?,
                     deps.depends_on::<Service<dyn ConversationEventSink>>()?,
+                )
+                .with_attachments(
+                    deps.depends_on::<Service<dyn crate::messages::AttachmentRepository>>()?,
                 ),
             ))
         }))?;

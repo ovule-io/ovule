@@ -215,7 +215,7 @@
 .attachmentFullImage {
   display: block;
   width: 100%;
-  max-height: 70vh;
+  max-height: max(120px, calc(100dvh - 240px));
   object-fit: contain;
   border-radius: 6px;
 }
@@ -339,4 +339,46 @@
   display: block;
   color: var(--muted-foreground);
   font-size: var(--font-size-caption);
+}
+
+.imageActions {
+  justify-content: flex-end;
+  padding: 0 8px 8px;
+}
+.attachmentPreviewActions {
+  display: flex;
+  gap: 8px;
+  margin: 12px 0;
+}
+.attachmentDialog:global(.ui-dialog-content) {
+  box-sizing: border-box;
+  width: min(960px, calc(100vw - 40px));
+  max-height: calc(100dvh - 40px);
+  overflow: auto;
+}
+
+.imageAction:global(.ui-button) {
+  width: 28px;
+  height: 28px;
+}
+.imageFeedback[data-feedback="error"]:global(.ui-button),
+.imageAction[data-feedback="error"]:global(.ui-button) {
+  color: var(--danger);
+  background: color-mix(in oklch, var(--danger) 14%, transparent);
+}
+.imageFeedback[data-feedback="success"]:global(.ui-button),
+.imageAction[data-feedback="success"]:global(.ui-button) {
+  color: var(--primary);
+  background: var(--accent);
+}
+.imagePreviewError {
+  position: absolute;
+  inset: auto 8px 40px;
+  padding: 8px;
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--danger);
+  font-size: var(--font-size-caption);
+  box-shadow: 0 2px 8px #0002;
+  z-index: 3;
 }

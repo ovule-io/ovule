@@ -195,6 +195,12 @@ export interface BrowserRevealDownloadRequest {
 export interface BrowserRevealDownloadResponse {
   'result': boolean;
 }
+export interface BrowserRevealLocalFileRequest {
+  'url': string;
+}
+export interface BrowserRevealLocalFileResponse {
+  'result': boolean;
+}
 export interface BrowserRevokePreviewRequest {
   'id': string;
 }
@@ -285,6 +291,13 @@ export interface CreateThreadInput {
   'workspacePath'?: string | null;
 }
 export interface DesktopPermissions {
+  'appVersion': string;
+  'bundlePath'?: string | null;
+  'executablePath'?: string | null;
+  'signingIdentity'?: string | null;
+  'otherBundlePaths': string[];
+  'screenCaptureVerified': boolean;
+  'inputMonitoring': boolean;
   'managed': boolean;
   'screenRecording': boolean;
   'accessibility': boolean;
@@ -1379,6 +1392,7 @@ export declare const browser: {
   readonly 'createFilePreview': (arg0: string) => Promise<PreviewInfo>;
   readonly 'revokePreview': (arg0: string) => Promise<boolean>;
   readonly 'createHtmlPreview': (arg0: string, arg1: string) => Promise<PreviewInfo>;
+  readonly 'revealLocalFile': (arg0: string) => Promise<boolean>;
 };
 export declare const content: {
   readonly 'readHtmlPreview': (arg0: string, arg1: string) => Promise<HtmlPreview>;

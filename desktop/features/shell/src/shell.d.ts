@@ -15,6 +15,7 @@ export interface ShellService {
   localExplorerAddress(address: string): string;
   fileCodeLanguage(address: string): string | undefined;
   listLocalDirectory(url: string): Promise<{ name: string; url: string; isDirectory: boolean }[]>;
+  revealLocalFile?(url: string): Promise<boolean>;
   readLocalText(url: string): Promise<string>;
   readLocalFile(url: string): Promise<import("@ovule/shell-api").WorkspaceFile>;
   downloads?: import("./downloads").DownloadsService;

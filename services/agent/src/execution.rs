@@ -320,8 +320,44 @@ impl ToolExecutor {
         if let (Some(preview), Some(project), Some(card)) = (&preview, project, &mut card) {
             preview.record_result(card, project, &result);
         }
+        if let (Some(project), Ok(value)) = (project, &result) {
+            self.project_images(&call_id, project(value));
+        }
         self.observe_settlement(&call_id, tool, started.elapsed(), card.as_ref(), &result);
         result
+    }
+    fn project_images(&self, call_id: &str, output: &Value) {
+        let Some(content) = output.get("content").and_then(Value::as_array) else {
+            return;
+        };
+        let mut remaining = 16 * 1024 * 1024;
+        for (index, image) in content
+            .iter()
+            .enumerate()
+            .filter(|(_, item)| item["type"] == "image")
+            .take(4)
+        {
+            let Some(data) = image.get("data").and_then(Value::as_str) else {
+                continue;
+            };
+            let Some(mime) = image.get("mimeType").and_then(Value::as_str) else {
+                continue;
+            };
+            if !matches!(
+                mime,
+                "image/png" | "image/jpeg" | "image/webp" | "image/gif"
+            ) || data.len() > remaining
+            {
+                continue;
+            }
+            remaining -= data.len();
+            (self.notify)(WorkerEvent::MessageBlock {
+                attempt_id: self.attempt_id.clone(),
+                block_id: format!("tool-{call_id}-image-{index}"),
+                kind: "image".into(),
+                data_json: json!({"data":data,"mediaType":mime,"name":"Screenshot"}).to_string(),
+            });
+        }
     }
     fn observe_settlement<T>(
         &self,
@@ -360,6 +396,44 @@ mod tests {
             Ok(())
         }
     }
+    #[tokio::test]
+    async fn tool_images_are_projected_outside_bounded_tool_previews() {
+        let events = Arc::new(std::sync::Mutex::new(Vec::new()));
+        let capture = events.clone();
+        let executor = ToolExecutor::new(
+            "attempt".into(),
+            CancellationToken::new(),
+            ApprovalBroker::unavailable(),
+            Arc::new(move |event| capture.lock().unwrap().push(event)),
+        );
+        executor.run_value("screenshot", &json!({}), Effect::Workspace, Duration::from_secs(1), |_| async {
+            Ok(json!({"content":[{"type":"image","mimeType":"image/png","data":"image-base64"}]}))
+        }).await.unwrap();
+        let events = events.lock().unwrap();
+        assert_eq!(
+            events
+                .iter()
+                .filter(
+                    |event| matches!(event, WorkerEvent::MessageBlock {kind, ..} if kind == "image")
+                )
+                .count(),
+            1
+        );
+        for event in events.iter() {
+            match event {
+                WorkerEvent::MessageBlock {
+                    kind, data_json, ..
+                } if kind == "image" => assert!(data_json.contains("image-base64")),
+                WorkerEvent::MessageBlock { data_json, .. }
+                | WorkerEvent::Diagnostic {
+                    detail_json: data_json,
+                    ..
+                } => assert!(!data_json.contains("image-base64")),
+                _ => {}
+            }
+        }
+    }
+
     #[tokio::test]
     async fn tool_status_stream_updates_one_card_without_copying_arguments() {
         let events = Arc::new(std::sync::Mutex::new(Vec::new()));

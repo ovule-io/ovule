@@ -29,6 +29,7 @@ pub trait ConversationIngress: Send + Sync {
 
 pub(super) struct NativeConversationService {
     state: Arc<WorkspaceSession>,
+    attachments: Option<Arc<dyn crate::messages::AttachmentRepository>>,
     prerequisites: Arc<dyn AttemptPrerequisites>,
     sessions: Arc<dyn AgentSessionService>,
     workspace_events: Arc<dyn WorkspaceEventSink>,
@@ -45,6 +46,7 @@ impl NativeConversationService {
         events: Arc<dyn ConversationEventSink>,
     ) -> Self {
         Self {
+            attachments: None,
             state,
             prerequisites,
             sessions,
@@ -53,7 +55,22 @@ impl NativeConversationService {
         }
     }
 
+    pub(crate) fn with_attachments(
+        mut self,
+        attachments: Arc<dyn crate::messages::AttachmentRepository>,
+    ) -> Self {
+        self.attachments = Some(attachments);
+        self
+    }
+
     pub fn handle_worker_event(&self, event: WorkerEvent) {
+        let event = match persist_image_event(event, self.attachments.as_deref()) {
+            Ok(event) => event,
+            Err(error) => {
+                tracing::error!(error, "persist Agent image");
+                return;
+            }
+        };
         if let Err(error) = handle_worker_event(
             &self.state,
             self.workspace_events.as_ref(),
@@ -76,7 +93,15 @@ impl NativeConversationService {
         let event_state = Arc::clone(&self.state);
         let workspace_events = Arc::clone(&self.workspace_events);
         let conversation_events = Arc::clone(&self.events);
+        let attachments = self.attachments.clone();
         let notify: WorkerEventCallback = Arc::new(move |event| {
+            let event = match persist_image_event(event, attachments.as_deref()) {
+                Ok(event) => event,
+                Err(error) => {
+                    tracing::error!(error, "persist Agent image");
+                    return;
+                }
+            };
             let forwarded_event = event.clone();
             let result = handle_worker_event(
                 &event_state,
@@ -190,6 +215,76 @@ impl ConversationIngress for NativeConversationService {
     fn worker_event(&self, event: WorkerEvent) {
         self.handle_worker_event(event);
     }
+}
+
+/// Store image bytes outside snapshots and forward only a content-addressed reference.
+fn persist_image_event(
+    event: WorkerEvent,
+    attachments: Option<&dyn crate::messages::AttachmentRepository>,
+) -> Result<WorkerEvent, String> {
+    use base64::Engine as _;
+    let WorkerEvent::MessageBlock {
+        attempt_id,
+        block_id,
+        kind,
+        data_json,
+    } = event
+    else {
+        return Ok(event);
+    };
+    if kind != "image" {
+        return Ok(WorkerEvent::MessageBlock {
+            attempt_id,
+            block_id,
+            kind,
+            data_json,
+        });
+    }
+    if data_json.len() > 17 * 1024 * 1024 {
+        return Err("Agent image payload exceeds limit".into());
+    }
+    let data: serde_json::Value =
+        serde_json::from_str(&data_json).map_err(|error| error.to_string())?;
+    // Existing attachment references can pass through without decoding again.
+    if data
+        .get("url")
+        .and_then(serde_json::Value::as_str)
+        .is_some_and(|url| url.starts_with("ovule-attachment:///"))
+    {
+        return Ok(WorkerEvent::MessageBlock {
+            attempt_id,
+            block_id,
+            kind,
+            data_json,
+        });
+    }
+    let encoded = data
+        .get("data")
+        .and_then(serde_json::Value::as_str)
+        .ok_or("Agent image has no data")?;
+    let media_type = data
+        .get("mediaType")
+        .and_then(serde_json::Value::as_str)
+        .ok_or("Agent image has no media type")?;
+    let bytes = base64::engine::general_purpose::STANDARD
+        .decode(encoded)
+        .map_err(|error| error.to_string())?;
+    let stored = attachments
+        .ok_or("Agent attachment store unavailable")?
+        .persist_output(&crate::messages::ImageAttachment {
+            name: data
+                .get("name")
+                .and_then(serde_json::Value::as_str)
+                .unwrap_or("Image")
+                .into(),
+            media_type: media_type.into(),
+            bytes,
+        })
+        .map_err(|error| format!("{error:?}"))?;
+    let image = stored.first().ok_or("Agent attachment was not stored")?;
+    Ok(WorkerEvent::MessageBlock { attempt_id, block_id, kind, data_json: serde_json::json!({
+        "url": format!("ovule-attachment:///{}", image.id), "name": image.name, "mediaType":image.media_type, "sizeBytes":image.size_bytes,
+    }).to_string() })
 }
 
 pub fn handle_worker_event(
@@ -494,5 +589,87 @@ mod tests {
                 .output
                 .is_empty()
         );
+    }
+}
+
+#[cfg(test)]
+mod image_tests {
+    use super::*;
+    use base64::Engine as _;
+
+    #[test]
+    fn agent_images_become_readable_references_without_base64_in_snapshot_events() {
+        let root = tempfile::tempdir().unwrap();
+        let store = crate::messages::providers::attachments(root.path());
+        let bytes = b"\x89PNG\r\n\x1a\nimage";
+        let event = WorkerEvent::MessageBlock {
+            attempt_id: "attempt".into(), block_id: "image-1".into(), kind: "image".into(),
+            data_json: serde_json::json!({"data":base64::engine::general_purpose::STANDARD.encode(bytes),"mediaType":"image/png","name":"screenshot.png"}).to_string(),
+        };
+        let WorkerEvent::MessageBlock { data_json, .. } =
+            persist_image_event(event, Some(store.as_ref())).unwrap()
+        else {
+            panic!("expected image block");
+        };
+        let data: serde_json::Value = serde_json::from_str(&data_json).unwrap();
+        assert!(data.get("data").is_none());
+        let id = data["url"]
+            .as_str()
+            .unwrap()
+            .strip_prefix("ovule-attachment:///")
+            .unwrap();
+        assert_eq!(store.read(id).unwrap(), bytes);
+        assert_eq!(data["mediaType"], "image/png");
+        assert_eq!(data["name"], "screenshot.png");
+    }
+
+    #[test]
+    fn desktop_screenshot_above_user_upload_limit_is_stored() {
+        let root = tempfile::tempdir().unwrap();
+        let store = crate::messages::providers::attachments(root.path());
+        let mut bytes = vec![0; 7 * 1024 * 1024];
+        bytes[..8].copy_from_slice(b"\x89PNG\r\n\x1a\n");
+        let event = WorkerEvent::MessageBlock { attempt_id: "attempt".into(), block_id: "desktop".into(), kind: "image".into(), data_json: serde_json::json!({"data":base64::engine::general_purpose::STANDARD.encode(&bytes),"mediaType":"image/png"}).to_string() };
+        let WorkerEvent::MessageBlock { data_json, .. } =
+            persist_image_event(event, Some(store.as_ref())).unwrap()
+        else {
+            panic!("image event");
+        };
+        let data: serde_json::Value = serde_json::from_str(&data_json).unwrap();
+        let id = data["url"]
+            .as_str()
+            .unwrap()
+            .strip_prefix("ovule-attachment:///")
+            .unwrap();
+        assert_eq!(store.read(id).unwrap(), bytes);
+        assert!(data_json.len() < 512);
+        assert!(
+            store
+                .persist(&[crate::messages::ImageAttachment {
+                    name: "upload.png".into(),
+                    media_type: "image/png".into(),
+                    bytes
+                }])
+                .is_err()
+        );
+    }
+
+    #[test]
+    fn invalid_agent_image_cannot_be_persisted() {
+        let root = tempfile::tempdir().unwrap();
+        let store = crate::messages::providers::attachments(root.path());
+        for (data, mime) in [
+            ("not base64", "image/png"),
+            ("aGVsbG8=", "image/png"),
+            ("aGVsbG8=", "image/svg+xml"),
+        ] {
+            let event = WorkerEvent::MessageBlock {
+                attempt_id: "attempt".into(),
+                block_id: "image".into(),
+                kind: "image".into(),
+                data_json: serde_json::json!({"data":data,"mediaType":mime}).to_string(),
+            };
+            assert!(persist_image_event(event, Some(store.as_ref())).is_err());
+        }
     }
 }

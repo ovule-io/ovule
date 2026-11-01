@@ -90,6 +90,7 @@ export function VirtualMessageTurn({
       ref={element}
       className={className}
       messageId={messageId}
+      data-turn-id={messageId}
       scrollAnchor={scrollAnchor}
       data-virtual-message={mounted ? "mounted" : "placeholder"}
       style={mounted ? undefined : { height: height.current, overflow: "hidden" }}

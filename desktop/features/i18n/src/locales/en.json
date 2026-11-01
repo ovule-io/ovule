@@ -161,7 +161,8 @@
     "closeDialog": "Close dialog",
     "copied": "Copied",
     "actionRequested": "Requested",
-    "actionFailed": "Action failed. Try again."
+    "actionFailed": "Action failed. Try again.",
+    "cancel": "Cancel"
   },
   "nodeKind": {
     "task": "Task",
@@ -204,7 +205,14 @@
     "file": "File",
     "attachment": "Attachment",
     "unknown": "{{kind}} content",
-    "noRenderer": "A renderer is not available for this content."
+    "noRenderer": "A renderer is not available for this content.",
+    "copyImage": "Copy image",
+    "saveImage": "Save image",
+    "imageAction": {
+      "copied": "Image copied",
+      "saved": "Image saved",
+      "failed": "Could not complete the image action. Try again."
+    }
   },
   "titlebar": {
     "hideSidebar": "Hide sidebar",
@@ -535,6 +543,11 @@
     "mCPConfig": " · MCP config"
   },
   "browser": {
+    "showPreview": "Show preview",
+    "showSource": "Show source",
+    "revealInFinder": "Reveal in Finder",
+    "revealInExplorer": "Reveal in Explorer",
+    "revealFailed": "Could not reveal the local file",
     "savingDownload": "Saving…",
     "downloading": "Downloading",
     "downloadSaveFailed": "Could not save to your download folder",
@@ -1097,7 +1110,10 @@
     "harnessJournal": "Durable execution records (latest 64)",
     "harnessJournalUnavailable": "Execution records are unavailable.",
     "harnessUnsettled": "Unsettled — inspect side effects before retrying",
-    "loadEarlier": "Load earlier messages"
+    "loadEarlier": "Load earlier messages",
+    "copyMessage": "Copy message",
+    "saveMessage": "Save message",
+    "messageCopied": "Message copied"
   },
   "agentApproval": {
     "reviewFallback": "Approve for me is enabled. This command or permission scope requires your confirmation.",
@@ -1119,6 +1135,21 @@
     "allowOnce": "Allow once"
   },
   "desktopPermissions": {
+    "captureVerified": "Capture verified in this process within the last minute",
+    "notConfirmed": "Not granted to this running build",
+    "preflightNote": "These checks describe this running app. A disabled preflight result does not prove that the similarly named entry in System Settings is disabled. Recent successful captures are shown separately.",
+    "inputMonitoring": "Input Monitoring",
+    "inputMonitoringHelp": "Only needed for tools that listen to global input. Request access can register this app with macOS; ordinary pointer and keyboard control uses Accessibility.",
+    "automation": "Automation",
+    "automationHelp": "Apple Events access is granted separately for each target app. It does not replace screen recording or Accessibility.",
+    "filesAndFolders": "Files and Folders",
+    "filesAndFoldersHelp": "Ovule appears here after accessing a protected folder. Access is requested when needed, or you can select the folder using the file picker. Opening Settings alone does not trigger a prompt.",
+    "fullDiskAccess": "Full Disk Access",
+    "fullDiskAccessHelp": "Optional. macOS provides no authorization prompt for Full Disk Access. In System Settings, use + or drag this running Ovule.app from Finder into the list and enable it.",
+    "systemManaged": "Managed by macOS; no reliable global status query",
+    "buildIdentity": "Running executable and code signature",
+    "otherCopies": "Other registered copies with the same bundle ID",
+    "copiesNote": "The same bundle ID is not enough to identify a privacy grant. macOS also checks the code signing requirement; another path or a rebuilt app may correspond to a different grant.",
     "title": "Permissions",
     "description": "Allow this Host to share its screen and accept keyboard and pointer input. These permissions are shared by Remote Desktop and Computer Use.",
     "loading": "Checking system permissions…",
@@ -1134,6 +1165,19 @@
     "authorize": "Authorize",
     "restart": "After changing access, fully quit and reopen this Host app. Permissions apply to this computer and this app build. Return here to refresh the status.",
     "refresh": "Refresh permissions",
-    "desktopGroup": "Remote Desktop & Computer Use"
+    "desktopGroup": "Remote Desktop & Computer Use",
+    "about": "About Ovule {{version}}",
+    "bundleId": "Bundle ID",
+    "appLocation": "App location",
+    "checked": "Permissions checked at {{time}}",
+    "openSettings": "Open settings",
+    "requestAccess": "Request access",
+    "showApp": "Show app in Finder",
+    "adHocRecovery": "This build uses ad-hoc signing. After rebuilding, macOS may keep an enabled entry for an older signature. If access remains unavailable, remove the old Ovule entry, add this running app again, then quit and reopen Ovule. Refresh only checks access; it does not repair old grants.",
+    "automationUnavailable": "No Apple Events integration is enabled yet. Ovule will appear in Automation only after it requests control of a specific supported app; opening System Settings does not create an entry.",
+    "repair": "Repair access…",
+    "repairTitle": "Reset Ovule {{permission}} access?",
+    "repairDescription": "This removes only this Ovule bundle ID’s existing grant for this permission, including other copies with the same ID. macOS will ask for access again. Confirm for the currently running app, then enable access and fully quit and reopen Ovule. It does not grant access automatically.",
+    "repairConfirm": "Reset and request access"
   }
 }

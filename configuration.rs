@@ -60,6 +60,7 @@ pub fn configuration(debug: bool) -> Configuration {
     config = config.asset(Asset::file(
         ["ovule://*.local"],
         [
+            "/image",
             "/code",
             "/markdown",
             "/office",
@@ -176,6 +177,6 @@ pub fn configuration(debug: bool) -> Configuration {
         ],
         ..Rule::default()
     });
-    config = config.rule(Rule { origins: vec!["ovule://-".into(), "ovule://*.artifact".into(), "ovule://*.preview".into(), "ovule://*.local".into()], identifier: Some("document-csp".into()), csp: Some("default-src 'self'; connect-src 'self' ws: wss:; script-src 'self' 'nonce-ovule-spa' 'sha256-X+PV4o5mNco/Pvq+pI48kE+2DEZFB7C85wagfp0G5Bc=' 'sha256-7Jd2j+/dVXRgQ8V+qmwGHURb1YpFcJvFTBg5hMsQGV8=' 'sha256-duhaxWNI+6QAukUMmlYrkl97X+e0pxobkwS+TpY5/CQ=' 'sha256-RBZNiG3Ztb26Xi/69+VRecU4BPhrfxcvspLXMRrrCNE='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https: http:; frame-src 'self' https:; object-src 'none'; base-uri 'none'".into()), ..Rule::default() });
+    config = config.rule(Rule { origins: vec!["ovule://-".into(), "ovule://*.artifact".into(), "ovule://*.preview".into(), "ovule://*.local".into()], identifier: Some("document-csp".into()), csp: Some("default-src 'self'; connect-src 'self' blob: https: ws: wss:; script-src 'self' 'nonce-ovule-spa' 'sha256-X+PV4o5mNco/Pvq+pI48kE+2DEZFB7C85wagfp0G5Bc=' 'sha256-7Jd2j+/dVXRgQ8V+qmwGHURb1YpFcJvFTBg5hMsQGV8=' 'sha256-duhaxWNI+6QAukUMmlYrkl97X+e0pxobkwS+TpY5/CQ=' 'sha256-RBZNiG3Ztb26Xi/69+VRecU4BPhrfxcvspLXMRrrCNE='; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https: http:; frame-src 'self' https:; object-src 'none'; base-uri 'none'".into()), ..Rule::default() });
     config
 }

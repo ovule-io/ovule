@@ -1,3 +1,6 @@
+import messagePartsTokens from "@ovule/message-parts/message-parts.token";
+import { attachmentPreviewRequest } from "./attachment-preview-request";
+import type { AttachmentPreviewRequest } from "@ovule/message-parts/message-parts";
 import conversationTokens from "@ovule/conversation/conversation.token";
 import workflowTokens from "@ovule/workflow/workflow.token";
 import settingsTokens from "@ovule/settings/settings.token";
@@ -14,14 +17,17 @@ const MessageTelemetryDialog = lazy(() =>
 import type { MessageTelemetryRuntime } from "./MessageTelemetryDialog";
 import { useObservableState } from "@ovule/ioc/react";
 
-type GlobalDialogRequest = {
-  kind: "message-telemetry";
-  messageId: string;
-  runtime?: MessageTelemetryRuntime;
-};
+type GlobalDialogRequest =
+  | AttachmentPreviewRequest
+  | {
+      kind: "message-telemetry";
+      messageId: string;
+      runtime?: MessageTelemetryRuntime;
+    };
 
 export const GlobalDialogHostFactory = create((dependsOn) => {
   const stateView = dependsOn(StateProjectionFactory);
+  const AttachmentPreviewDialog = dependsOn(messagePartsTokens.attachmentPreview);
   return function GlobalDialogHost() {
     const [request, setRequest] = useState<GlobalDialogRequest>();
     const snapshot = useObservableState(stateView, (state) => state.snapshot);
@@ -29,6 +35,11 @@ export const GlobalDialogHostFactory = create((dependsOn) => {
     useEffect(() => {
       const open = (event: Event) => {
         const detail = (event as CustomEvent<GlobalDialogRequest | undefined>).detail;
+        const attachment = attachmentPreviewRequest(detail);
+        if (attachment) {
+          setRequest(attachment);
+          return;
+        }
         if (detail?.kind !== "message-telemetry" || !detail.messageId) return;
         setRequest(detail);
       };
@@ -36,7 +47,20 @@ export const GlobalDialogHostFactory = create((dependsOn) => {
       return () => window.removeEventListener("ovule:global-dialog", open);
     }, []);
 
-    if (!snapshot || !request) return null;
+    if (!request) return null;
+    if (request.kind === "image-preview")
+      return (
+        <Suspense fallback={null}>
+          <AttachmentPreviewDialog
+            key={request.url}
+            request={request}
+            onOpenChange={(open) => {
+              if (!open) setRequest(undefined);
+            }}
+          />
+        </Suspense>
+      );
+    if (!snapshot) return null;
 
     const message = snapshot.messages.find((item) => item.id === request?.messageId);
     const thread = snapshot.threads.find((item) => item.id === message?.threadId);

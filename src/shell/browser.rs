@@ -111,6 +111,12 @@ impl crate::shell_api::Browser for Profile {
             .remove(&id)
             .map_err(tuffite::CommandError::Failed)
     }
+    fn reveal_local_file(&self, url: String) -> Result<bool, tuffite::CommandError> {
+        let path = local_path(&url)?
+            .canonicalize()
+            .map_err(|error| tuffite::CommandError::Failed(error.to_string()))?;
+        reveal_local_path(&path)
+    }
     fn reveal_download(&self, id: String) -> Result<bool, tuffite::CommandError> {
         let path = self
             .service::<ovule_browser::downloads::DownloadsRuntime>()?
@@ -121,22 +127,7 @@ impl crate::shell_api::Browser for Profile {
                 "Downloaded file is no longer available".into(),
             ));
         }
-        #[cfg(target_os = "macos")]
-        let mut command = {
-            let mut value = std::process::Command::new("open");
-            value.arg("-R").arg(&path);
-            value
-        };
-        #[cfg(target_os = "windows")]
-        let mut command = {
-            let mut value = std::process::Command::new("explorer.exe");
-            value.arg(format!("/select,{}", path.display()));
-            value
-        };
-        command
-            .status()
-            .map(|status| status.success())
-            .map_err(|error| tuffite::CommandError::Failed(error.to_string()))
+        reveal_local_path(&path)
     }
     fn respond(
         &self,
@@ -168,4 +159,23 @@ fn download(value: ovule_browser::downloads::Download) -> crate::shell_api::Down
         created_at: value.created_at,
         removed: value.removed,
     }
+}
+
+fn reveal_local_path(path: &std::path::Path) -> Result<bool, tuffite::CommandError> {
+    #[cfg(target_os = "macos")]
+    let mut command = {
+        let mut value = std::process::Command::new("open");
+        value.arg("-R").arg(path);
+        value
+    };
+    #[cfg(target_os = "windows")]
+    let mut command = {
+        let mut value = std::process::Command::new("explorer.exe");
+        value.arg(format!("/select,{}", path.display()));
+        value
+    };
+    command
+        .status()
+        .map(|status| status.success())
+        .map_err(|error| tuffite::CommandError::Failed(error.to_string()))
 }

@@ -1,4 +1,5 @@
 import omniboxTokens from "@ovule/omnibox/omnibox.token";
+import { useMemo } from "react";
 import { useService } from "@ovule/ioc/react";
 import { useTranslation } from "react-i18next";
 import { Input } from "@ovule/ui/form";
@@ -28,8 +29,27 @@ function BrowserAddressEditor({
   const Omnibox = useService(omniboxTokens.omniboxView);
   const { t } = useTranslation();
   const { active, address, setAddress, submit } = model;
+  const tabSuggestions = useMemo(
+    () =>
+      model.tabs
+        .filter(
+          (tab) =>
+            tab.kind === "browser" &&
+            tab.id !== active?.id &&
+            /^(https?|file):/.test(tab.url ?? tab.target ?? ""),
+        )
+        .map((tab) => ({
+          id: `tab-${tab.id}`,
+          kind: "tab",
+          title: tab.title,
+          detail: tab.url ?? tab.target ?? "",
+          target: tab.url ?? tab.target ?? "",
+        })),
+    [model.tabs, active?.id],
+  );
   return (
     <Omnibox
+      additionalSuggestions={tabSuggestions}
       className={cn("pane-omnibox", styles.paneOmnibox)}
       inputClassName={styles.paneOmniboxInput}
       contentClassName={cn(

@@ -1,5 +1,9 @@
 import type { BrowserAgentBinding } from "@ovule/shell/explorer";
-import type { ExplorerElement, ExplorerTransfer } from "@ovule/shell/explorer";
+import type {
+  ExplorerNavigationState,
+  ExplorerElement,
+  ExplorerTransfer,
+} from "@ovule/shell/explorer";
 import type { ShellService } from "@ovule/shell/shell";
 import type { WindowInfo } from "@ovule/shell/window";
 
@@ -9,6 +13,41 @@ export function requireExplorerTransfer(source: ExplorerElement): void {
       "This Tuffite runtime does not support Explorer transfer",
       "NotSupportedError",
     );
+}
+
+/** A connected DOM element can still be waiting for its native guest or file grant. */
+export function isExplorerNotAttached(error: unknown): boolean {
+  return error instanceof TypeError && error.message === "Explorer is not attached";
+}
+
+export async function detachExplorerWhenReady(
+  source: ExplorerElement,
+  options: { isCurrent?(): boolean; timeoutMs?: number; retryDelayMs?: number } = {},
+): Promise<{ state: ExplorerNavigationState; transfer: ExplorerTransfer }> {
+  const deadline = performance.now() + (options.timeoutMs ?? 10_000);
+  for (;;) {
+    if (!source.isConnected || options.isCurrent?.() === false)
+      throw new DOMException("Explorer preview was closed before transfer", "AbortError");
+    try {
+      if (source.dataset.previewPending !== "true") {
+        const state = await source.getNavigationState();
+        if (!source.isConnected || options.isCurrent?.() === false)
+          throw new DOMException("Explorer preview was closed before transfer", "AbortError");
+        // Do not race this call with a timer: once it starts, ownership can move.
+        const transfer = await source.detach();
+        return { state, transfer };
+      }
+    } catch (error) {
+      const creating =
+        error instanceof DOMException &&
+        error.name === "InvalidStateError" &&
+        error.message === "Explorer is not available to detach";
+      if (!isExplorerNotAttached(error) && !creating) throw error;
+    }
+    if (performance.now() >= deadline)
+      throw new Error("Explorer did not become ready for transfer");
+    await new Promise((resolve) => setTimeout(resolve, options.retryDelayMs ?? 50));
+  }
 }
 
 export async function recoverExplorerTransfer(

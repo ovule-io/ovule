@@ -1,3 +1,4 @@
+import panesTokens from "@ovule/panes/panes.token";
 import settingsTokens from "@ovule/settings/settings.token";
 import type { NewTabAction } from "@ovule/panes/view";
 import shellTokens from "@ovule/shell/shell.token";
@@ -16,14 +17,14 @@ import {
   Workflow,
   MonitorUp,
 } from "lucide-react";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Button } from "@ovule/ui/button";
 
 import type { BrowserSuggestion } from "@ovule/shell-api";
 import { resolveOmnibox } from "./navigation";
-import { useService } from "@ovule/ioc/react";
+import { useService, useObservableState } from "@ovule/ioc/react";
 
 import { cn } from "@ovule/ui/cn";
 import toolStyles from "@ovule/ui/tool-panels.module.css";
@@ -68,6 +69,24 @@ function BrowserPanelContent({
   const { explorerOpenDestination } = useService(shellTokens.shell);
 
   const { shell, Omnibox, preferences } = dependencies;
+  const panes = useService(panesTokens.panes);
+  const tabs = useObservableState(panes, (state) => state.instances);
+  const tabSuggestions = useMemo(
+    () =>
+      tabs
+        .filter(
+          (tab) => tab.kind === "browser" && /^(https?|file):/.test(tab.url ?? tab.target ?? ""),
+        )
+        .sort((a, b) => (b.lastVisited ?? 0) - (a.lastVisited ?? 0))
+        .map((tab) => ({
+          id: `tab-${tab.id}`,
+          kind: "tab",
+          title: tab.title,
+          detail: tab.url ?? tab.target ?? "",
+          target: tab.url ?? tab.target ?? "",
+        })),
+    [tabs],
+  );
   const {
     threadId,
     workspacePath,
@@ -128,7 +147,17 @@ function BrowserPanelContent({
     pendingLoadedStatus.current = loadedStatus;
     pendingNavigationStarted.current = true;
     committedSurfaceUrl.current = url;
+    if (tabId)
+      void shell
+        .requestRoot("tab.metadata", {
+          tabId,
+          url,
+          title: url,
+          toolbarState: { loading: "true", source: "false" },
+        })
+        .catch(console.error);
     const element = explorer.current;
+    if (element) element.dataset.previewMode = "preview";
     if (element && typeof element.load === "function") {
       element.dataset.navigationGeneration = String(generation);
       element.contextMenuEnabled = /^(?:https?|file):\/\//i.test(url);
@@ -227,9 +256,7 @@ function BrowserPanelContent({
               generation !== navigationGeneration.current ||
               !element.isConnected ||
               address === "about:blank" ||
-              (pendingNavigationStarted.current &&
-                committedSurfaceUrl.current?.startsWith("file:") &&
-                address !== committedSurfaceUrl.current)
+              (pendingNavigationStarted.current && address !== committedSurfaceUrl.current)
             )
               return;
             return shell.requestRoot("tab.metadata", {
@@ -250,6 +277,13 @@ function BrowserPanelContent({
       pendingNavigationStarted.current = false;
       setStatus(pendingLoadedStatus.current ?? translator.current("browser.ready"));
       pendingLoadedStatus.current = undefined;
+      if (tabId)
+        void shell
+          .requestRoot("tab.metadata", {
+            tabId,
+            toolbarState: { loading: "false" },
+          })
+          .catch(console.error);
       publishNavigationMetadata();
     };
     const failed = (event: Event) => {
@@ -264,6 +298,13 @@ function BrowserPanelContent({
       }
       pendingNavigationStarted.current = false;
       pendingLoadedStatus.current = undefined;
+      if (tabId)
+        void shell
+          .requestRoot("tab.metadata", {
+            tabId,
+            toolbarState: { loading: "false" },
+          })
+          .catch(console.error);
       setStatus(
         detail?.errorDescription
           ? translator.current("browser.failedDetail", {
@@ -288,6 +329,21 @@ function BrowserPanelContent({
       )
         return;
       committedSurfaceUrl.current = committedUrl;
+      if (committedUrl.startsWith("file:")) {
+        let source = false;
+        try {
+          source =
+            new URL(reportedUrl!).hostname.endsWith(".local") &&
+            new URL(reportedUrl!).searchParams.get("mode") === "source";
+        } catch {
+          /* Native file navigation has no preview mode. */
+        }
+        element.dataset.previewMode = source ? "source" : "preview";
+        if (tabId)
+          void shell
+            .requestRoot("tab.metadata", { tabId, toolbarState: { source: String(source) } })
+            .catch(console.error);
+      }
       publishNavigationMetadata({
         url: committedUrl,
         ...((event as CustomEvent<{ title?: string }>).detail?.title
@@ -311,6 +367,10 @@ function BrowserPanelContent({
         // nevertheless usable, so do not leave the status on the previous page.
         if (committedUrl.startsWith("file:") && pendingNavigationStarted.current) {
           pendingNavigationStarted.current = false;
+          if (tabId)
+            void shell
+              .requestRoot("tab.metadata", { tabId, toolbarState: { loading: "false" } })
+              .catch(console.error);
           setStatus(pendingLoadedStatus.current ?? translator.current("browser.ready"));
           pendingLoadedStatus.current = undefined;
         }
@@ -413,6 +473,19 @@ function BrowserPanelContent({
         // native WebContents. Ask this guest window to take focus first.
         window.focus();
         emptyOmnibox.current?.focus({ preventScroll: true });
+      } else if (action === "browser.toggleSource" && element) {
+        const address = committedSurfaceUrl.current ?? target;
+        if (!/^file:.*\.(?:md|markdown|mdown|html?|svg)(?:[?#].*)?$/i.test(address)) return;
+        const source = element.dataset.previewMode !== "source";
+        element.dataset.previewMode = source ? "source" : "preview";
+        shell.loadExplorer(element, address);
+        if (tabId)
+          void shell
+            .requestRoot("tab.metadata", {
+              tabId,
+              toolbarState: { source: String(source) },
+            })
+            .catch(console.error);
       } else if (action === "browser.reload") {
         if (element?.reload) void element.reload();
         else void load();
@@ -514,6 +587,7 @@ function BrowserPanelContent({
               <RefreshCw size={14} />
             </Button>
             <Omnibox
+              additionalSuggestions={tabSuggestions}
               className={cn("browser-address", toolStyles.browserAddress)}
               inputClassName={toolStyles.browserAddressInput}
               contentClassName={toolStyles.browserSuggestions}
@@ -567,6 +641,7 @@ function BrowserPanelContent({
         {!surfaceUrl && (
           <div className={toolStyles.browserEmpty}>
             <Omnibox
+              additionalSuggestions={tabSuggestions}
               className={cn("browser-empty-omnibox", toolStyles.browserEmptyOmnibox)}
               inputClassName={toolStyles.browserEmptyInput}
               contentClassName={toolStyles.browserSuggestions}

@@ -16,7 +16,7 @@ export function FeedbackButton({
 }: Omit<ComponentProps<typeof Button>, "onClick"> & {
   label: string;
   successLabel?: string;
-  action(): boolean | void | Promise<boolean | void>;
+  action(): boolean | void | null | Promise<boolean | void | null>;
 }) {
   const { t } = useTranslation();
   const feedback = useActionFeedback();
@@ -45,9 +45,7 @@ export function FeedbackButton({
           children
         )}
         <span className={styles.status} role="status">
-          {feedback.status === "idle" || feedback.status === "pending"
-            ? ""
-            : text}
+          {feedback.status === "idle" || feedback.status === "pending" ? "" : text}
         </span>
       </Button>
     </Tooltip>

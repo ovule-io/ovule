@@ -2540,6 +2540,24 @@ export const mojomTypes = {
     ]],
     'size': 16
   },
+  'BrowserRevealLocalFileRequest': {
+    'fields': [[
+      'url',
+      8,
+      0,
+      'string'
+    ]],
+    'size': 16
+  },
+  'BrowserRevealLocalFileResponse': {
+    'fields': [[
+      'result',
+      8,
+      0,
+      'bool'
+    ]],
+    'size': 16
+  },
   'BrowserRevokePreviewRequest': {
     'fields': [[
       'id',
@@ -3074,37 +3092,83 @@ export const mojomTypes = {
   'DesktopPermissions': {
     'fields': [
       [
-        'managed',
+        'appVersion',
         8,
         0,
-        'bool'
+        'string'
       ],
       [
-        'screenRecording',
-        8,
-        1,
-        'bool'
-      ],
-      [
-        'accessibility',
-        8,
-        2,
-        'bool'
-      ],
-      [
-        'bundleId',
+        'bundlePath',
         16,
         0,
         { 'nullable': 'string' }
       ],
       [
-        'expectedBundleId',
+        'executablePath',
         24,
+        0,
+        { 'nullable': 'string' }
+      ],
+      [
+        'signingIdentity',
+        32,
+        0,
+        { 'nullable': 'string' }
+      ],
+      [
+        'otherBundlePaths',
+        40,
+        0,
+        {
+          'array': 'string',
+          'boolean': false,
+          'width': 8
+        }
+      ],
+      [
+        'screenCaptureVerified',
+        48,
+        0,
+        'bool'
+      ],
+      [
+        'inputMonitoring',
+        48,
+        1,
+        'bool'
+      ],
+      [
+        'managed',
+        48,
+        2,
+        'bool'
+      ],
+      [
+        'screenRecording',
+        48,
+        3,
+        'bool'
+      ],
+      [
+        'accessibility',
+        48,
+        4,
+        'bool'
+      ],
+      [
+        'bundleId',
+        56,
+        0,
+        { 'nullable': 'string' }
+      ],
+      [
+        'expectedBundleId',
+        64,
         0,
         'string'
       ]
     ],
-    'size': 32
+    'size': 72
   },
   'DiscoverSshHostResult': {
     'fields': [
@@ -61625,37 +61689,83 @@ export const mojomTypes = {
       {
         'fields': [
           [
-            'managed',
+            'appVersion',
             8,
             0,
-            'bool'
+            'string'
           ],
           [
-            'screenRecording',
-            8,
-            1,
-            'bool'
-          ],
-          [
-            'accessibility',
-            8,
-            2,
-            'bool'
-          ],
-          [
-            'bundleId',
+            'bundlePath',
             16,
             0,
             { 'nullable': 'string' }
           ],
           [
-            'expectedBundleId',
+            'executablePath',
             24,
+            0,
+            { 'nullable': 'string' }
+          ],
+          [
+            'signingIdentity',
+            32,
+            0,
+            { 'nullable': 'string' }
+          ],
+          [
+            'otherBundlePaths',
+            40,
+            0,
+            {
+              'array': 'string',
+              'boolean': false,
+              'width': 8
+            }
+          ],
+          [
+            'screenCaptureVerified',
+            48,
+            0,
+            'bool'
+          ],
+          [
+            'inputMonitoring',
+            48,
+            1,
+            'bool'
+          ],
+          [
+            'managed',
+            48,
+            2,
+            'bool'
+          ],
+          [
+            'screenRecording',
+            48,
+            3,
+            'bool'
+          ],
+          [
+            'accessibility',
+            48,
+            4,
+            'bool'
+          ],
+          [
+            'bundleId',
+            56,
+            0,
+            { 'nullable': 'string' }
+          ],
+          [
+            'expectedBundleId',
+            64,
             0,
             'string'
           ]
         ],
-        'size': 32
+        'size': 72
       }
     ]],
     'size': 16
@@ -67851,37 +67961,83 @@ export const mojomTypes = {
       {
         'fields': [
           [
-            'managed',
+            'appVersion',
             8,
             0,
-            'bool'
+            'string'
           ],
           [
-            'screenRecording',
-            8,
-            1,
-            'bool'
-          ],
-          [
-            'accessibility',
-            8,
-            2,
-            'bool'
-          ],
-          [
-            'bundleId',
+            'bundlePath',
             16,
             0,
             { 'nullable': 'string' }
           ],
           [
-            'expectedBundleId',
+            'executablePath',
             24,
+            0,
+            { 'nullable': 'string' }
+          ],
+          [
+            'signingIdentity',
+            32,
+            0,
+            { 'nullable': 'string' }
+          ],
+          [
+            'otherBundlePaths',
+            40,
+            0,
+            {
+              'array': 'string',
+              'boolean': false,
+              'width': 8
+            }
+          ],
+          [
+            'screenCaptureVerified',
+            48,
+            0,
+            'bool'
+          ],
+          [
+            'inputMonitoring',
+            48,
+            1,
+            'bool'
+          ],
+          [
+            'managed',
+            48,
+            2,
+            'bool'
+          ],
+          [
+            'screenRecording',
+            48,
+            3,
+            'bool'
+          ],
+          [
+            'accessibility',
+            48,
+            4,
+            'bool'
+          ],
+          [
+            'bundleId',
+            56,
+            0,
+            { 'nullable': 'string' }
+          ],
+          [
+            'expectedBundleId',
+            64,
             0,
             'string'
           ]
         ],
-        'size': 32
+        'size': 72
       }
     ]],
     'size': 16
@@ -78253,6 +78409,30 @@ export const mojomMethods = [
       'size': 16
     },
     'ovule.Browser.CreateHtmlPreview'
+  ],
+  [
+    'browser.revealLocalFile',
+    '0xf316b72d76c470fc',
+    '0xaab2856a1ecf29b7',
+    {
+      'fields': [[
+        'url',
+        8,
+        0,
+        'string'
+      ]],
+      'size': 16
+    },
+    {
+      'fields': [[
+        'result',
+        8,
+        0,
+        'bool'
+      ]],
+      'size': 16
+    },
+    'ovule.Browser.RevealLocalFile'
   ],
   [
     'content.readHtmlPreview',
@@ -146358,7 +146538,7 @@ export const mojomMethods = [
   [
     'workspace.desktopPermissions',
     '0xaf7a61d934c8731c',
-    '0x81a32419ede07f7d',
+    '0xf400e1c90b7413f3',
     {
       'fields': [],
       'size': 8
@@ -146371,37 +146551,83 @@ export const mojomMethods = [
         {
           'fields': [
             [
-              'managed',
+              'appVersion',
               8,
               0,
-              'bool'
+              'string'
             ],
             [
-              'screenRecording',
-              8,
-              1,
-              'bool'
-            ],
-            [
-              'accessibility',
-              8,
-              2,
-              'bool'
-            ],
-            [
-              'bundleId',
+              'bundlePath',
               16,
               0,
               { 'nullable': 'string' }
             ],
             [
-              'expectedBundleId',
+              'executablePath',
               24,
+              0,
+              { 'nullable': 'string' }
+            ],
+            [
+              'signingIdentity',
+              32,
+              0,
+              { 'nullable': 'string' }
+            ],
+            [
+              'otherBundlePaths',
+              40,
+              0,
+              {
+                'array': 'string',
+                'boolean': false,
+                'width': 8
+              }
+            ],
+            [
+              'screenCaptureVerified',
+              48,
+              0,
+              'bool'
+            ],
+            [
+              'inputMonitoring',
+              48,
+              1,
+              'bool'
+            ],
+            [
+              'managed',
+              48,
+              2,
+              'bool'
+            ],
+            [
+              'screenRecording',
+              48,
+              3,
+              'bool'
+            ],
+            [
+              'accessibility',
+              48,
+              4,
+              'bool'
+            ],
+            [
+              'bundleId',
+              56,
+              0,
+              { 'nullable': 'string' }
+            ],
+            [
+              'expectedBundleId',
+              64,
               0,
               'string'
             ]
           ],
-          'size': 32
+          'size': 72
         }
       ]],
       'size': 16
@@ -146411,7 +146637,7 @@ export const mojomMethods = [
   [
     'workspace.requestDesktopPermission',
     '0x4748149f0f299cb9',
-    '0x9dae3fb3e5100586',
+    '0x901562365796f1d8',
     {
       'fields': [[
         'permission',
@@ -146429,37 +146655,83 @@ export const mojomMethods = [
         {
           'fields': [
             [
-              'managed',
+              'appVersion',
               8,
               0,
-              'bool'
+              'string'
             ],
             [
-              'screenRecording',
-              8,
-              1,
-              'bool'
-            ],
-            [
-              'accessibility',
-              8,
-              2,
-              'bool'
-            ],
-            [
-              'bundleId',
+              'bundlePath',
               16,
               0,
               { 'nullable': 'string' }
             ],
             [
-              'expectedBundleId',
+              'executablePath',
               24,
+              0,
+              { 'nullable': 'string' }
+            ],
+            [
+              'signingIdentity',
+              32,
+              0,
+              { 'nullable': 'string' }
+            ],
+            [
+              'otherBundlePaths',
+              40,
+              0,
+              {
+                'array': 'string',
+                'boolean': false,
+                'width': 8
+              }
+            ],
+            [
+              'screenCaptureVerified',
+              48,
+              0,
+              'bool'
+            ],
+            [
+              'inputMonitoring',
+              48,
+              1,
+              'bool'
+            ],
+            [
+              'managed',
+              48,
+              2,
+              'bool'
+            ],
+            [
+              'screenRecording',
+              48,
+              3,
+              'bool'
+            ],
+            [
+              'accessibility',
+              48,
+              4,
+              'bool'
+            ],
+            [
+              'bundleId',
+              56,
+              0,
+              { 'nullable': 'string' }
+            ],
+            [
+              'expectedBundleId',
+              64,
               0,
               'string'
             ]
           ],
-          'size': 32
+          'size': 72
         }
       ]],
       'size': 16

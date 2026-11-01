@@ -4,7 +4,6 @@ import { useTranslation } from "react-i18next";
 import { useService } from "@ovule/ioc/react";
 import shellTokens from "@ovule/shell/shell.token";
 import { Button } from "@ovule/ui/button";
-import { Input } from "@ovule/ui/form";
 import type { DownloadsState } from "@ovule/shell/downloads";
 import styles from "./GeneralSettings.module.css";
 const empty: DownloadsState = { items: [], directory: "~/Downloads" };
@@ -44,18 +43,14 @@ export function DownloadSettings() {
       data-general-section="downloads"
       aria-labelledby="settings-downloads-label"
     >
-      <div className={styles.row}>
+      <div className={styles.group}>
         <h4 className={styles.title} id="settings-downloads-label">
           {t("settings.downloadDirectory")}
         </h4>
-        <div className="flex min-w-0 flex-1 flex-wrap items-center gap-2">
-          <Input
-            readOnly
-            value={state.directory}
-            title={state.directory}
-            aria-labelledby="settings-downloads-label"
-            className="min-w-0 flex-1"
-          />
+        <p className={styles.downloadPath} aria-labelledby="settings-downloads-label">
+          {state.directory}
+        </p>
+        <div className={styles.downloadActions}>
           <Button
             type="button"
             size="sm"

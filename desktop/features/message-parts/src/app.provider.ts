@@ -1,9 +1,20 @@
+import { lazy } from "react";
 import messagePartsTokens from "./message-parts.token";
 import type { Register } from "@ovule/ioc";
 import { encodeHumanHandoff } from "./handoff/protocol-codec";
 import { parseHumanHandoff } from "./handoff/protocol-codec";
 import { value } from "@ovule/ioc";
 export default function register(register: Register): void {
+  register(
+    messagePartsTokens.attachmentPreview,
+    value(
+      lazy(() =>
+        import("./AttachmentPreviewDialog").then((module) => ({
+          default: module.AttachmentPreviewDialog,
+        })),
+      ),
+    ),
+  );
   registerHumanHandoff(register);
   registerRoute(register);
 }

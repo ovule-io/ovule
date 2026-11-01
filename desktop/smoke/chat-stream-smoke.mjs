@@ -178,6 +178,18 @@ try {
     const node = document.querySelector(".ui-message-scroller-viewport");
     return node.scrollHeight - node.clientHeight - node.scrollTop < 8;
   });
+  const contextBar = page.locator("[data-turn-context]");
+  await contextBar.getByRole("button", { name: "Check the workspace" }).waitFor();
+  await page.screenshot({ path: "/private/tmp/ovule-sticky-turn-context.png" });
+  await contextBar.getByRole("button", { name: "Check the workspace" }).click();
+  await page.waitForFunction(() => {
+    const viewport = document.querySelector(".ui-message-scroller-viewport");
+    const prompt = document.querySelector('[data-turn-id="question"]');
+    return (
+      Math.abs(prompt.getBoundingClientRect().top - viewport.getBoundingClientRect().top - 64) < 6
+    );
+  });
+  await page.getByRole("button", { name: "Jump to latest message", exact: true }).click();
   // A new user turn must not reintroduce anchored-turn scrolling. Dragging the
   // scrollbar to the bottom resumes following without Jump to latest.
   await page.evaluate(() => chatTest.reanchor());

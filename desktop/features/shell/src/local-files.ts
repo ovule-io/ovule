@@ -25,9 +25,11 @@ export function localExplorerSource(address: string, base = location.href): stri
   if (file.protocol !== "file:" || file.pathname.endsWith("/")) return address;
   const office = localDocumentFile(address);
   const markdown = /\.(?:md|markdown|mdown)$/i.test(file.pathname);
-  const code = Boolean(fileCodeLanguage(address));
+  const image = /\.svg$/i.test(file.pathname);
+  const code = !image && Boolean(fileCodeLanguage(address));
   if (
     !office &&
+    !image &&
     !markdown &&
     !code &&
     (!/\.[^/]+$/.test(file.pathname) ||
@@ -37,13 +39,15 @@ export function localExplorerSource(address: string, base = location.href): stri
   )
     return address;
   const url = new URL(
-    office
-      ? "/local-office"
-      : markdown
-        ? "/local-markdown"
-        : code
-          ? "/local-code"
-          : "/local-unsupported",
+    image
+      ? "/local-image"
+      : office
+        ? "/local-office"
+        : markdown
+          ? "/local-markdown"
+          : code
+            ? "/local-code"
+            : "/local-unsupported",
     base,
   );
   url.searchParams.set("url", address);
@@ -61,6 +65,8 @@ export function localExplorerAddress(address: string, base = location.href): str
         "/html",
         "/navigate",
         "/pdf",
+        "/image",
+        "/local-image",
         "/code",
         "/office",
         "/markdown",
@@ -118,4 +124,8 @@ export function htmlPreviewRequest(
   } catch {
     /* Not an internal HTML preview recipe. */
   }
+}
+
+export async function revealLocalFile(url: string): Promise<boolean> {
+  return (await import("@ovule/shell-api")).browser.revealLocalFile(url);
 }

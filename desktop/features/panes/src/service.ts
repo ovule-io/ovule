@@ -121,6 +121,7 @@ export function createPanesService({
         placement === "thread" &&
         ownerId &&
         options.target &&
+        !options.replaceBlankId &&
         options.reuseExistingTarget !== false
       ) {
         const existing = state.instances.find(
@@ -172,7 +173,16 @@ export function createPanesService({
           : kind === "browser"
             ? state.nextBrowserOrdinal
             : undefined;
-      const id = `${kind}-${createId()}`;
+      const blank = state.instances.find(
+        (tab) =>
+          tab.id === options.replaceBlankId &&
+          tab.kind === "browser" &&
+          !tab.target &&
+          !tab.url &&
+          (tab.placement ?? "workbench") === placement &&
+          (tab.threadId ?? tab.draftId) === ownerId,
+      );
+      const id = blank?.id ?? `${kind}-${createId()}`;
       const title =
         kind === "terminal"
           ? `Terminal ${ordinal}`
@@ -188,34 +198,35 @@ export function createPanesService({
                 terminal: "Terminal",
               } satisfies Record<PaneKind, string>
             )[kind];
+      const pane: PaneInstance = {
+        id,
+        kind,
+        lastVisited: visited,
+        title:
+          kind !== "handoff" && kind !== "spice" && options.target
+            ? options.target.split(/[\\/]/).at(-1) || title
+            : title,
+        placement,
+        ordinal,
+        threadId: options.threadId || undefined,
+        draftId: options.draftId,
+        workspaceBindingId: options.workspaceBindingId,
+        shellProfileId: options.shellProfileId,
+        useThreadWorkspace: options.useThreadWorkspace,
+        target: options.target,
+        autoLoad: options.autoLoad,
+        navigation: options.navigation,
+        requestVersion: (blank?.requestVersion ?? 0) + (options.autoLoad && options.target ? 1 : 0),
+      };
       set({
         ...activation(id),
         nextTerminalOrdinal:
           kind === "terminal" ? state.nextTerminalOrdinal + 1 : state.nextTerminalOrdinal,
         nextBrowserOrdinal:
           kind === "browser" ? state.nextBrowserOrdinal + 1 : state.nextBrowserOrdinal,
-        instances: [
-          ...state.instances,
-          {
-            id,
-            kind,
-            lastVisited: visited,
-            title:
-              kind !== "handoff" && kind !== "spice" && options.target
-                ? options.target.split(/[\\/]/).at(-1) || title
-                : title,
-            placement,
-            ordinal,
-            threadId: options.threadId || undefined,
-            draftId: options.draftId,
-            workspaceBindingId: options.workspaceBindingId,
-            useThreadWorkspace: options.useThreadWorkspace,
-            target: options.target,
-            autoLoad: options.autoLoad,
-            navigation: options.navigation,
-            requestVersion: options.autoLoad && options.target ? 1 : 0,
-          },
-        ],
+        instances: blank
+          ? state.instances.map((tab) => (tab.id === id ? pane : tab))
+          : [...state.instances, pane],
       });
       return id;
     },

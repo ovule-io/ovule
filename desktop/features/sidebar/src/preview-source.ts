@@ -9,9 +9,13 @@ export function previewSourceAddress(value: string): string {
       );
     const legacy =
       url.hostname === "-" &&
-      ["/local-code", "/local-office", "/local-markdown", "/local-unsupported"].includes(
-        url.pathname,
-      );
+      [
+        "/local-image",
+        "/local-code",
+        "/local-office",
+        "/local-markdown",
+        "/local-unsupported",
+      ].includes(url.pathname);
     if (url.protocol !== "ovule:" || (!grant && !legacy)) return value;
     const source = url.searchParams.get("url");
     if (!source) return value;

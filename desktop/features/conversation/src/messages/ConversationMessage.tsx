@@ -100,7 +100,13 @@ export function ConversationMessage({
               <pre>{notice}</pre>
             </details>
           ) : null}
-          {(createdAt !== undefined || onTelemetry || error || actions || onFork || onRestart) && (
+          {(createdAt !== undefined ||
+            onTelemetry ||
+            error ||
+            actions ||
+            onFork ||
+            onRestart ||
+            prompt) && (
             <MessageFooter className={styles.messageMeta}>
               {error && (
                 <span role="alert" className={styles.messageError}>
@@ -118,8 +124,9 @@ export function ConversationMessage({
               {!editing && (
                 <>
                   {actions}
-                  {(onFork || (from === "user" && onRestart)) && (
+                  {(prompt?.trim() || onFork || (from === "user" && onRestart)) && (
                     <MessageActions
+                      text={prompt}
                       onFork={onFork}
                       onEdit={
                         from === "user" && onRestart

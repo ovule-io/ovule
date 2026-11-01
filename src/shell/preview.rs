@@ -117,10 +117,12 @@ fn preview_kind(path: &std::path::Path) -> &'static str {
         "doc" | "docx" | "dotx" | "xlsx" | "xlsm" | "csv" | "pptx" | "pptm" | "ppsx" => "office",
         "md" | "markdown" | "mdown" => "markdown",
         "pdf" => "pdf",
+        "svg" => "image",
+        "html" | "htm" => "html",
         "js" | "mjs" | "cjs" | "jsx" | "ts" | "mts" | "cts" | "tsx" | "py" | "rs" | "go" | "c"
         | "h" | "cc" | "cpp" | "hpp" | "cs" | "java" | "kt" | "swift" | "rb" | "php" | "sh"
         | "bash" | "zsh" | "fish" | "ps1" | "json" | "jsonc" | "yaml" | "yml" | "toml" | "ini"
-        | "css" | "scss" | "less" | "sql" | "xml" | "svg" | "vue" | "svelte" | "diff" | "patch"
+        | "css" | "scss" | "less" | "sql" | "xml" | "vue" | "svelte" | "diff" | "patch"
         | "cmake" => "code",
         _ if name == "dockerfile" || name == "makefile" => "code",
         _ => "unsupported",
@@ -176,7 +178,7 @@ impl crate::shell_api::Preview for Profile {
         if let PreviewSource::Html(html) = &grant.source {
             return Ok(html.to_string());
         }
-        if !matches!(grant.kind.as_str(), "code" | "markdown") {
+        if !matches!(grant.kind.as_str(), "code" | "markdown" | "image" | "html") {
             return Err(CommandError::Failed("Local preview access denied".into()));
         }
         validate_path(&grant)?;
@@ -184,7 +186,7 @@ impl crate::shell_api::Preview for Profile {
     }
     fn read_file(&self, id: String) -> Result<PreviewFile, CommandError> {
         let grant = self.preview_grants.get(&id)?;
-        if !matches!(grant.kind.as_str(), "office" | "pdf") {
+        if !matches!(grant.kind.as_str(), "office" | "pdf" | "image") {
             return Err(CommandError::Failed("Local preview access denied".into()));
         }
         validate_path(&grant)?;
@@ -474,6 +476,7 @@ mod tests {
             ("a.xlsx", "office"),
             ("a.pptx", "office"),
             ("a.YAML", "code"),
+            ("a.SVG", "image"),
             ("a.md", "markdown"),
             ("a.zip", "unsupported"),
         ] {

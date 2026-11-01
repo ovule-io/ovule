@@ -2564,3 +2564,31 @@ fn cancelling_before_output_uses_a_stage_neutral_notice_without_a_large_error_re
         Some("Generation stopped")
     );
 }
+
+#[test]
+fn assistant_image_reference_survives_completion_and_has_attachment_metadata() {
+    let mut workspace = fixture();
+    let thread_id = workspace.conversation.threads[0].id.clone();
+    let spec = workspace
+        .prepare_message_attempt(&thread_id, "Screenshot")
+        .unwrap();
+    let url = format!("ovule-attachment:///{}.png", "a".repeat(64));
+    let block = serde_json::json!({"url":url,"mediaType":"image/png","sizeBytes":1234,"name":"Screenshot.png"}).to_string();
+    workspace
+        .upsert_attempt_message_block(&spec.id, "screenshot", "image", block)
+        .unwrap();
+    workspace
+        .finish_attempt(&spec.id, "succeeded", "Done".into())
+        .unwrap();
+    let snapshot = workspace.snapshot();
+    let part = snapshot
+        .messages
+        .iter()
+        .flat_map(|message| &message.parts)
+        .find(|part| part.kind == "image")
+        .unwrap();
+    assert_eq!(part.url.as_deref(), Some(url.as_str()));
+    assert_eq!(part.media_type.as_deref(), Some("image/png"));
+    assert_eq!(part.name.as_deref(), Some("Screenshot.png"));
+    assert_eq!(part.size_bytes, Some(1234));
+}

@@ -17,7 +17,7 @@ use agent_client_protocol::schema::v1::{
     NewSessionRequest, NewSessionResponse, PermissionOptionKind, PromptRequest, PromptResponse,
     ReadTextFileRequest, ReadTextFileResponse, RequestPermissionOutcome, RequestPermissionRequest,
     RequestPermissionResponse, SelectedPermissionOutcome, SessionNotification, SessionUpdate,
-    StopReason, TextContent, WriteTextFileRequest, WriteTextFileResponse,
+    StopReason, TextContent, ToolCallContent, WriteTextFileRequest, WriteTextFileResponse,
 };
 use agent_client_protocol::{
     Agent, Channel, Client, ConnectTo, ConnectionTo, on_receive_notification, on_receive_request,
@@ -536,6 +536,27 @@ where
                             (notify_for_notifications)(WorkerEvent::MessageBlock { attempt_id: attempt_id_for_notifications.clone(), block_id, kind: "tool".into(), data_json });
                         }
                     }
+                    let images = match &notification.update {
+                        SessionUpdate::AgentMessageChunk(chunk) => vec![(&chunk.content, format!("message-image-{:032x}", rand::random::<u128>()))],
+                        SessionUpdate::ToolCall(call) => call.content.iter().enumerate().filter_map(|(index, item)| match item {
+                            ToolCallContent::Content(content) => Some((&content.content, acp_image_block_id(&call.tool_call_id.to_string(), index))),
+                            _ => None,
+                        }).collect(),
+                        SessionUpdate::ToolCallUpdate(call) => call.fields.content.iter().flatten().enumerate().filter_map(|(index, item)| match item {
+                            ToolCallContent::Content(content) => Some((&content.content, acp_image_block_id(&call.tool_call_id.to_string(), index))),
+                            _ => None,
+                        }).collect(),
+                        _ => Vec::new(),
+                    };
+                    for (content, block_id) in images {
+                        if let ContentBlock::Image(image) = content {
+                            if image.data.len() > 16 * 1024 * 1024 { continue; }
+                            (notify_for_notifications)(WorkerEvent::MessageBlock {
+                                attempt_id: attempt_id_for_notifications.clone(), block_id, kind: "image".into(),
+                                data_json: serde_json::json!({"data":image.data,"mediaType":image.mime_type,"name":"Image"}).to_string(),
+                            });
+                        }
+                    }
                     let delta = extract_text_delta(&notification.update);
                     if delta.is_empty() {
                         return Ok(());
@@ -848,6 +869,13 @@ fn strip_root(path: &str, root: &str) -> Option<String> {
                 .is_some_and(|suffix| suffix.starts_with('/'))
     };
     matches.then(|| path[root.len()..].trim_start_matches('/').to_owned())
+}
+
+fn acp_image_block_id(call_id: &str, index: usize) -> String {
+    use std::hash::{Hash as _, Hasher as _};
+    let mut hash = std::collections::hash_map::DefaultHasher::new();
+    call_id.hash(&mut hash);
+    format!("acp-image-{:016x}-{index}", hash.finish())
 }
 
 fn extract_text_delta(update: &SessionUpdate) -> String {

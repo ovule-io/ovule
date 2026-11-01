@@ -44,6 +44,7 @@ function TerminalPanelContent({
     threadId?: string;
     workspacePath?: string;
     workspaceBindingId?: string;
+    shellProfileId?: string;
     useThreadWorkspace: boolean;
     runs: TerminalRunView[];
     invoke(operation: WorkspaceOperation): Promise<boolean>;
@@ -513,6 +514,7 @@ export const TerminalPanelFactory = create((dependsOn) => {
     threadId?: string;
     workspacePath?: string;
     workspaceBindingId?: string;
+    shellProfileId?: string;
     useThreadWorkspace: boolean;
     runs: TerminalRunView[];
     invoke(operation: WorkspaceOperation): Promise<boolean>;
@@ -522,6 +524,7 @@ export const TerminalPanelFactory = create((dependsOn) => {
         workspace,
         owner: props.instanceId,
         directory: props.workspacePath,
+        initialProfile: props.shellProfileId,
       });
     }
     return createElement(TerminalPanelContent, { dependencies, props });

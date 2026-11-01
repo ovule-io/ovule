@@ -1,3 +1,6 @@
+import { PtyPanel } from "../features/terminal/src/PtyPanel";
+import { PaneToolbarActions } from "../features/panes/src/toolbar/PaneToolbarActions";
+import "@xterm/xterm/css/xterm.css";
 import settingsTokens from "@ovule/settings/settings.token";
 import { SearchEngineSettings } from "../features/settings/src/preferences/SearchEngineSettings";
 import { defaultShellService } from "../features/shell/src/service";
@@ -7,7 +10,9 @@ import { ScopeProvider } from "@ovule/ioc-container/react";
 import { useService, useServiceState } from "@ovule/ioc/react";
 import { I18nextProvider } from "react-i18next";
 import { createInstance } from "i18next";
-import { useEffect } from "react";
+import { TitleBar } from "../features/framework/src/titlebar/TitleBar";
+import { PreferencesSection } from "../features/settings/src/preferences/PreferencesSection";
+import { useEffect, useState } from "react";
 import { registerDesktopServices } from "../src/app/services";
 import { registerMainServices } from "../src/app/main/services";
 import { handleRootRequest } from "../features/conversation/src/ThreadSurface";
@@ -28,6 +33,14 @@ const boundary = query.has("boundary");
 const control = {
   path: undefined as string | undefined,
   dialogs: 0,
+  ptyOps: [] as string[],
+  ptyState: {} as Record<string, string>,
+  permissionChecks: 0,
+  permissionDelay: 0,
+  accessibilityGranted: false,
+  inputGranted: false,
+  requestedPermission: "",
+  revealedApp: "",
   suggestionDelay: 0,
   preferences: undefined as any,
   lastLoaded: "",
@@ -90,8 +103,26 @@ document.createElement = ((name: string, options?: ElementCreationOptions) => {
   }
   return element;
 }) as typeof document.createElement;
+const downloadState = {
+  items: [],
+  directory: "/Users/test/Downloads/a-long-download-folder/complete-path",
+};
 const shell = {
-  requestRoot: (channel: string, payload: unknown) => control.request(channel, payload),
+  macOS: true,
+  window: async () => ({ current: async () => ({ maximized: false, fullscreen: false }) }),
+  revealLocalFile: async (url: string) => {
+    control.revealedApp = url;
+    return true;
+  },
+  downloads: { current: () => downloadState, subscribe: () => () => {}, refresh: async () => {} },
+  requestRoot: async (channel: string, payload: any) => {
+    if (channel === "tab.metadata" && payload.tabId === "pty-test") {
+      control.ptyState = payload.toolbarState;
+      window.dispatchEvent(new Event("fixture:pty-metadata"));
+      return {};
+    }
+    return control.request(channel, payload);
+  },
   dialog: async () => ({
     openFile: async () => {
       control.dialogs++;
@@ -106,8 +137,60 @@ const shell = {
   surfaceUrl: (_route: string, values: Record<string, string>) =>
     `${location.origin}/?guest=1&tab=${values.tab}`,
 } as never;
+const permissionStatus = () => ({
+  appVersion: "0.1.0",
+  managed: true,
+  bundleId: "test",
+  expectedBundleId: "test",
+  screenRecording: false,
+  screenCaptureVerified: true,
+  accessibility: control.accessibilityGranted,
+  inputMonitoring: control.inputGranted,
+  bundlePath: "/Applications/Ovule.app",
+  executablePath: "/Applications/Ovule.app/Contents/MacOS/ovule",
+  signingIdentity: "Signature=adhoc",
+  otherBundlePaths: ["/Users/test/Desktop/Ovule.app"],
+});
 const workspace = {
   api: async () => ({
+    listSessions: async () => "[]",
+    openSession: async (owner: string, profile: string) => {
+      control.ptyOps.push(`open:${profile}`);
+      return JSON.stringify({
+        id: `session-${control.ptyOps.length}`,
+        owner,
+        profileId: profile,
+        directory: "",
+      });
+    },
+    closeSession: async (id: string) => {
+      control.ptyOps.push(`close:${id}`);
+      return true;
+    },
+    readSession: async () =>
+      JSON.stringify({
+        data: [...new TextEncoder().encode("ready\r\n")],
+        cursor: 7,
+        eof: true,
+        truncated: false,
+      }),
+    resizeSession: async () => true,
+    writeSession: async () => true,
+    shellProfiles: async () =>
+      JSON.stringify([
+        { id: "bash", name: "Bash" },
+        { id: "zsh", name: "Zsh" },
+      ]),
+    desktopPermissions: async () => {
+      control.permissionChecks++;
+      await new Promise((resolve) => setTimeout(resolve, control.permissionDelay));
+      return permissionStatus();
+    },
+    requestDesktopPermission: async (permission: string) => {
+      control.requestedPermission = permission;
+      if (permission === "inputMonitoring") control.inputGranted = true;
+      return permissionStatus();
+    },
     browserSuggestions: async (_threadId: string, query: string) => {
       await new Promise((resolve) => setTimeout(resolve, control.suggestionDelay));
       return [
@@ -193,10 +276,71 @@ function Fixture() {
     </main>
   );
 }
+function PtyFixture() {
+  const [state, setState] = useState<Record<string, string>>(control.ptyState);
+  useEffect(() => {
+    const receive = () => setState(control.ptyState);
+    window.addEventListener("fixture:pty-metadata", receive);
+    return () => window.removeEventListener("fixture:pty-metadata", receive);
+  }, []);
+  const command = (action: string) =>
+    window.dispatchEvent(
+      new CustomEvent("ovule:pane-command", { detail: { action, tabId: "pty-test" } }),
+    );
+  return (
+    <div style={{ height: 600, display: "grid", gridTemplateRows: "48px minmax(0,1fr)" }}>
+      <header
+        data-pty-toolbar
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 12,
+          borderBottom: "1px solid #ddd",
+          padding: 8,
+        }}
+      >
+        <span>Terminal 1</span>
+        <PaneToolbarActions
+          tab={{
+            id: "pty-test",
+            kind: "terminal",
+            title: "Terminal 1",
+            requestVersion: 0,
+            toolbarState: state,
+          }}
+          command={command}
+          startSearch={() => command("search:ready")}
+        />
+      </header>
+      <PtyPanel workspace={workspace} owner="pty-test" initialProfile="zsh" />
+    </div>
+  );
+}
 createRoot(document.getElementById("root")!).render(
   <I18nextProvider i18n={i18n}>
     <ScopeProvider registry={registry}>
-      {query.has("settings") ? <SearchEngineSettings /> : <Fixture />}
+      {query.has("pty") ? (
+        <PtyFixture />
+      ) : query.has("titlebar") ? (
+        <TitleBar
+          title="Ovule"
+          workbenchOpen={query.has("workbench")}
+          settingsOpen={query.has("settings")}
+          onboardingOpen={query.has("onboarding")}
+          onBackToChat={() => {}}
+          onToggleWorkbench={() => {}}
+          onOpenSettings={() => {}}
+          onOpenOnboarding={() => {}}
+        />
+      ) : query.has("general") ? (
+        <div style={{ padding: 24, height: 650, overflow: "auto" }}>
+          <PreferencesSection />
+        </div>
+      ) : query.has("settings") ? (
+        <SearchEngineSettings />
+      ) : (
+        <Fixture />
+      )}
     </ScopeProvider>
   </I18nextProvider>,
 );

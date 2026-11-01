@@ -74,6 +74,7 @@ export function PaneApp() {
       id={id}
       target={target}
       workspaceBindingId={workspaceBindingId}
+      shellProfileId={query.get("shellProfile") ?? undefined}
       useThreadWorkspace={useThreadWorkspace}
       requestVersion={requestVersion}
       thread={vm.thread}

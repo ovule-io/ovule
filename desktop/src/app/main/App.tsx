@@ -89,6 +89,7 @@ export function App() {
                 overlays.close("remoteWorkspaces");
                 overlays.closeExplorer();
                 layout.closeWorkbench();
+                panes.selectThreadArtifact(thread?.id ?? panes.current().draftConversationId);
               }}
               onToggleWorkbench={() =>
                 workbenchOpen ? layout.closeWorkbench() : layout.openWorkbench()

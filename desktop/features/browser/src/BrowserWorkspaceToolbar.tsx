@@ -5,7 +5,16 @@ import type { WorkspaceToolbarContext } from "@ovule/panes/pane";
 import { Button } from "@ovule/ui/button";
 import { FeedbackButton } from "@ovule/ui/FeedbackButton";
 import { FileBreadcrumbs } from "./FileBreadcrumbs";
-import { ArrowLeft, ArrowRight, Link, RotateCw, Pencil } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  Link,
+  RotateCw,
+  Pencil,
+  LoaderCircle,
+  FolderSearch,
+  Eye,
+} from "lucide-react";
 import { useTranslation } from "react-i18next";
 import styles from "./BrowserWorkspaceToolbar.module.css";
 
@@ -19,8 +28,15 @@ export function browserAddressHost(address: string): string {
 }
 
 export function BrowserWorkspaceToolbar(props: WorkspaceToolbarContext) {
-  const { listLocalDirectory } = useService(shellTokens.shell);
-  return <BrowserWorkspaceToolbarContent {...props} loadDirectory={listLocalDirectory} />;
+  const { listLocalDirectory, revealLocalFile, macOS } = useService(shellTokens.shell);
+  return (
+    <BrowserWorkspaceToolbarContent
+      {...props}
+      loadDirectory={listLocalDirectory}
+      revealFile={revealLocalFile}
+      macOS={macOS}
+    />
+  );
 }
 
 export function BrowserWorkspaceToolbarContent({
@@ -32,7 +48,13 @@ export function BrowserWorkspaceToolbarContent({
   addressEditor,
   downloads,
   loadDirectory,
-}: WorkspaceToolbarContext & { loadDirectory?: DirectoryLoader }) {
+  revealFile,
+  macOS,
+}: WorkspaceToolbarContext & {
+  loadDirectory?: DirectoryLoader;
+  revealFile?(url: string): Promise<boolean>;
+  macOS?: boolean;
+}) {
   const { t } = useTranslation();
   const address = tab.url ?? tab.target ?? "";
   return (
@@ -51,7 +73,11 @@ export function BrowserWorkspaceToolbarContent({
                 disabled={!address}
                 action={copyAddress}
               >
-                <Link />
+                {tab.toolbarState?.loading === "true" ? (
+                  <LoaderCircle className="animate-spin" />
+                ) : (
+                  <Link />
+                )}
               </FeedbackButton>
               {address.startsWith("file://") ? (
                 <>
@@ -60,6 +86,40 @@ export function BrowserWorkspaceToolbarContent({
                     loadDirectory={loadDirectory}
                     onNavigate={(url) => command(`browser.navigate:${url}`)}
                   />
+                  {/\.(?:md|markdown|mdown|html?|svg)(?:[?#].*)?$/i.test(address) && (
+                    <Button
+                      className={styles.action}
+                      size="sm"
+                      aria-label={t(
+                        tab.toolbarState?.source === "true"
+                          ? "browser.showPreview"
+                          : "browser.showSource",
+                      )}
+                      title={t(
+                        tab.toolbarState?.source === "true"
+                          ? "browser.showPreview"
+                          : "browser.showSource",
+                      )}
+                      aria-pressed={tab.toolbarState?.source !== "true"}
+                      onClick={() => command("browser.toggleSource")}
+                    >
+                      <Eye />
+                    </Button>
+                  )}
+                  {revealFile && (
+                    <FeedbackButton
+                      className={styles.action}
+                      size="sm"
+                      label={t(macOS ? "browser.revealInFinder" : "browser.revealInExplorer")}
+                      successLabel={t("common.done")}
+                      action={async () => {
+                        if (!(await revealFile(address)))
+                          throw new Error(t("browser.revealFailed"));
+                      }}
+                    >
+                      <FolderSearch />
+                    </FeedbackButton>
+                  )}
                   <Button
                     className={styles.action}
                     size="sm"

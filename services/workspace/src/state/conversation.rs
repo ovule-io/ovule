@@ -837,7 +837,9 @@ impl Workspace {
             .find(|message| message.id == response_message_id)
             .ok_or_else(|| format!("Attempt response Message is missing: {response_message_id}"))?;
         let part_id = format!("{response_message_id}-extension-{block_id}");
-        let part = MessagePart {
+        let image = (kind == "image")
+            .then(|| serde_json::from_str::<serde_json::Value>(&data_json).unwrap_or_default());
+        let mut part = MessagePart {
             id: part_id.clone(),
             kind: kind.to_owned(),
             text: None,
@@ -847,6 +849,21 @@ impl Workspace {
             size_bytes: i64::try_from(data_json.len()).ok(),
             data_json: Some(data_json),
         };
+        if let Some(image) = image {
+            part.url = image
+                .get("url")
+                .and_then(serde_json::Value::as_str)
+                .map(str::to_owned);
+            part.name = image
+                .get("name")
+                .and_then(serde_json::Value::as_str)
+                .map(str::to_owned);
+            part.media_type = image
+                .get("mediaType")
+                .and_then(serde_json::Value::as_str)
+                .map(str::to_owned);
+            part.size_bytes = image.get("sizeBytes").and_then(serde_json::Value::as_i64);
+        }
         if let Some(existing) = message.parts.iter_mut().find(|part| part.id == part_id) {
             *existing = part;
         } else {

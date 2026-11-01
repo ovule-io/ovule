@@ -91,3 +91,49 @@ test("file breadcrumbs preserve root, remote hosts, unicode and encoded path sep
   expect(fileBreadcrumbs("https://example.com")).toEqual([]);
   expect(fileBreadcrumbs("file:///tmp/%ZZ")).toEqual([]);
 });
+
+test("file toolbar offers the platform reveal action", () => {
+  for (const macOS of [true, false]) {
+    const html = renderToStaticMarkup(
+      <BrowserWorkspaceToolbar
+        {...context}
+        tab={{ ...context.tab, url: "file:///tmp/logo.svg" }}
+        macOS={macOS}
+        revealFile={async () => true}
+      />,
+    );
+    expect(html).toContain(macOS ? "browser.revealInFinder" : "browser.revealInExplorer");
+  }
+});
+
+test("pending navigation exposes a spinner beside the submitted address", () => {
+  const html = renderToStaticMarkup(
+    <BrowserWorkspaceToolbar
+      {...context}
+      tab={{
+        ...context.tab,
+        title: "New tab",
+        url: "https://www.bing.com/search?q=slow",
+        toolbarState: { loading: "true" },
+      }}
+    />,
+  );
+  expect(html).toContain("www.bing.com");
+  expect(html).toContain("animate-spin");
+  expect(html).not.toContain(">New tab<");
+});
+
+test("Markdown, HTML and SVG breadcrumbs expose the preview/source toggle", () => {
+  for (const extension of ["md", "html", "svg"]) {
+    for (const source of ["true", "false"]) {
+      const html = renderToStaticMarkup(
+        <BrowserWorkspaceToolbar
+          {...context}
+          tab={{ ...context.tab, url: `file:///tmp/demo.${extension}`, toolbarState: { source } }}
+        />,
+      );
+      expect(html).toContain(source === "true" ? "browser.showPreview" : "browser.showSource");
+      expect(html).toContain(`aria-pressed="${source === "false"}"`);
+    }
+  }
+});

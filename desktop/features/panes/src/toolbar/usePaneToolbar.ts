@@ -71,7 +71,7 @@ function usePaneToolbarImpl(dependencies: UsePaneToolbarDependencies, active?: P
         url: undefined,
         title:
           active.kind === "browser"
-            ? active.title
+            ? value.trim()
             : value.trim().split(/[\\/]/).at(-1) || active.title,
         requestVersion: active.requestVersion + 1,
       });

@@ -108,6 +108,7 @@
   justify-content: flex-end;
 }
 .timeline {
+  position: relative;
   min-width: 0;
   min-height: 0;
   overflow-x: hidden;
@@ -445,4 +446,45 @@ p.statusNotice,
 .promptEditor textarea:focus-visible {
   outline: none;
   box-shadow: none;
+}
+
+.turnContext {
+  position: absolute;
+  z-index: 5;
+  top: 0;
+  left: var(--thread-content-gutter, 24px);
+  right: var(--thread-content-gutter, 24px);
+  display: flex;
+  gap: 12px;
+  padding: 6px 0;
+  background: var(--background);
+}
+.turnContext button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  padding: 6px 8px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--muted-foreground);
+  font: inherit;
+  cursor: pointer;
+}
+.turnContext button:first-child {
+  max-width: min(100%, 640px);
+  text-align: left;
+}
+.turnContext button:hover {
+  background: var(--surface-2);
+  color: var(--foreground);
+}
+.turnContext span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.turnContext svg {
+  flex: none;
 }

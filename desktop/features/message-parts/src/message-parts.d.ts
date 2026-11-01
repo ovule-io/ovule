@@ -21,3 +21,11 @@ export type MessagePartsRuntime = {
   ): Promise<void>;
   registerDefaults(registry: MessagePresentationRegistry): void;
 };
+
+export type AttachmentPreviewRequest = {
+  kind: "image-preview";
+  url: string;
+  name?: string;
+  mediaType?: string;
+  sizeBytes?: string;
+};

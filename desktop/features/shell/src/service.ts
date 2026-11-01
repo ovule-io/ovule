@@ -26,6 +26,7 @@ import {
   listLocalDirectory,
   readLocalText,
   readLocalFile,
+  revealLocalFile,
 } from "./local-files";
 
 import { loadExplorer } from "./preview-loader";
@@ -40,6 +41,7 @@ export const defaultShellService: ShellService = {
   listLocalDirectory,
   readLocalText,
   readLocalFile,
+  revealLocalFile,
   downloads: downloadHistory,
   installExplorerResources,
   installBrowserControl,

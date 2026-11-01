@@ -1,6 +1,6 @@
 import { FeedbackButton } from "@ovule/ui/FeedbackButton";
 import { ButtonGroup } from "@ovule/ui/controls";
-import { FolderOpen, Save, Search, Trash2 } from "lucide-react";
+import { FolderOpen, Save, Search, Trash2, RotateCw, Square } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import type { PaneInstance } from "@ovule/panes/tab";
@@ -47,6 +47,35 @@ export function PaneToolbarActions({
       className={cn("pane-toolbar-actions", styles.paneToolbarActions)}
       data-kind={tab.kind}
     >
+      {tab.kind === "terminal" && tab.toolbarState?.terminalMode === "pty" && (
+        <>
+          <span className={styles.terminalProfileName}>
+            {tab.toolbarState.shellName || t("terminal.shellClosed")}
+          </span>
+          <FeedbackButton
+            label={t("terminal.restartShell")}
+            variant="ghost"
+            size="sm"
+            className={styles.titlebarButton}
+            disabled={tab.toolbarState.shellBusy === "true"}
+            action={() => command("terminal.restart")}
+          >
+            <RotateCw className={styles.titlebarIcon} />
+          </FeedbackButton>
+          <FeedbackButton
+            label={t("terminal.closeShell")}
+            variant="ghost"
+            size="sm"
+            className={styles.titlebarButton}
+            disabled={
+              tab.toolbarState.shellBusy === "true" || tab.toolbarState.shellOpen !== "true"
+            }
+            action={() => command("terminal.close")}
+          >
+            <Square className={styles.titlebarIcon} />
+          </FeedbackButton>
+        </>
+      )}
       {(paneActions[tab.kind] ?? [])
         .filter((action) => !action.requiresTarget || tab.target)
         .map(({ label, icon: Icon, command: action }) => (

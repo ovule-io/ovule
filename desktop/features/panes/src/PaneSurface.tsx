@@ -53,6 +53,7 @@ function PaneSurfaceContent({
   const { workbench, overlays } = dependencies;
   const { tab, active, style } = props;
   const pendingAddress = useRef<string | undefined>(undefined);
+  const pendingPreviewMode = useRef<boolean | undefined>(undefined);
 
   useTranslation();
   const [initialized, setInitialized] = useState(active && Boolean(style));
@@ -131,6 +132,7 @@ function PaneSurfaceContent({
           tab: tab.id,
           thread: tab.threadId ?? "",
           workspaceBinding: tab.workspaceBindingId,
+          shellProfile: tab.shellProfileId,
           useThreadWorkspace: tab.useThreadWorkspace ? "true" : undefined,
           target: tab.target,
           theme: document.documentElement.dataset.theme,
@@ -186,6 +188,11 @@ function PaneSurfaceContent({
               workbench.current().instances.find((entry) => entry.id === tab.id)?.requestVersion
           )
             return;
+          const rendered = new URL(state.url);
+          const source = rendered.searchParams.get("mode") === "source";
+          if (pendingPreviewMode.current !== undefined && source !== pendingPreviewMode.current)
+            return;
+          pendingPreviewMode.current = undefined;
           const address = localExplorerAddress(state.url);
           if (pendingAddress.current && address !== pendingAddress.current) return;
           if (address !== "about:blank") {
@@ -196,6 +203,10 @@ function PaneSurfaceContent({
             url: localExplorerAddress(state.url),
             canGoBack: state.canGoBack,
             canGoForward: state.canGoForward,
+            toolbarState: {
+              ...latest.current.toolbarState,
+              source: String(source),
+            },
           });
         })
         .catch(console.error);
@@ -297,6 +308,7 @@ function PaneSurfaceContent({
       if (detail?.tabId === tab.id && detail.action) {
         if (directBrowser) {
           if (detail.action.startsWith("browser.navigate:")) {
+            pendingPreviewMode.current = undefined;
             workbench.updateTab(tab.id, {
               target: detail.action.slice("browser.navigate:".length),
               url: undefined,
@@ -304,8 +316,22 @@ function PaneSurfaceContent({
             });
             return;
           }
-          if (detail.action === "browser.back" || detail.action === "browser.forward")
+          if (detail.action === "browser.toggleSource") {
+            const address = localExplorerAddress(latest.current.url ?? latest.current.target ?? "");
+            if (!/^file:.*\.(?:md|markdown|mdown|html?|svg)(?:[?#].*)?$/i.test(address)) return;
+            const source = element.dataset.previewMode !== "source";
+            pendingPreviewMode.current = source;
+            element.dataset.previewMode = source ? "source" : "preview";
+            workbench.updateTab(tab.id, {
+              toolbarState: { ...latest.current.toolbarState, source: String(source) },
+            });
+            loadExplorer(element, address);
+            return;
+          }
+          if (detail.action === "browser.back" || detail.action === "browser.forward") {
             pendingAddress.current = undefined;
+            pendingPreviewMode.current = undefined;
+          }
           const operation =
             detail.action === "browser.back"
               ? element.back?.()
@@ -376,7 +402,16 @@ function PaneSurfaceContent({
       element.remove();
       explorer.current = null;
     };
-  }, [directBrowser, initialized, tab.id, workbench, overlays, agent, installAgentBrowserControls]);
+  }, [
+    directBrowser,
+    initialized,
+    tab.id,
+    tab.kind,
+    workbench,
+    overlays,
+    agent,
+    installAgentBrowserControls,
+  ]);
   useEffect(() => {
     if (directBrowser) return;
     void explorer.current?.postMessage?.({
@@ -396,6 +431,8 @@ function PaneSurfaceContent({
     if (directBrowser && typeof element.load === "function") {
       const address = localExplorerAddress(tab.target);
       pendingAddress.current = address.startsWith("file:") ? address : undefined;
+      pendingPreviewMode.current = undefined;
+      element.dataset.previewMode = "preview";
       loadExplorer(element, browserAddress(tab.target));
     } else {
       void element.postMessage?.({ type: "tab.navigate", target: tab.target });

@@ -435,6 +435,13 @@ struct HostView {
 };
 
 struct DesktopPermissions {
+  string appVersion;
+  string? bundlePath;
+  string? executablePath;
+  string? signingIdentity;
+  array<string> otherBundlePaths;
+  bool screenCaptureVerified;
+  bool inputMonitoring;
   bool managed;
   bool screenRecording;
   bool accessibility;
@@ -680,6 +687,7 @@ interface Browser {
   CreateFilePreview@10(string url) => (PreviewInfo result);
   RevokePreview@11(string id) => (bool result);
   CreateHtmlPreview@12(string threadId, string path) => (PreviewInfo result);
+  RevealLocalFile@13(string url) => (bool result);
 };
 
 struct LocalFileEntry {

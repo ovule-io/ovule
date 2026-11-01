@@ -1,3 +1,4 @@
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@ovule/ui/select";
 import { openLocalFile } from "./open-local-file";
 import conversationTokens from "@ovule/conversation/conversation.token";
 import workspaceTokens from "@ovule/workspace/workspace.token";
@@ -7,7 +8,7 @@ import remotingTokens from "@ovule/remoting/remoting.token";
 import { projectServices } from "@ovule/ioc/observable";
 import { create } from "@ovule/ioc";
 import { useService, useObservableState } from "@ovule/ioc/react";
-import { useEffect, useState, type ReactElement } from "react";
+import { useEffect, useRef, useState, type ReactElement } from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "@ovule/ui/button";
 import {
@@ -28,16 +29,43 @@ export function NewTabActions({ model }: { model: ToolbarModel }) {
   const { encodeLinkRemoteControlSession, encodeSpiceSession } = useService(
     remotingTokens.sessionLinks,
   );
+  const workspace = useService(workspaceTokens.workspace);
+  const [shellProfiles, setShellProfiles] = useState<{ id: string; name: string }[]>([]);
+  const [shellProfile, setShellProfile] = useState("");
+  const [profileError, setProfileError] = useState("");
   const { dialog } = useService(shellTokens.shell);
   const stateView = useService(StateProjectionFactory);
   const snapshot = useObservableState(stateView, (state) => state.snapshot);
   const { t } = useTranslation();
+  const sourceTab = useRef<string | undefined>(undefined);
   const [terminalDialogOpen, setTerminalDialogOpen] = useState(false);
   const [remoteHostDialogOpen, setRemoteHostDialogOpen] = useState(false);
   const thread = snapshot?.threads.find((item) => item.id === threadId);
   const workspaceBindings = (thread?.workspaceBindingIds ?? [])
     .map((id) => snapshot?.bindings.find((binding) => binding.id === id))
     .filter((binding) => binding !== undefined);
+  useEffect(() => {
+    if (!terminalDialogOpen) return;
+    let active = true;
+    setProfileError("");
+    void workspace
+      .api()
+      .then((api) => api.shellProfiles())
+      .then((json) => {
+        if (!active) return;
+        const profiles = JSON.parse(json) as { id: string; name: string }[];
+        setShellProfiles(profiles);
+        setShellProfile((previous) =>
+          profiles.some((p) => p.id === previous) ? previous : (profiles[0]?.id ?? ""),
+        );
+      })
+      .catch((error) => {
+        if (active) setProfileError(String(error));
+      });
+    return () => {
+      active = false;
+    };
+  }, [terminalDialogOpen, workspace]);
   const openTerminal = (location: string) => {
     const workspaceBindingId = location.startsWith("binding:")
       ? location.slice("binding:".length)
@@ -49,6 +77,8 @@ export function NewTabActions({ model }: { model: ToolbarModel }) {
       placement,
       workspaceBindingId,
       useThreadWorkspace: location === "thread",
+      replaceBlankId: sourceTab.current,
+      shellProfileId: workspaceBindingId ? undefined : shellProfile || undefined,
     });
     setTerminalDialogOpen(false);
   };
@@ -64,11 +94,12 @@ export function NewTabActions({ model }: { model: ToolbarModel }) {
           websocketUrl: endpoint.spiceWebsocketUrl ?? "",
         });
     const existing = tabs.find((tab) => tab.kind === "spice" && tab.target === target);
-    if (existing) workbenchService.selectTab(existing.id);
+    if (existing && !sourceTab.current) workbenchService.selectTab(existing.id);
     else
       workbenchService.openTab("spice", {
         target,
         autoLoad: true,
+        replaceBlankId: sourceTab.current,
         threadId,
         draftId,
         newInstance: true,
@@ -87,6 +118,7 @@ export function NewTabActions({ model }: { model: ToolbarModel }) {
         }>
       ).detail;
       if (detail?.tabId !== active?.id) return;
+      sourceTab.current = detail.tabId;
       const handlers: Record<string, () => Promise<{ opened: boolean }> | { opened: boolean }> = {
         terminal: () => {
           setTerminalDialogOpen(true);
@@ -97,7 +129,13 @@ export function NewTabActions({ model }: { model: ToolbarModel }) {
           return { opened: true };
         },
         workflow: () => {
-          workbenchService.openTab("workflow", { threadId, draftId, placement, newInstance: true });
+          workbenchService.openTab("workflow", {
+            threadId,
+            draftId,
+            placement,
+            newInstance: true,
+            replaceBlankId: detail.tabId,
+          });
           return { opened: true };
         },
         files: () =>
@@ -105,7 +143,7 @@ export function NewTabActions({ model }: { model: ToolbarModel }) {
             dialog,
             panes: workbenchService,
             title: t("harness.localFiles"),
-            options: { threadId, draftId, placement },
+            options: { threadId, draftId, placement, replaceBlankId: detail.tabId },
           }),
       };
       void Promise.resolve()
@@ -128,6 +166,26 @@ export function NewTabActions({ model }: { model: ToolbarModel }) {
             <DialogTitle>{t("terminal.locationTitle")}</DialogTitle>
             <DialogDescription>{t("terminal.locationDescription")}</DialogDescription>
           </DialogHeader>
+          <div className={styles.terminalProfile}>
+            <label id="terminal-profile-label">{t("terminal.shellProfile")}</label>
+            <Select
+              value={shellProfile}
+              onValueChange={setShellProfile}
+              disabled={!shellProfiles.length}
+            >
+              <SelectTrigger aria-labelledby="terminal-profile-label">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {shellProfiles.map((profile) => (
+                  <SelectItem key={profile.id} value={profile.id}>
+                    {profile.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            {profileError && <p role="alert">{profileError}</p>}
+          </div>
           <div
             className={styles.terminalLocationList}
             role="list"

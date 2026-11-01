@@ -147,3 +147,42 @@ test("native history grants survive navigation and are all revoked when the owne
     Object.assign(globalThis, saved);
   }
 });
+
+test("HTML source mode uses a file grant and preview mode restores native rendering", async () => {
+  const saved = { location: globalThis.location, document: globalThis.document };
+  Object.assign(globalThis, {
+    location: new URL("ovule://-/main"),
+    document: { documentElement: { dataset: {}, lang: "en" } },
+  });
+  try {
+    const requests: string[] = [];
+    const loader = createExplorerLoader(async () => ({
+      createFilePreview: async (url) => {
+        requests.push(url);
+        return { id: "a".repeat(48), kind: "html", url };
+      },
+      createHtmlPreview: async () => {
+        throw new Error("Unexpected workspace HTML");
+      },
+      revokePreview: async () => true,
+    }));
+    const element = {
+      src: "",
+      dataset: { previewMode: "source" },
+      isConnected: true,
+      getBoundingClientRect: () => ({ width: 500, height: 400 }),
+      load(source: string) {
+        this.src = source;
+      },
+    } as unknown as ExplorerElement;
+    loader(element, "file:///tmp/demo.html");
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    expect(requests).toEqual(["file:///tmp/demo.html"]);
+    expect(new URL(element.src).searchParams.get("mode")).toBe("source");
+    element.dataset.previewMode = "preview";
+    loader(element, "file:///tmp/demo.html");
+    expect(element.src).toBe("file:///tmp/demo.html");
+  } finally {
+    Object.assign(globalThis, saved);
+  }
+});

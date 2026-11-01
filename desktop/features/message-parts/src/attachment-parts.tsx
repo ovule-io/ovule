@@ -1,3 +1,4 @@
+import { FeedbackButton } from "@ovule/ui/FeedbackButton";
 import conversationTokens from "@ovule/conversation/conversation.token";
 import workspaceTokens from "@ovule/workspace/workspace.token";
 import { create, type ServiceOf } from "@ovule/ioc";
@@ -9,10 +10,12 @@ import {
   AttachmentTitle,
   AttachmentDescription,
   AttachmentTrigger,
+  AttachmentActions,
 } from "@ovule/ui/attachment";
-import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@ovule/ui/dialog";
-import { File, ImageIcon, Link as LinkIcon } from "lucide-react";
-import { createElement, useEffect, useState } from "react";
+import shellTokens from "@ovule/shell/shell.token";
+import { useImageActions, useImageAttachment } from "./image-attachment";
+import { Copy, Download, File, ImageIcon, Link as LinkIcon } from "lucide-react";
+import { createElement, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useService } from "@ovule/ioc/react";
 import type { MessagePartRendererProps } from "@ovule/conversation/messages/message-list";
@@ -20,60 +23,40 @@ import { cn } from "@ovule/ui/cn";
 import styles from "./MessageParts.module.css";
 import { workspaceOfficeTarget } from "./markdown-links";
 import { UnavailablePart } from "./fallback-parts";
-import { safeRemoteUrl, formatBytes, attachmentIdFromUrl } from "./part-assets";
+import { safeRemoteUrl, formatBytes } from "./part-assets";
 
 const ImagePartFactory = create((dependsOn) => {
-  const workspace = dependsOn(workspaceTokens.workspace);
+  const shell = dependsOn(shellTokens.shell);
   return function ImagePart({ part }: MessagePartRendererProps) {
     const { t } = useTranslation();
-    const remoteSource = safeRemoteUrl(part.url);
-    const attachmentId = attachmentIdFromUrl(part.url);
-    const [attachmentSource, setAttachmentSource] = useState<{ id: string; url: string }>();
+    const { source, loading, blob } = useImageAttachment(part);
     const [failedSource, setFailedSource] = useState<string>();
-    const [previewOpen, setPreviewOpen] = useState(false);
-    const [loading, setLoading] = useState(Boolean(attachmentId));
-    useEffect(() => {
-      if (!attachmentId) {
-        setLoading(false);
-        setAttachmentSource(undefined);
-        return;
-      }
-      setLoading(true);
-      let active = true;
-      let objectUrl: string | undefined;
-      void workspace
-        .api()
-        .then((api) => api.readMessageAttachment(attachmentId))
-        .then((bytes) => {
-          if (!active) return;
-          objectUrl = URL.createObjectURL(
-            new Blob([Uint8Array.from(bytes)], {
-              type: part.mediaType ?? "application/octet-stream",
-            }),
-          );
-          setAttachmentSource({ id: attachmentId, url: objectUrl });
-          setLoading(false);
-        })
-        .catch(() => {
-          if (active) {
-            setAttachmentSource(undefined);
-            setLoading(false);
-          }
-        });
-      return () => {
-        active = false;
-        if (objectUrl) URL.revokeObjectURL(objectUrl);
+    const [previewError, setPreviewError] = useState(false);
+    const actions = useImageActions(part, source, blob);
+    const preview = async () => {
+      setPreviewError(false);
+      const request = {
+        kind: "image-preview",
+        url: part.url,
+        name: part.name,
+        mediaType: part.mediaType,
+        sizeBytes: part.sizeBytes?.toString(),
       };
-    }, [attachmentId, part.mediaType, workspace]);
-    const source =
-      remoteSource ?? (attachmentSource?.id === attachmentId ? attachmentSource?.url : undefined);
+      try {
+        if (["thread", "pane"].includes(document.documentElement.dataset.surface ?? ""))
+          await shell.requestRoot("ui.dialog.open", request);
+        else window.dispatchEvent(new CustomEvent("ovule:global-dialog", { detail: request }));
+      } catch {
+        setPreviewError(true);
+      }
+    };
     const available = Boolean(source && failedSource !== source);
     const name = part.name ?? t("messageParts.image");
     const metadata = [part.mediaType?.split("/")[1]?.toUpperCase(), formatBytes(part.sizeBytes)]
       .filter(Boolean)
       .join(" · ");
     return (
-      <Dialog open={previewOpen} onOpenChange={setPreviewOpen}>
+      <>
         <Attachment
           orientation="vertical"
           state={loading ? "processing" : available ? "done" : "error"}
@@ -100,19 +83,43 @@ const ImagePartFactory = create((dependsOn) => {
                   : t("messageParts.imageUnavailable")}
             </AttachmentDescription>
           </AttachmentContent>
+          <AttachmentActions className={styles.imageActions}>
+            <FeedbackButton
+              label={t("messageParts.copyImage")}
+              successLabel={t("messageParts.imageAction.copied")}
+              variant="ghost"
+              size="icon"
+              className={styles.imageAction}
+              disabled={!available || actions.busy}
+              action={actions.copy}
+            >
+              <Copy size={14} />
+            </FeedbackButton>
+            <FeedbackButton
+              label={t("messageParts.saveImage")}
+              successLabel={t("messageParts.imageAction.saved")}
+              variant="ghost"
+              size="icon"
+              className={styles.imageAction}
+              disabled={!available || actions.busy}
+              action={actions.save}
+            >
+              <Download size={14} />
+            </FeedbackButton>
+          </AttachmentActions>
           {available && (
             <AttachmentTrigger
               aria-label={t("messageParts.previewAttachment", { name })}
-              onClick={() => setPreviewOpen(true)}
+              onClick={() => void preview()}
             />
           )}
+          {previewError && (
+            <span className={styles.imagePreviewError} role="alert">
+              {t("messageParts.imageAction.failed")}
+            </span>
+          )}
         </Attachment>
-        <DialogContent className={styles.attachmentDialog}>
-          <DialogTitle>{name}</DialogTitle>
-          <DialogDescription>{metadata || t("messageParts.image")}</DialogDescription>
-          {available && <img className={styles.attachmentFullImage} src={source} alt={name} />}
-        </DialogContent>
-      </Dialog>
+      </>
     );
   };
 }, "ImagePart");

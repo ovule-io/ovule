@@ -80,7 +80,11 @@ impl ComputerUse {
             "screenshot" => {
                 let screen_id = optional_i64(arguments, "screenId")?;
                 let snapshot = match &self.target {
-                    ComputerUseTarget::Local(host) => host.snapshot(screen_id).await?,
+                    ComputerUseTarget::Local(host) => {
+                        let image = host.snapshot(screen_id).await?;
+                        ovule_platform::permissions::record_screen_capture_success();
+                        image
+                    }
                     ComputerUseTarget::Workspace(transport) => transport
                         .computer_use_snapshot(screen_id)
                         .await

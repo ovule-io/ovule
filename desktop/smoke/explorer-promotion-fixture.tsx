@@ -29,7 +29,7 @@ const lifecycle = {
   attaches: 0,
 };
 const transfers = new Map<string, { value: string; history: string[] }>();
-const transferControl = { failNextAttach: false };
+const transferControl = { failNextAttach: false, pendingCreates: 0 };
 const paint = { blocked: false, waiting: false, release: undefined as (() => void) | undefined };
 const preview =
   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+a1X8AAAAASUVORK5CYII=";
@@ -72,12 +72,20 @@ class TestExplorer extends HTMLElement {
     this.page = undefined;
   }
   async detach() {
+    if (transferControl.pendingCreates > 0) {
+      transferControl.pendingCreates--;
+      throw new DOMException("Explorer is not available to detach", "InvalidStateError");
+    }
     if (!this.page) throw new Error("No page");
     lifecycle.detaches++;
     const token = crypto.randomUUID();
     transfers.set(token, this.page);
     this.page = undefined;
     this.dispatchEvent(new Event("detached"));
+    // A queued load event may outlive ownership of the native guest.
+    this.dispatchEvent(
+      new CustomEvent("loadcommit", { detail: { url: "https://example.com/current" } }),
+    );
     return Object.defineProperties(new EventTarget(), {
       token: { value: token },
       state: { get: () => (transfers.has(token) ? "pending" : "transferred") },
@@ -115,6 +123,7 @@ class TestExplorer extends HTMLElement {
     return preview;
   }
   getNavigationState() {
+    if (!this.page) return Promise.reject(new TypeError("Explorer is not attached"));
     return Promise.resolve({
       url: this.history.at(-1),
       title: "Live page",

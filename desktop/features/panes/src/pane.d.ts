@@ -7,6 +7,7 @@ export type PaneContext = {
   id: string;
   target?: string;
   workspaceBindingId?: string;
+  shellProfileId?: string;
   useThreadWorkspace: boolean;
   requestVersion: number;
   thread?: ThreadView;

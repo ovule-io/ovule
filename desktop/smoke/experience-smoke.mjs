@@ -168,6 +168,11 @@ try {
     await page.evaluate(() => experience.panes.current().instances.at(-1).target),
     "file:///tmp/ovule%20%23experience%25%3F/%E7%9B%AE%E5%BD%95/config.yaml",
   );
+  assert.equal(
+    await page.evaluate(() => experience.panes.current().instances.length),
+    2,
+    "Local files reuses its New Tab",
+  );
   await page.locator(".pane-active-tab").hover();
   await page.getByRole("button", { name: "Edit address", exact: true }).click();
   const toolbarAddress = page.locator(".pane-omnibox input");
@@ -188,28 +193,56 @@ try {
         .id,
     ),
   );
-  await page.getByRole("button", { name: "Terminal", exact: true }).click();
-  await page.getByRole("dialog").waitFor();
-  await page.getByRole("button", { name: /HOME/ }).click();
-  await page.locator('[data-opened-kind="terminal"]').waitFor();
-  await page.evaluate(() =>
-    experience.panes.selectTab(
-      experience.panes.current().instances.findLast((tab) => tab.kind === "browser" && !tab.target)
-        .id,
-    ),
+  const blankBefore = await page.evaluate(() =>
+    experience.panes.current().instances.findLast((tab) => tab.kind === "browser" && !tab.target),
   );
+  const countBefore = await page.evaluate(() => experience.panes.current().instances.length);
+  await page.getByRole("button", { name: "Terminal", exact: true }).click();
+  const terminalDialog = page.getByRole("dialog");
+  await terminalDialog.getByRole("combobox", { name: "Shell profile", exact: true }).click();
+  await page.getByRole("option", { name: "Zsh", exact: true }).click();
+  await terminalDialog.getByRole("button", { name: /HOME/ }).click();
+  await page.locator('[data-opened-kind="terminal"]').waitFor();
+  assert.equal(await page.evaluate(() => experience.panes.current().instances.length), countBefore);
+  assert.equal(
+    await page.evaluate(
+      (id) => experience.panes.current().instances.find((tab) => tab.id === id)?.shellProfileId,
+      blankBefore.id,
+    ),
+    "zsh",
+  );
+  await page.getByRole("button", { name: "Add tab", exact: true }).click();
+  const remoteBefore = await page.evaluate(() => ({
+    id: experience.panes.current().instances.at(-1).id,
+    count: experience.panes.current().instances.length,
+  }));
   await page.getByRole("button", { name: "Remote Host", exact: true }).click();
   await page.getByRole("dialog").waitFor();
   await page.getByRole("button", { name: /Test remote/ }).click();
   await page.locator('[data-opened-kind="spice"]').waitFor();
-  await page.evaluate(() =>
-    experience.panes.selectTab(
-      experience.panes.current().instances.findLast((tab) => tab.kind === "browser" && !tab.target)
-        .id,
-    ),
+  assert.equal(
+    await page.evaluate(() => experience.panes.current().instances.length),
+    remoteBefore.count,
   );
+  assert.equal(
+    await page.evaluate(() => experience.panes.current().instances.at(-1).id),
+    remoteBefore.id,
+  );
+  await page.getByRole("button", { name: "Add tab", exact: true }).click();
+  const workflowBefore = await page.evaluate(() => ({
+    id: experience.panes.current().instances.at(-1).id,
+    count: experience.panes.current().instances.length,
+  }));
   await page.getByRole("button", { name: "Workflow", exact: true }).click();
   await page.locator('[data-opened-kind="workflow"]').waitFor();
+  assert.equal(
+    await page.evaluate(() => experience.panes.current().instances.length),
+    workflowBefore.count,
+  );
+  assert.equal(
+    await page.evaluate(() => experience.panes.current().instances.at(-1).id),
+    workflowBefore.id,
+  );
   const boundary = await browser.newPage({ viewport: { width: 920, height: 660 } });
   boundary.on("pageerror", (error) => errors.push(error.message));
   await boundary.goto(`http://127.0.0.1:${server.address().port}/?boundary=1`);
@@ -316,6 +349,132 @@ try {
     () => experience.preferences.current().searchEngine === "google",
   );
   await configured.close();
+  const general = await searchContext.newPage();
+  await general.goto(`http://127.0.0.1:${server.address().port}/?general=1`);
+  await general.getByRole("button", { name: "Refresh permissions", exact: true }).waitFor();
+  assert.equal(
+    await general
+      .locator('[data-general-section="search"]')
+      .evaluate((node) => getComputedStyle(node).borderBottomWidth),
+    "0px",
+  );
+  const downloadPath = general.getByText(
+    "/Users/test/Downloads/a-long-download-folder/complete-path",
+    { exact: true },
+  );
+  await downloadPath.scrollIntoViewIfNeeded();
+  assert.ok(await downloadPath.evaluate((node) => node.scrollWidth <= node.clientWidth));
+  const permissions = general.locator("[data-desktop-permissions]");
+  await permissions
+    .getByText("Capture verified in this process within the last minute", { exact: true })
+    .waitFor();
+  assert.equal(await permissions.getByText("Authorization required", { exact: true }).count(), 0);
+  assert.equal(
+    await permissions.getByText("Remote Desktop & Computer Use", { exact: true }).count(),
+    0,
+  );
+  const refreshPermissions = permissions.getByRole("button", {
+    name: "Refresh permissions",
+    exact: true,
+  });
+  await general.evaluate(() => {
+    experience.permissionDelay = 400;
+    experience.accessibilityGranted = true;
+  });
+  const previousChecks = await general.evaluate(() => experience.permissionChecks);
+  await refreshPermissions.click();
+  await permissions.getByText("Checking system permissions…", { exact: true }).waitFor();
+  assert.equal(await refreshPermissions.isDisabled(), true);
+  await general.waitForFunction(
+    () =>
+      !document.querySelector('[data-desktop-permissions] [aria-label="Refresh permissions"]')
+        .disabled,
+  );
+  assert.ok((await general.evaluate(() => experience.permissionChecks)) > previousChecks);
+  await permissions
+    .locator('[data-permission="accessibility"]')
+    .getByText("Granted", { exact: true })
+    .waitFor();
+  await permissions
+    .locator('[data-permission="inputMonitoring"]')
+    .getByRole("button", { name: "Request access", exact: true })
+    .click();
+  assert.equal(await general.evaluate(() => experience.requestedPermission), "inputMonitoring");
+  await permissions
+    .locator('[data-permission="inputMonitoring"]')
+    .getByText("Granted", { exact: true })
+    .waitFor();
+  assert.equal(await permissions.locator('[data-permission="automation"] button').count(), 0);
+  await permissions.getByRole("button", { name: "Show app in Finder", exact: true }).last().click();
+  assert.equal(
+    await general.evaluate(() => experience.revealedApp),
+    "file:///Applications/Ovule.app",
+  );
+  await general.evaluate(() => {
+    experience.accessibilityGranted = false;
+    experience.permissionDelay = 0;
+  });
+  await refreshPermissions.click();
+  const repair = permissions
+    .locator('[data-permission="accessibility"]')
+    .getByRole("button", { name: "Repair access…", exact: true });
+  await repair.waitFor();
+  await repair.click();
+  await general.getByRole("dialog").getByRole("button", { name: "Cancel", exact: true }).click();
+  assert.notEqual(
+    await general.evaluate(() => experience.requestedPermission),
+    "resetAccessibility",
+  );
+  await repair.click();
+  await general
+    .getByRole("dialog")
+    .getByRole("button", { name: "Reset and request access", exact: true })
+    .click();
+  await general.waitForFunction(() => experience.requestedPermission === "resetAccessibility");
+  const about = general.locator("[data-about-ovule]");
+  await about.getByRole("heading", { name: "About Ovule 0.1.0", exact: true }).waitFor();
+  await about.getByText("/Applications/Ovule.app", { exact: true }).waitFor();
+  await about.locator("summary").filter({ hasText: "Other registered copies" }).click();
+  await about.getByText("/Users/test/Desktop/Ovule.app", { exact: true }).waitFor();
+  await about.scrollIntoViewIfNeeded();
+  await permissions.getByText("Automation", { exact: true }).waitFor();
+  await permissions.getByText("Input Monitoring", { exact: true }).waitFor();
+  await general.screenshot({ path: "/private/tmp/ovule-general-refined.png" });
+  for (const [flags, back] of [
+    ["", false],
+    ["&workbench=1", false],
+    ["&settings=1", true],
+    ["&onboarding=1", true],
+  ]) {
+    await general.goto(`http://127.0.0.1:${server.address().port}/?titlebar=1${flags}`);
+    await general.locator(".titlebar").waitFor();
+    assert.equal(
+      await general.getByRole("button", { name: "Back to chat", exact: true }).count(),
+      back ? 1 : 0,
+      `titlebar route ${flags}`,
+    );
+  }
+  await general.goto(`http://127.0.0.1:${server.address().port}/?pty=1`);
+  const ptyToolbar = general.locator("[data-pty-toolbar]");
+  await ptyToolbar.getByText("Zsh", { exact: true }).waitFor();
+  assert.equal(
+    await general.locator("[data-terminal-pty] select, [data-terminal-pty] button").count(),
+    0,
+    "shell actions live in the app toolbar",
+  );
+  await general.waitForFunction(() => experience.ptyOps.includes("open:zsh"));
+  await ptyToolbar.getByRole("button", { name: "Restart shell", exact: true }).click();
+  await general.waitForFunction(
+    () => experience.ptyOps.filter((operation) => operation === "open:zsh").length === 2,
+  );
+  await ptyToolbar.getByRole("button", { name: "Close shell", exact: true }).click();
+  await general.waitForFunction(() => experience.ptyState.shellOpen === "false");
+  assert.equal(
+    await ptyToolbar.getByRole("button", { name: "Close shell", exact: true }).isDisabled(),
+    true,
+  );
+  await general.screenshot({ path: "/private/tmp/ovule-terminal-toolbar.png" });
+  await general.close();
   await settings.close();
   await searchContext.close();
   const restoreContext = await browser.newContext({ viewport: { width: 920, height: 660 } });
@@ -473,6 +632,29 @@ try {
       return source && new URL(source).searchParams.get("url")?.endsWith(name);
     }, expected);
   }
+  await restored.evaluate(() =>
+    window.dispatchEvent(
+      new CustomEvent("ovule:pane-command", {
+        detail: { tabId: "browser-file", action: "browser.navigate:file:///tmp/project/logo.svg" },
+      }),
+    ),
+  );
+  await restored.waitForFunction(() =>
+    document.querySelector('[data-tool-tab="browser-file"] explorer')?.src.includes("local-image"),
+  );
+  const eye = restored.getByRole("button", { name: "Show source", exact: true });
+  await eye.click();
+  await restored.waitForFunction(
+    () =>
+      document.querySelector('[data-tool-tab="browser-file"] explorer')?.dataset.previewMode ===
+      "source",
+  );
+  await restored.getByRole("button", { name: "Show preview", exact: true }).click();
+  await restored.waitForFunction(
+    () =>
+      document.querySelector('[data-tool-tab="browser-file"] explorer')?.dataset.previewMode ===
+      "preview",
+  );
   await restored.evaluate(() => experience.panes.selectTab("browser-empty"));
   await restored.reload();
   await restored.locator(".browser-empty-omnibox input").waitFor();

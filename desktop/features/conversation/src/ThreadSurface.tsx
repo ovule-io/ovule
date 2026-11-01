@@ -1,3 +1,4 @@
+import { attachmentPreviewRequest } from "./message-telemetry/attachment-preview-request";
 import workflowTokens from "@ovule/workflow/workflow.token";
 import shellTokens from "@ovule/shell/shell.token";
 import frameworkTokens from "@ovule/framework/framework.token";
@@ -468,11 +469,14 @@ export async function handleRootRequest(
       typeof value.toolbarState === "object" &&
       !Array.isArray(value.toolbarState)
     ) {
-      values.toolbarState = Object.fromEntries(
-        Object.entries(value.toolbarState).filter(
-          (entry): entry is [string, string] => typeof entry[1] === "string",
+      values.toolbarState = {
+        ...services.workbench.current().instances.find((tab) => tab.id === tabId)?.toolbarState,
+        ...Object.fromEntries(
+          Object.entries(value.toolbarState).filter(
+            (entry): entry is [string, string] => typeof entry[1] === "string",
+          ),
         ),
-      );
+      };
     }
     services.workbench.updateTab(tabId, values);
     return { updated: true };
@@ -561,6 +565,12 @@ export async function handleRootRequest(
     return { shown: true };
   }
   if (channel === "ui.dialog.open") {
+    if (value.kind === "image-preview") {
+      const request = attachmentPreviewRequest(value);
+      if (!request) throw new Error("invalidAttachmentPreview");
+      window.dispatchEvent(new CustomEvent("ovule:global-dialog", { detail: request }));
+      return { shown: true };
+    }
     if (value.kind !== "message-telemetry") {
       throw new Error("unsupportedGlobalDialog");
     }

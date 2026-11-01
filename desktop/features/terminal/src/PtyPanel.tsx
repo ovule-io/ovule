@@ -1,3 +1,6 @@
+import { useService } from "@ovule/ioc/react";
+import shellTokens from "@ovule/shell/shell.token";
+import { SearchAddon } from "@xterm/addon-search";
 import { useEffect, useRef, useState } from "react";
 import { Terminal } from "@xterm/xterm";
 import { FitAddon } from "@xterm/addon-fit";
@@ -20,12 +23,19 @@ export function PtyPanel({
   workspace,
   owner,
   directory = "",
+  initialProfile,
 }: {
   workspace: WorkspaceService;
   owner: string;
   directory?: string;
+  initialProfile?: string;
 }) {
   const { t } = useTranslation();
+  const shell = useService(shellTokens.shell);
+  const terminalRef = useRef<Terminal | undefined>(undefined);
+  const searchRef = useRef<SearchAddon | undefined>(undefined);
+  const actions = useRef({ restart: async () => {}, close: async () => {} });
+  const [busy, setBusy] = useState(false);
   const host = useRef<HTMLDivElement>(null);
   const [profiles, setProfiles] = useState<ShellProfile[]>([]);
   const [profile, setProfile] = useState("");
@@ -46,7 +56,12 @@ export function PtyPanel({
         if (disposed) return;
         setProfiles(profiles);
         const existing = sessions.find((session) => session.owner === owner);
-        setProfile(existing?.profileId ?? profiles[0]?.id ?? "");
+        setProfile(
+          existing?.profileId ??
+            (profiles.some((p) => p.id === initialProfile)
+              ? initialProfile!
+              : (profiles[0]?.id ?? "")),
+        );
       })
       .catch((cause) => {
         if (!disposed) setError(String(cause));
@@ -54,7 +69,7 @@ export function PtyPanel({
     return () => {
       disposed = true;
     };
-  }, [workspace, owner]);
+  }, [workspace, owner, initialProfile]);
 
   useEffect(() => {
     if (!profile || !host.current) return;
@@ -71,6 +86,10 @@ export function PtyPanel({
       allowProposedApi: false,
       theme: terminalTheme(),
     });
+    terminalRef.current = terminal;
+    const search = new SearchAddon();
+    terminal.loadAddon(search);
+    searchRef.current = search;
     const fit = new FitAddon();
     terminal.loadAddon(fit);
     terminal.open(host.current);
@@ -148,64 +167,78 @@ export function PtyPanel({
       themeObserver.disconnect();
       input.dispose();
       terminal.dispose();
+      if (terminalRef.current === terminal) {
+        terminalRef.current = undefined;
+        searchRef.current = undefined;
+      }
       session.current = undefined;
     };
   }, [workspace, owner, directory, profile, generation]);
 
-  const restart = async (profileId: string) => {
+  const close = async () => {
+    if (busy) return;
+    setBusy(true);
+    try {
+      const api = await workspace.api();
+      const opened = await starting.current;
+      session.current = undefined;
+      setProfile("");
+      if (opened) await api.closeSession(opened.id);
+    } catch (cause) {
+      setError(String(cause));
+    } finally {
+      setBusy(false);
+    }
+  };
+  const restart = async () => {
+    if (busy) return;
+    setBusy(true);
     try {
       const api = await workspace.api();
       const opened = await starting.current;
       if (opened) await api.closeSession(opened.id);
       session.current = undefined;
-      setProfile(profileId);
+      setProfile(profile || initialProfile || profiles[0]?.id || "");
       setGeneration((value) => value + 1);
     } catch (cause) {
       setError(String(cause));
+    } finally {
+      setBusy(false);
     }
   };
+  actions.current = { restart, close };
+  useEffect(() => {
+    void shell
+      .requestRoot("tab.metadata", {
+        tabId: owner,
+        toolbarState: {
+          terminalMode: "pty",
+          shellName: profiles.find((p) => p.id === profile)?.name ?? "",
+          shellOpen: String(Boolean(profile)),
+          shellBusy: String(busy),
+        },
+      })
+      .catch(console.error);
+  }, [shell, owner, profiles, profile, busy]);
+  useEffect(() => {
+    const command = (event: Event) => {
+      const detail = (event as CustomEvent<{ tabId?: string; action?: string }>).detail;
+      if (detail?.tabId && detail.tabId !== owner) return;
+      if (detail?.action === "terminal.restart") void actions.current.restart();
+      else if (detail?.action === "terminal.close") void actions.current.close();
+      else if (detail?.action === "clear") terminalRef.current?.clear();
+      else if (detail?.action?.startsWith("search:"))
+        searchRef.current?.findNext(detail.action.slice(7));
+    };
+    window.addEventListener("ovule:pane-command", command);
+    return () => window.removeEventListener("ovule:pane-command", command);
+  }, [owner]);
   return (
     <section className={styles.ptyPanel} data-terminal-pty>
-      <div className={styles.ptyToolbar}>
-        <select
-          aria-label={t("terminal.shellProfile")}
-          value={profile}
-          onChange={(event) => void restart(event.target.value)}
-        >
-          {!profile && (
-            <option value="" disabled>
-              {t("terminal.shellClosed")}
-            </option>
-          )}
-          {profiles.map((profile) => (
-            <option key={profile.id} value={profile.id}>
-              {profile.name}
-            </option>
-          ))}
-        </select>
-        <button type="button" onClick={() => void restart(profile || profiles[0]?.id || "")}>
-          {t("terminal.restartShell")}
-        </button>
-        <button
-          type="button"
-          disabled={!profile}
-          onClick={() => {
-            void workspace
-              .api()
-              .then(async (api) => {
-                const opened = await starting.current;
-                session.current = undefined;
-                setProfile("");
-                if (opened) await api.closeSession(opened.id);
-              })
-              .catch((cause) => setError(String(cause)));
-          }}
-        >
-          {t("terminal.closeShell")}
-        </button>
-        {exitCode !== undefined && <span>{t("terminal.shellExited", { code: exitCode })}</span>}
-      </div>
       <div className={styles.shell} ref={host} />
+      {exitCode !== undefined && (
+        <p role="status">{t("terminal.shellExited", { code: exitCode })}</p>
+      )}
       {error && <p role="alert">{error}</p>}
     </section>
   );

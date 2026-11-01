@@ -53,6 +53,7 @@
           "ovule://*.local"
         ],
         "paths": [
+          "/image",
           "/code",
           "/markdown",
           "/office",

@@ -21,6 +21,7 @@ export const terminalPaneDefinition: PaneDefinition = {
           binding?.root ?? (context.useThreadWorkspace ? context.thread?.workspacePath : undefined)
         }
         workspaceBindingId={context.workspaceBindingId}
+        shellProfileId={context.shellProfileId}
         useThreadWorkspace={context.useThreadWorkspace}
         instanceId={context.id}
         runs={context.snapshot.terminalRuns}

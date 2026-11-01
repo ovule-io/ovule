@@ -24,6 +24,12 @@ pub trait AttachmentRepository: Send + Sync {
         &self,
         attachments: &[ImageAttachment],
     ) -> Result<Vec<LocalImageAttachment>, MessageError>;
+    fn persist_output(
+        &self,
+        image: &ImageAttachment,
+    ) -> Result<Vec<LocalImageAttachment>, MessageError> {
+        self.persist(std::slice::from_ref(image))
+    }
     fn read(&self, id: &str) -> Result<Vec<u8>, MessageError>;
 }
 pub use ovule_settings::catalog::CommandPlan;

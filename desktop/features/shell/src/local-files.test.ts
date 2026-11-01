@@ -72,3 +72,16 @@ test("HTML recipes survive origin changes without sharing content through localS
   expect(localExplorerAddress(guest, base)).toBe(recipe);
   expect(htmlPreviewRequest(recipe.replace("ovule:", "https:"))).toBeUndefined();
 });
+
+test("SVG uses an image preview grant and preserves the original local address", () => {
+  const file = "file:///tmp/My%20Files/logo.SVG";
+  const source = localExplorerSource(file, base);
+  expect(new URL(source).pathname).toBe("/local-image");
+  expect(localExplorerAddress(source, base)).toBe(file);
+  expect(
+    localExplorerAddress(
+      `ovule://${"a".repeat(48)}.local/image?url=${encodeURIComponent(file)}`,
+      base,
+    ),
+  ).toBe(file);
+});

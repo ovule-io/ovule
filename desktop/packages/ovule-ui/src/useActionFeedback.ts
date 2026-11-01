@@ -12,14 +12,17 @@ export function useActionFeedback() {
       clearTimeout(timer.current);
     };
   }, []);
-  const run = async (
-    action: () => boolean | void | Promise<boolean | void>,
-  ) => {
+  const run = async (action: () => boolean | void | null | Promise<boolean | void | null>) => {
     clearTimeout(timer.current);
     setStatus("pending");
     let ok = false;
     try {
-      ok = (await action()) !== false;
+      const outcome = await action();
+      if (outcome === null) {
+        if (active.current) setStatus("idle");
+        return false;
+      }
+      ok = outcome !== false;
     } catch {
       ok = false;
     }

@@ -35,6 +35,8 @@ await main("desktop-permissions", async (c) => {
     );
     assert.equal(typeof status.screenRecording, "boolean");
     assert.equal(typeof status.accessibility, "boolean");
+    assert.equal(typeof status.inputMonitoring, "boolean");
+    assert.equal(typeof status.appVersion, "string");
     assert.equal(status.expectedBundleId, manifest.application);
     assert.equal(status.managed, process.platform === "darwin");
     if (status.managed) assert.equal(status.bundleId, status.expectedBundleId);
@@ -58,13 +60,31 @@ await main("desktop-permissions", async (c) => {
       await panel
         .locator("[data-general-settings] > [data-general-section]")
         .evaluateAll((sections) => sections.map((section) => section.dataset.generalSection)),
-      ["theme", "language", "links", "permissions"],
+      ["theme", "language", "search", "links", "downloads", "permissions", "about"],
     );
     if (status.managed) {
-      await card.getByText(`Current application: ${status.bundleId}`, { exact: true }).waitFor();
-      assert.equal(await card.getByRole("button", { name: /^(Authorize|Manage)$/ }).count(), 2);
+      const about = panel.locator("[data-about-ovule]");
+      await about.getByText(status.bundleId, { exact: true }).waitFor();
+      for (const name of ["screenRecording", "accessibility", "inputMonitoring"]) {
+        assert.equal(
+          await card
+            .locator(`[data-permission="${name}"]`)
+            .getByRole("button", { name: /^(Request access|Open settings)$/ })
+            .count(),
+          1,
+        );
+      }
+      assert.equal(await card.locator('[data-permission="automation"] button').count(), 0);
       await card.getByRole("button", { name: "Refresh permissions", exact: true }).click();
-      await card.getByText(`Current application: ${status.bundleId}`, { exact: true }).waitFor();
+      await card
+        .locator("[data-permissions-feedback]")
+        .filter({ hasText: "Permissions checked at" })
+        .waitFor();
+      await page.waitForFunction(
+        () =>
+          document.querySelector("[data-desktop-permissions]")?.getAttribute("aria-busy") ===
+          "false",
+      );
     }
     await card.screenshot({ path: join(c.artifacts, "general-permissions.png") });
     await panel.getByRole("button", { name: "Hosts", exact: true }).click();

@@ -24,6 +24,7 @@ export type OmniboxViewProps = {
   autoFocus?: boolean;
   selectOnFocus?: boolean;
   suggestionsEnabled?: boolean;
+  additionalSuggestions?: BrowserSuggestion[];
   debounceMs?: number;
   initialActive?: number;
   formatTitle?: (suggestion: BrowserSuggestion) => string;

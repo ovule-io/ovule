@@ -456,3 +456,14 @@
   flex: 1;
   padding-inline: 6px;
 }
+
+.terminalProfile {
+  display: grid;
+  gap: 8px;
+  margin: 12px 0;
+}
+.terminalProfileName {
+  color: var(--muted-foreground);
+  font-size: var(--font-size-caption);
+  white-space: nowrap;
+}

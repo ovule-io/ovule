@@ -1,6 +1,8 @@
 import type { PaneInstance, PaneKind } from "@ovule/panes/tab";
 
 export type OpenPaneOptions = {
+  /** Replace this pane only while it is still a blank New Tab. */
+  replaceBlankId?: string;
   placement?: "thread" | "workbench";
   newInstance?: boolean;
   reuseExistingTarget?: boolean;
@@ -10,6 +12,7 @@ export type OpenPaneOptions = {
   threadId?: string;
   draftId?: string;
   workspaceBindingId?: string;
+  shellProfileId?: string;
   useThreadWorkspace?: boolean;
 };
 

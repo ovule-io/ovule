@@ -1,3 +1,4 @@
+import { TurnContext } from "./TurnContext";
 import { messageNotice } from "./message-notice";
 import { useEffect, useMemo, useState } from "react";
 import {
@@ -103,6 +104,7 @@ function MessageListContent({
         className={cn("timeline", conversationStyles.timeline)}
         data-testid="thread-timeline"
       >
+        <TurnContext viewport={viewport} messages={messages} />
         <MessageScrollerViewport
           ref={setViewport}
           className={cn(

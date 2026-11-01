@@ -27,6 +27,8 @@ export function createExplorerLoader(api: () => Promise<PreviewApi>, native = tr
     let created: string | undefined;
     const html = htmlPreviewRequest(address);
     const mapped = localExplorerSource(address);
+    const sourceMode = element.dataset.previewMode === "source";
+    const sourceHtml = sourceMode && /^file:.*\.html?(?:[?#].*)?$/i.test(address);
     const failed = (error: unknown) => {
       if (requests.get(element) !== request || !element.isConnected) return;
       element.dataset.previewPending = "false";
@@ -50,8 +52,12 @@ export function createExplorerLoader(api: () => Promise<PreviewApi>, native = tr
         failed(error);
       }
     };
-    if ((!html && mapped === address) || !native) {
-      commit(mapped);
+    if ((!html && mapped === address && !sourceHtml) || !native) {
+      if (!native && mapped !== address && sourceMode) {
+        const preview = new URL(mapped);
+        preview.searchParams.set("mode", "source");
+        commit(preview.href);
+      } else commit(mapped);
       return;
     }
     element.dataset.previewPending = "true";
@@ -72,6 +78,7 @@ export function createExplorerLoader(api: () => Promise<PreviewApi>, native = tr
         const source = new URL(`ovule://${grant.id}.local/${grant.kind}`);
         // Display metadata only: guest reads always use the opaque grant, never this URL.
         source.searchParams.set("url", html ? address : grant.url);
+        source.searchParams.set("mode", sourceMode ? "source" : "preview");
         source.searchParams.set("theme", document.documentElement.dataset.theme ?? "light");
         source.searchParams.set("language", document.documentElement.lang || "en");
         const bounds = element.getBoundingClientRect();

@@ -88,7 +88,7 @@ export function PreferencesSection() {
           </div>
         </section>
         <DownloadSettings />
-        <DesktopPermissionsControl />
+        <DesktopPermissionsControl showAbout />
       </div>
     </CatalogSection>
   );

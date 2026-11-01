@@ -167,6 +167,19 @@ impl super::AttachmentRepository for MessageAttachmentStore {
     ) -> Result<Vec<LocalImageAttachment>, MessageError> {
         Self::persist(self, attachments)
     }
+    fn persist_output(
+        &self,
+        image: &ImageAttachment,
+    ) -> Result<Vec<LocalImageAttachment>, MessageError> {
+        if image.bytes.is_empty() || image.bytes.len() > 12 * 1024 * 1024 {
+            return Err(MessageError::InvalidArgument(
+                "Agent image must be between 1 byte and 12 MiB".into(),
+            ));
+        }
+        std::fs::create_dir_all(&self.root)
+            .map_err(|error| MessageError::Persistence(error.to_string()))?;
+        Ok(vec![self.persist_one(image)?])
+    }
     fn read(&self, id: &str) -> Result<Vec<u8>, MessageError> {
         Self::read(self, id)
     }

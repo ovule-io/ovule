@@ -177,20 +177,19 @@ function TitleBarContent({
       </div>
       <div className={styles.actions}>
         <div className={styles.titlebarTools}>
-          {onBackToChat &&
-            Number(onboardingOpen) + Number(settingsOpen) + Number(workbenchOpen) >= 2 && (
-              <Tooltip side="bottom" content={t("titlebar.backToChat")}>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className={cn(styles.actionButton, styles.toolButton)}
-                  aria-label={t("titlebar.backToChat")}
-                  onClick={onBackToChat}
-                >
-                  <ArrowLeft size={16} />
-                </Button>
-              </Tooltip>
-            )}
+          {onBackToChat && (onboardingOpen || settingsOpen) && (
+            <Tooltip side="bottom" content={t("titlebar.backToChat")}>
+              <Button
+                variant="ghost"
+                size="sm"
+                className={cn(styles.actionButton, styles.toolButton)}
+                aria-label={t("titlebar.backToChat")}
+                onClick={onBackToChat}
+              >
+                <ArrowLeft size={16} />
+              </Button>
+            </Tooltip>
+          )}
           {showOnboarding && (
             <Tooltip
               className={styles.titlebarTooltip}
